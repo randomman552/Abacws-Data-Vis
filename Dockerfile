@@ -27,5 +27,9 @@ WORKDIR /api
 COPY --from=backend-build /api/build /api
 COPY --from=backend-build /api/node_modules /api/node_modules
 
-EXPOSE 5000
+# Environment variables
+ENV PRODUCTION=true
+ENV PORT=80
+
+EXPOSE ${PORT}
 ENTRYPOINT [ "node", "app.js" ]
