@@ -1,0 +1,16 @@
+name: Docker Image CI
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Login to DockerHub
+      run: echo ${{secrets.DOCKER_HUB_PASSWORD}} | docker login -u ${{secrets.DOCKER_HUB_USERNAME}} --password-stdin
+    - name: Build the Docker image
+      run: docker build . --tag ${{secrets.DOCKER_HUB_USERNAME}}/abacws-data-vis:latest
+    - name: Push the Docker image
+      run: docker push ${{secrets.DOCKER_HUB_USERNAME}}/abacws-data-vis:latest
