@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 
 // Get environment variables
-const port: Number = Number(process.env.PORT) || 5000;
+const port: Number = Number(process.env.API_PORT) || 5000;
 const production: Boolean = Boolean(process.env.PRODUCTION);
 
 /** Express app */
