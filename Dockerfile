@@ -23,7 +23,7 @@ ENV PRODUCTION=true
 ENV API_PORT=5000
 ENV WEB_PORT=80
 
-EXPOSE ${NGINX_PORT}
+EXPOSE ${WEB_PORT}
 
 # Copy frontend build
 WORKDIR /app
@@ -45,6 +45,6 @@ COPY --from=node /usr/local/bin /usr/local/bin
 COPY nginx.conf.template /etc/nginx/templates/default.conf.template
 
 # Copy start script
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
-CMD [ "/start.sh" ]
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+CMD [ "/entrypoint.sh" ]
