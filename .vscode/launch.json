@@ -3,14 +3,14 @@
     "configurations": [
       {
         "command": "npm run dev",
-        "name": "Start backend",
+        "name": "Debug backend",
         "request": "launch",
         "type": "node-terminal",
         "cwd": "${workspaceFolder}/backend"
       },
       {
         "command": "npm run start",
-        "name": "Start frontend",
+        "name": "Debug frontend",
         "request": "launch",
         "type": "node-terminal",
         "cwd": "${workspaceFolder}/frontend"
