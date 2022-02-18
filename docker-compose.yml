@@ -1,0 +1,7 @@
+version: '3.9'
+services:
+  application:
+    image: randomman552/abacws-data-vis:latest
+    container_name: abacws-data-visualiser
+    ports: 
+      - 80:80
