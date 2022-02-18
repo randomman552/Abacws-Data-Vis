@@ -1,5 +1,7 @@
 import { useEffect, useRef } from "react"
 import * as THREE from "three"
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 
 export interface Props {}
 
@@ -17,22 +19,30 @@ export default function ModelView(props: Props) {
         const renderer = new THREE.WebGLRenderer();
         
         renderer.setSize(width, height);
-        
         mountRef.current.appendChild(renderer.domElement);
+
+        // Load orbit controls
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 1;
         
-        const geometry = new THREE.BoxGeometry(1, 1, 1);
-        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-        const cube = new THREE.Mesh(geometry, material);
+        // Load model
+        const loader = new GLTFLoader();
+        loader.load("/assets/Cube.glb", (gltf) => {
+            console.log("Scene loaded!");
+            scene.add(gltf.scene);
+        }, undefined, (error) => {
+            console.log(error);
+        })
         
-        scene.add(cube);
+        // Need ambient lighting for the model to be visible
+        scene.add(new THREE.AmbientLight(0xF4F4F4))
         camera.position.z = 5;
         
-        // Animation function
-        const animate = function () {
-          requestAnimationFrame(animate);
-          cube.rotation.x += 0.01;
-          cube.rotation.y += 0.01;
-          renderer.render(scene, camera);
+        var animate = function () {
+            requestAnimationFrame( animate );
+            controls.update();
+            renderer.render( scene, camera );
         };
         animate();
 
