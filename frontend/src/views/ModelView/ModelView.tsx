@@ -15,30 +15,32 @@ export default function ModelView(props: Props) {
         let height = window.innerHeight;
 
         const scene = new THREE.Scene();
+
         const camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1000);
+        camera.position.z = 5;
+
         const renderer = new THREE.WebGLRenderer();
-        
         renderer.setSize(width, height);
+        renderer.setClearColor(0xa0f0f0)
+
         mountRef.current.appendChild(renderer.domElement);
 
         // Load orbit controls
         const controls = new OrbitControls(camera, renderer.domElement);
-        controls.autoRotate = true;
-        controls.autoRotateSpeed = 1;
-        
+
         // Load model
         const loader = new GLTFLoader();
-        loader.load("/assets/Cube.glb", (gltf) => {
+        loader.load("/assets/abacws.glb", (gltf) => {
             console.log("Scene loaded!");
             scene.add(gltf.scene);
         }, undefined, (error) => {
             console.log(error);
-        })
+        });
+
+        // Add lighting
+        scene.add(new THREE.AmbientLight(0xf4f4f4));
         
-        // Need ambient lighting for the model to be visible
-        scene.add(new THREE.AmbientLight(0xF4F4F4))
-        camera.position.z = 5;
-        
+        // Animation function
         var animate = function () {
             requestAnimationFrame( animate );
             controls.update();
