@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react"
 import * as THREE from "three"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
+import Stats from "three/examples/jsm/libs/stats.module"
 
 export interface Props {}
 
@@ -14,19 +15,24 @@ export default function ModelView(props: Props) {
         let width = window.innerWidth;
         let height = window.innerHeight;
 
+        let stats = Stats();
+        mountRef.current.appendChild(stats.dom);
+
         const scene = new THREE.Scene();
 
         const camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1000);
-        camera.position.z = 5;
 
         const renderer = new THREE.WebGLRenderer();
         renderer.setSize(width, height);
-        renderer.setClearColor(0xa0f0f0)
-
+        renderer.setClearColor(0x000000)
         mountRef.current.appendChild(renderer.domElement);
 
         // Load orbit controls
         const controls = new OrbitControls(camera, renderer.domElement);
+        controls.target.set(0, 25, 0);
+        controls.minDistance = 50;
+        camera.position.set(150, 80, -150)
+        controls.update();
 
         // Load model
         const loader = new GLTFLoader();
@@ -38,13 +44,22 @@ export default function ModelView(props: Props) {
         });
 
         // Add lighting
-        scene.add(new THREE.AmbientLight(0xf4f4f4));
+        const lights : THREE.Light[] = [];
+
+        lights.push(new THREE.AmbientLight(0x404040));
+        lights.push(new THREE.DirectionalLight(0xf4f4f4));
+        lights.push(new THREE.DirectionalLight(0xf4f4af));
+
+        lights[1].position.set(-100, 100, -100);
+        lights[2].position.set(100, 100, 100);
+        scene.add(...lights);
         
         // Animation function
         var animate = function () {
-            requestAnimationFrame( animate );
+            requestAnimationFrame(animate);
             controls.update();
-            renderer.render( scene, camera );
+            renderer.render(scene, camera);
+            stats.update()
         };
         animate();
 
@@ -59,8 +74,11 @@ export default function ModelView(props: Props) {
         window.addEventListener('resize', onResize);
         
         // Cleanup function
+        // Store ref now so that it doesn't break this code if changed
+        const ref = mountRef.current;
         return () => {
-            mountRef.current.removeChild(renderer.domElement);
+            ref.removeChild(renderer.domElement);
+            ref.removeChild(stats.dom);
             window.removeEventListener('resize', onResize);
         }
     }, []);
