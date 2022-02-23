@@ -1,0 +1,45 @@
+@use "../../_variables.scss";
+
+$width: 500px;
+
+.data-container {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    width: $width;
+    background-color: rgba($color: variables.$background_color, $alpha: 0.75) ;
+    transition: 0.3s;
+    z-index: 2;
+}
+
+.data-container.hidden {
+    right: -$width;
+}
+
+.data-container .toggle {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    left: -20px;
+    width: 20px;
+    height: 100vh;
+    cursor: pointer;
+    font-size: 4rem;
+}
+
+.data-container .toggle .indicator {
+    rotate: 0deg;
+    opacity: 0.75;
+    transition: 0.3s;
+}
+
+.data-container.hidden .toggle .indicator {
+    rotate: 180deg;
+}
+
+.data-container .toggle:hover .indicator {
+    opacity: 1;
+    transform: translate(5px, 0);
+}
