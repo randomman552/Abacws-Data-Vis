@@ -1,12 +1,16 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import * as THREE from "three"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import Stats from "three/examples/jsm/libs/stats.module"
 
+import "./ModelView.scss"
+import Spinner from "../../components/Spinner"
+
 export interface Props {}
 
 export default function ModelView(props: Props) {
+    const [loaded, setLoaded] = useState(false);
     // Reference to mount the canvas to
     const mountRef = useRef<any>(null);
     
@@ -39,6 +43,7 @@ export default function ModelView(props: Props) {
         loader.load("/assets/abacws.glb", (gltf) => {
             console.log("Scene loaded!");
             scene.add(gltf.scene);
+            setLoaded(true);
         }, undefined, (error) => {
             console.log(error);
         });
@@ -83,8 +88,11 @@ export default function ModelView(props: Props) {
         }
     }, []);
 
-    // Render view
+    // Render loading spinner until the model is finished loading
+    const loadingSpinner = (!loaded) ? <Spinner/> : null;
     return (
-        <div ref={mountRef}></div>
+        <div ref={mountRef} className="model-container">
+            {loadingSpinner}
+        </div>
     )
 }

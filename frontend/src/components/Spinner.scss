@@ -1,0 +1,46 @@
+@use '../_variables';
+
+.spinner-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding: 5px;
+    background-color: rgba($color: variables.$background_color, $alpha: 0.75);
+}
+
+.spinner-dot {
+    border-radius: 50%;
+    background-color: variables.$color;
+    margin: 1px;
+    width: 20px;
+    height: 20px;
+    animation-name: load-animation;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+.spinner-dot:nth-child(2) {
+    animation-delay: 0.333s;
+}
+
+@keyframes load-animation {
+    0% {
+        transform: translate(0, -5px);
+        opacity: 0.8;
+    }
+
+    50% {
+        transform: translate(0, 5px);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: translate(0, -5px);
+        opacity: 0.8;
+    }
+}
