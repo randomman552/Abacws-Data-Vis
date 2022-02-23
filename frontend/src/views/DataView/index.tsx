@@ -1,4 +1,5 @@
 import { useState } from "react"
+import FloorSelector from "../../components/FloorSelector";
 import "./DataView.scss"
 
 export interface Props {}
@@ -18,6 +19,10 @@ export default function DataView(props:Props) {
                 <h1 className="title">
                     Data panel
                 </h1>
+
+                <FloorSelector
+                    onSelect={(i: number) => {console.log(`Selected floor '${i}'`)}}
+                />
             </article>
         </div>
     )
