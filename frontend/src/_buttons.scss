@@ -18,7 +18,7 @@
     border-color: map-get($map, 'border');
     color: map-get($map, 'color');
 
-    &:hover, &:active, &:focus {
+    &:hover, &:active, &:focus, &.active {
         background-color: map-get($map, 'background-hover');
         border-color: map-get($map, 'border-hover');
         color: map-get($map, 'color-hover');
