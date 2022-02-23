@@ -48,7 +48,7 @@ function FloorButton(props: ButtonProps) {
             className={ (props.current === props.number) ? "active" : "" }
             onClick={() => { props.onSelect(props.number) }}
         >
-            {(props.number == 0) ? "G" : props.number}
+            {(props.number === 0) ? "G" : props.number}
         </button>
     );
 }

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import FloorSelector from "../../components/FloorSelector";
+import FloorSelector from "../components/FloorSelector";
 import "./DataView.scss"
 
 export interface Props {}

@@ -3,9 +3,7 @@ import * as THREE from "three"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import Stats from "three/examples/jsm/libs/stats.module"
-
-import "./ModelView.scss"
-import Spinner from "../../components/Spinner"
+import Spinner from "../components/Spinner"
 
 export interface Props {}
 
