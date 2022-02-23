@@ -1,3 +1,81 @@
 // Color definitions
 $background_color: #0a0a0a;
 $color: #c4c4c4;
+
+// Color scheme maps
+$default: (
+    'background': transparent,
+    'background-hover': transparent,
+
+    'border': $color,
+    'border-hover': #f8f8f8,
+    
+    'color': #ececec,
+    'color-hover': #ececec,
+);
+
+$primary: (
+    'background': rgb(0, 144, 224),
+    'background-hover': rgb(75, 192, 255),
+
+    'border': rgb(75, 192, 255),
+    'border-hover': rgb(0, 144, 224),
+    
+    'color': #ececec,
+    'color-hover': #ececec,
+);
+
+$secondary: (
+    'background': rgb(121, 121, 121),
+    'background-hover': rgb(180, 180, 180),
+
+    'border': rgb(180, 180, 180),
+    'border-hover': rgb(121, 121, 121),
+    
+    'color': #efefef,
+    'color-hover': #efefef,
+);
+
+$info: (
+    'background':  	rgb(112, 173, 206),
+    'background-hover': rgb(130, 211, 255),
+
+    'border':  	rgb(130, 211, 255),
+    'border-hover':rgb(112, 173, 206),
+    
+    'color': #efefef,
+    'color-hover': #efefef,
+);
+
+$success: (
+    'background':#34c240,
+    'background-hover':#3feb4d,
+
+    'border':  	#3feb4d,
+    'border-hover':#34c240,
+    
+    'color': #efefef,
+    'color-hover': #efefef,
+);
+
+$warn: (
+    'background': #d6863b,
+    'background-hover': #fa9f47,
+
+    'border':  #fa9f47,
+    'border-hover': #d6863b,
+    
+    'color': #ececec,
+    'color-hover': #efefef,
+);
+
+$danger: (
+    'background': #d64242,
+    'background-hover': #ff4f4f,
+
+    'border': #ff4d4d,
+    'border-hover': #d64242,
+    
+    'color': #ececec,
+    'color-hover': #efefef,
+);

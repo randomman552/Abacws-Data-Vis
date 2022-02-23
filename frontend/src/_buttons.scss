@@ -1,0 +1,47 @@
+@use "_variables";
+
+/** Button Styles **/
+/**
+    Mixin to generate button styles given a color map.
+    Color maps for our buttons are defined in _variables.scss
+*/
+@mixin button($map) {
+    transition: 0.3s;
+    margin: 2px;
+    border: 2px solid;
+    border-radius: 2px;
+    cursor: pointer;
+    padding: 7px 10px 7px 10px;
+    box-shadow: 0px 0px 0px 0px map-get($map, 'border');
+
+    background-color: map-get($map, 'background');
+    border-color: map-get($map, 'border');
+    color: map-get($map, 'color');
+
+    &:hover, &:active, &:focus {
+        background-color: map-get($map, 'background-hover');
+        border-color: map-get($map, 'border-hover');
+        color: map-get($map, 'color-hover');
+        box-shadow: 0px 0px 0px 2px map-get($map, 'border-hover');
+    }
+}
+
+// Generate button styles for the following color schemes
+$styles: (
+    'primary': variables.$primary, 
+    'secondary': variables.$secondary, 
+    'info': variables.$info,
+    'success': variables.$success,
+    'warn': variables.$warn, 
+    'danger': variables.$danger
+);
+
+@each $name, $style in $styles {
+    button.#{$name} {
+        @include button($style);
+    }
+}
+
+button, button.default {
+    @include button(variables.$default)
+}
