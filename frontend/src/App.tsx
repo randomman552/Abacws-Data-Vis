@@ -1,12 +1,12 @@
 import './App.scss';
-import ModelView from './views/ModelView/ModelView';
+import ModelView from './views/ModelView';
+import DataView from './views/DataView';
 
-function App() {
-  return (
-    <div className="app">
-      <ModelView/>
-    </div>
-  );
+export default function App() {
+    return (
+        <div className="app">
+            <ModelView/>
+            <DataView/>
+        </div>
+);
 }
-
-export default App;
