@@ -1,10 +1,12 @@
 import { useState } from "react"
 import FloorSelector from "../components/FloorSelector";
 import "./DataView.scss"
+import GraphView from "./GraphView";
+import DeviceView from "./DeviceView";
 
-export interface Props {}
+export interface DataViewProps {}
 
-export default function DataView(props:Props) {
+export default function DataView(props: DataViewProps) {
     const [hidden, setHidden] = useState(false);
 
     const className = (hidden) ? "data-container hidden" : "data-container"
@@ -23,6 +25,8 @@ export default function DataView(props:Props) {
                 <FloorSelector
                     onSelect={(i: number) => {console.log(`Selected floor '${i}'`)}}
                 />
+                <DeviceView/>
+                <GraphView/>
             </article>
         </div>
     )

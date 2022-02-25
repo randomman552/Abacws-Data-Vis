@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from "react"
 import Spinner from "../components/Spinner"
 import Graphics from "../graphics/Graphics"
 
-export interface Props {}
+export interface ModelViewProps {}
 
-export default function ModelView(props: Props) {
+export default function ModelView(props: ModelViewProps) {
     const [loaded, setLoaded] = useState(false);
     const mountRef = useRef<any>(null);
     
