@@ -35,6 +35,7 @@ export default class Graphics {
         this.camera = new THREE.PerspectiveCamera(75, this.width/this.height, 0.1, 1000);
 
         this.renderer = new THREE.WebGLRenderer();
+        this.renderer.setPixelRatio(2);
         this.renderer.setSize(this.width, this.height);
         this.renderer.setClearColor(0x000000);
 
