@@ -123,6 +123,9 @@ export default class Graphics {
 
         // Remove event listeners
         window.removeEventListener('resize', this.resizeListener);
-        this.animateListener = () => {};
+        this.animateListener = () => { this.animate() };
+
+        // Remove old instance
+        Graphics.instance = undefined;
     }
 }
