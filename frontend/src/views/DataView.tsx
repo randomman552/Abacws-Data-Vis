@@ -1,19 +1,19 @@
-import { useState } from "react"
 import FloorSelector from "../components/FloorSelector";
 import "./DataView.scss"
 import GraphView from "./GraphView";
 import DeviceView from "./DeviceView";
+import { useSearchParams } from "react-router-dom";
 
 export interface DataViewProps {}
 
 export default function DataView(props: DataViewProps) {
-    const [hidden, setHidden] = useState(false);
-
+    const [searchParams, setSearchParams] = useSearchParams();
+    const hidden = searchParams.get("hidePanel") === "true"    
     const className = (hidden) ? "data-container hidden" : "data-container"
 
     return (
         <div className={className}>
-            <div className="toggle" onClick={() => {setHidden(!hidden)}}>
+            <div className="toggle" onClick={() => { setSearchParams({"hidePanel": `${!hidden}`}) }}>
                 <div className="indicator">&rsaquo;</div>
             </div>
 
