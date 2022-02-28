@@ -22,6 +22,7 @@ FROM nginx:alpine
 ENV PRODUCTION=true
 ENV API_PORT=5000
 ENV WEB_PORT=80
+ENV MONGODB_URI=mongodb://mongo:27017/abacws
 
 EXPOSE ${WEB_PORT}
 
