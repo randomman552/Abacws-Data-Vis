@@ -2,3 +2,6 @@
 /frontend/node_modules
 README.md
 /.vscode
+/.github
+Dockerfile
+docker-compose.yml
