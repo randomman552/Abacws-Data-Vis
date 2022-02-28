@@ -1,6 +1,13 @@
 {
     "version": "0.2.0",
     "configurations": [
+    {
+      "name": "Debug with Chrome",
+      "request": "launch",
+      "type": "pwa-chrome",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}"
+    },
       {
         "command": "npm run dev",
         "name": "Debug backend",
@@ -10,7 +17,7 @@
       },
       {
         "command": "npm run start",
-        "name": "Debug frontend",
+        "name": "Start frontend",
         "request": "launch",
         "type": "node-terminal",
         "cwd": "${workspaceFolder}/frontend"
