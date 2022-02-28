@@ -13,6 +13,8 @@ services:
     image: randomman552/abacws-data-vis:latest
     container_name: dissertation-app
     restart: always
+    depends_on:
+      - mongo
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.dissertation.loadbalancer.server.port=80"
