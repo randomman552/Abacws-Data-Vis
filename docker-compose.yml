@@ -16,6 +16,6 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.dissertation.loadbalancer.server.port=80"
-      - "traefik.http.routers.dissertation.rule=Host(`abacws.ggrainger.uk`)"
+      - "traefik.http.routers.dissertation.rule=Host(`abacws.example.com`)"
       - "traefik.http.routers.dissertation.entrypoints=https"
       - "traefik.http.routers.dissertation.tls=true"
