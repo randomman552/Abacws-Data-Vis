@@ -8,12 +8,11 @@ router.all("/healthcheck", async (req, res, next) => {
     const dbStatus = await client.db().command({ping: 1});
     
     if (dbStatus?.ok) {
-        res.status(200).json({status: "OK"});
+        res.status(200).json({health: "OK"});
         return;
     }
 
     res.status(500).json({
-        status: "ERROR",
-        error: "Could not run ping on database"
+        health: "FAIL"
     });
 })
