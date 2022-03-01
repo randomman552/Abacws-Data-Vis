@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import client from './database'
 import { router as healthcheck} from './routes/healthcheck';
+import { router as devices} from './routes/devices';
 
 /** Express app */
 const api = express();
@@ -8,6 +9,7 @@ const api = express();
 api.use(express.json())
 
 // Register routes
-api.use("/api", healthcheck);
+api.use("/api/healthcheck", healthcheck);
+api.use("/api/devices", devices);
 
 export = api;
