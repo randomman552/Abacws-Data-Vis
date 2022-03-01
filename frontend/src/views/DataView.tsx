@@ -13,7 +13,10 @@ export default function DataView(props: DataViewProps) {
 
     return (
         <div className={className}>
-            <div className="toggle" onClick={() => { setSearchParams({"hidePanel": `${!hidden}`}) }}>
+            <div className="toggle" onClick={() => {
+                    searchParams.set("hidePanel", `${!hidden}`);
+                    setSearchParams(searchParams);
+                }}>
                 <div className="indicator">&rsaquo;</div>
             </div>
 
@@ -23,7 +26,11 @@ export default function DataView(props: DataViewProps) {
                 </h1>
 
                 <FloorSelector
-                    onSelect={(i: number) => {console.log(`Selected floor '${i}'`)}}
+                    current={ Number(searchParams.get("floor")) }
+                    onSelect={(i: number) => {
+                        searchParams.set("floor", `${i}`);
+                        setSearchParams(searchParams);
+                    }}
                 />
                 <DeviceView/>
                 <GraphView/>

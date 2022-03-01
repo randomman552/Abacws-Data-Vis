@@ -21,6 +21,8 @@ export default class Graphics {
     private scene: THREE.Scene;
     private renderer: THREE.WebGLRenderer;
 
+    private clippingPlane: THREE.Plane;
+
     private controls: OrbitControls;
     private stats: Stats
     
@@ -34,16 +36,22 @@ export default class Graphics {
 
         this.camera = new THREE.PerspectiveCamera(75, this.width/this.height, 0.1, 1000);
 
+        // Renderer setup
         this.renderer = new THREE.WebGLRenderer();
         this.renderer.setPixelRatio(2);
         this.renderer.setSize(this.width, this.height);
         this.renderer.setClearColor(0x000000);
 
+        // Controls setup
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         this.controls.target.set(0, 25, 0);
         this.controls.minDistance = 50;
         this.camera.position.set(150, 80, -150)
         this.controls.update();
+        
+        // Clipping plane setup
+        this.clippingPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 100);
+        this.renderer.clippingPlanes = [ this.clippingPlane ];
     }
 
     /**
@@ -87,12 +95,31 @@ export default class Graphics {
         lights[2].position.set(100, 100, 100);
         this.scene.add(...lights);
 
+        // Clipping plane
+
+
         // Load model as the last step
         const loader = new GLTFLoader();
         return loader.loadAsync("/assets/abacws.glb").then((gltf: GLTF) => {
             this.scene.add(gltf.scene);
             return gltf;
         });
+    }
+
+    /**
+     * Method moves the clipping plane to hide floors above the given floor number.
+     * @param floor Integer representing the floor number
+     */
+    setFloor(floor: number) {
+        const perFloor = 12.5
+        const base = 12.5;
+
+        // Clamp floor value
+        floor = Math.min(Math.max(floor, 0), 7);
+
+        // Calculate clipping height
+        let val = base + perFloor*floor;
+        this.clippingPlane.set(this.clippingPlane.normal, val);
     }
 
     /**

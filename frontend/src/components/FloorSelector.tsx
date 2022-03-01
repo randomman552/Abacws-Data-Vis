@@ -14,7 +14,7 @@ export default function FloorSelector(props: Props) {
 
     // Generate a button for each floor
     const buttons = [];
-    for (let i = 0; i <= 6; i++) {
+    for (let i = 0; i <= 7; i++) {
         buttons.push(
             <FloorButton 
                 onSelect={onSelect}
@@ -43,12 +43,16 @@ interface ButtonProps extends Props {
  * @returns 
  */
 function FloorButton(props: ButtonProps) {
+    let text = `${props.number}`;
+    if (props.number === 0) text = "G";
+    else if (props.number === 7) text = "RF";
+
     return (
         <button 
             className={ (props.current === props.number) ? "active" : "" }
             onClick={() => { props.onSelect(props.number) }}
         >
-            {(props.number === 0) ? "G" : props.number}
+            {text}
         </button>
     );
 }
