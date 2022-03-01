@@ -11,6 +11,8 @@ export default function DataView(props: DataViewProps) {
     const hidden = searchParams.get("hidePanel") === "true"    
     const className = (hidden) ? "data-container hidden" : "data-container"
 
+    const selectedFloor = (searchParams.has("floor"))? Number(searchParams.get("floor")) : -1;
+
     return (
         <div className={className}>
             <div className="toggle" onClick={() => {
@@ -26,7 +28,7 @@ export default function DataView(props: DataViewProps) {
                 </h1>
 
                 <FloorSelector
-                    current={ Number(searchParams.get("floor")) }
+                    current={ selectedFloor }
                     onSelect={(i: number) => {
                         searchParams.set("floor", `${i}`);
                         setSearchParams(searchParams);
