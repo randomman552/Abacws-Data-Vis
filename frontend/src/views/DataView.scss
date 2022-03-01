@@ -30,16 +30,20 @@ $width: 300px;
 }
 
 .data-container .toggle .indicator {
-    rotate: 0deg;
+    transform: rotate(0deg);
     opacity: 0.75;
     transition: 0.3s;
 }
 
-.data-container.hidden .toggle .indicator {
-    rotate: 180deg;
-}
-
 .data-container .toggle:hover .indicator {
     opacity: 1;
-    transform: translate(5px, 0);
+    transform: translate(5px, 0) rotate(0deg);
+}
+
+.data-container.hidden .toggle .indicator {
+    transform: rotate(180deg);
+}
+
+.data-container.hidden .toggle:hover .indicator {
+    transform: translate(-5px, 0) rotate(180deg);
 }
