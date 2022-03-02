@@ -1,8 +1,7 @@
 import './App.scss';
-import ModelView from './views/ModelView';
-import DataView from './views/DataView';
 import { useEffect } from 'react';
 import { apiFetch } from './api/util';
+import { ModelView, DataView } from './views';
 
 export default function App() {
     useEffect(() => {

@@ -1,6 +1,6 @@
-export interface GraphViewProps {}
+export interface GraphContainerProps {}
 
-export default function GraphView(props: GraphViewProps) {
+export function GraphContainer(props: GraphContainerProps) {
     return (
         <article className="graph-container">
             <p>Graphs here...</p>

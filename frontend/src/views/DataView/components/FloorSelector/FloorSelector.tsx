@@ -1,11 +1,11 @@
 import { useState } from "react";
 
-export interface Props {
+export interface SelectorProps {
     onSelect: Function,
     current?: number
 }
 
-export default function FloorSelector(props: Props) {
+export function FloorSelector(props: SelectorProps) {
     const [current, setCurrent] = useState(props.current);
     const onSelect = (i: number) => {
         props.onSelect(i);
@@ -33,7 +33,7 @@ export default function FloorSelector(props: Props) {
 }
 
 
-interface ButtonProps extends Props {
+interface ButtonProps extends SelectorProps {
     number: number
 }
 

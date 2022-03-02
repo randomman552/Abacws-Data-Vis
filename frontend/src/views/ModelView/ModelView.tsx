@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react"
 import { useSearchParams } from "react-router-dom";
-import Spinner from "../components/Spinner"
-import Graphics from "../graphics/Graphics"
+import { Spinner } from "../../components";
+import Graphics from "./Graphics"
 
 export interface ModelViewProps {}
 
-export default function ModelView(props: ModelViewProps) {
+export function ModelView(props: ModelViewProps) {
     const [loaded, setLoaded] = useState(false);
     const [searchParams, setSearchParams] = useSearchParams();
     const mountRef = useRef<any>(null);

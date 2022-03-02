@@ -1,12 +1,10 @@
-import FloorSelector from "../components/FloorSelector";
 import "./DataView.scss"
-import GraphView from "./GraphView";
-import DeviceView from "./DeviceView";
 import { useSearchParams } from "react-router-dom";
+import { DeviceDetails, FloorSelector, GraphContainer } from "./components";
 
 export interface DataViewProps {}
 
-export default function DataView(props: DataViewProps) {
+export function DataView(props: DataViewProps) {
     const [searchParams, setSearchParams] = useSearchParams();
     const hidden = searchParams.get("hidePanel") === "true"    
     const className = (hidden) ? "data-container hidden" : "data-container"
@@ -34,8 +32,8 @@ export default function DataView(props: DataViewProps) {
                         setSearchParams(searchParams);
                     }}
                 />
-                <DeviceView/>
-                <GraphView/>
+                <DeviceDetails/>
+                <GraphContainer/>
             </article>
         </div>
     )
