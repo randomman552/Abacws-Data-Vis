@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import client from './database'
-import { router as healthcheck} from './routes/healthcheck';
-import { router as devices} from './routes/devices';
+import { router as healthcheck } from './routes/healthcheck';
+import { router as devices } from './routes/devices';
 
 /** Express app */
 const api = express();

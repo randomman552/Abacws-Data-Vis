@@ -1,4 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
+import devices from "../data/devices.json"
 import client from "../database";
 
 export const router = express.Router()
@@ -10,7 +11,7 @@ export const router = express.Router()
  * Methods: GET, POST
  */
 const listDevices = async (req: Request, res: Response, next: NextFunction) => {
-    res.json({"msg": "LIST DEVICES"});
+    res.status(200).json(devices);
 }
 
 /**
