@@ -1,7 +1,7 @@
 import { MongoClient } from 'mongodb';
 import { MONGODB_URI } from './constants';
 import devicesFile from "./data/devices.json"
-import { Device } from './middleware';
+import { Device } from './types';
 
 // Connect to database
 const client = new MongoClient(MONGODB_URI);

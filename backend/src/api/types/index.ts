@@ -10,3 +10,15 @@ export interface APIError extends Error {
     level?: LogLevel,
     url?: string
 }
+
+export interface Device {
+    name: string,
+    position: {
+        x: number,
+        y: number,
+        z: number
+    },
+    getData?: Function,
+    getHistory?: Function,
+    addData?: Function
+}

@@ -1,17 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import client from "../database";
+import { Device } from "../types";
 
-// Types
-export interface Device {
-    name: string,
-    position: {
-        x: number,
-        y: number,
-        z: number
-    },
-    getData?: Function,
-    getHistory?: Function
-}
 
 // Required for non optional additions to 'Request'
 declare module 'express-serve-static-core' {
@@ -19,6 +9,7 @@ declare module 'express-serve-static-core' {
         device: Device
     }
 }
+export { Device };
 
 
 // Function factories
@@ -26,28 +17,10 @@ function getDataFactory(device: Device) {
     return async () => {
         const [data] = await client.db()
             .collection(device.name)
-            .aggregate([
-                {
-                    '$sort': {
-                        '_id': -1
-                    }
-                },
-                {
-                    '$set': {
-                        'timestamp': {
-                            '$toDate': '$_id'
-                        }
-                    }
-                },
-                {
-                    '$project': {
-                        '_id': 0
-                    }
-                },
-                {
-                    '$limit': 1
-                }
-            ])
+            .find({})
+            .sort({ timestamp: -1 })
+            .limit(1)
+            .project({ _id: 0 })
             .toArray();
 
         return data;
@@ -58,28 +31,20 @@ function getHistoryFactory(device: Device) {
     return async () => {
         const history = await client.db()
             .collection(device.name)
-            .aggregate([
-                {
-                    '$sort': {
-                        '_id': -1
-                    }
-                },
-                {
-                    '$set': {
-                        'timestamp': {
-                            '$toDate': '$_id'
-                        }
-                    }
-                },
-                {
-                    '$project': {
-                        '_id': 0
-                    }
-                }
-            ])
+            .find({})
+            .sort({ timestamp: -1 })
+            .project({ _id: 0 })
             .toArray();
 
         return history;
+    }
+}
+
+function addDataFactory(device: Device) {
+    return async (data: any) => {
+        // Add timestamp to data and insert into database
+        data.timestamp = Date.now();
+        return client.db().collection(device.name).insertOne(data);
     }
 }
 
@@ -113,6 +78,7 @@ export const deviceMiddleware = async (req: Request, res: Response, next: NextFu
 
     device.getData = getDataFactory(device);
     device.getHistory = getHistoryFactory(device);
+    device.addData = addDataFactory(device);
 
     req.device = device;
     next();

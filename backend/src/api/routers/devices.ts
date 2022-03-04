@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import client from "../database";
-import { Device, deviceMiddleware } from "../middleware";
+import { deviceMiddleware } from "../middleware";
+import { Device } from "../types";
 
 export const router = express.Router()
 
@@ -57,8 +58,11 @@ const getHistoricalData = async (req: Request, res: Response) => {
  * Methods: PUT
  */
 const addData = async (req: Request, res: Response) => {
-    // TODO
-    res.json({"msg": `ADD DATA FOR '${req.params.deviceName}'`});
+    const device = req.device;
+    const data = req.body;
+
+    (device.addData) ? await device.addData(data) : undefined;
+    res.status(202).json();
 }
 
 /**
