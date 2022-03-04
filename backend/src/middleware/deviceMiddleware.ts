@@ -1,10 +1,14 @@
 import { NextFunction, Request, Response } from "express";
-import devices from "../data/devices.json"
 import client from "../database";
 
 // Types
 export interface Device {
     name: string,
+    position: {
+        x: number,
+        y: number,
+        z: number
+    },
     getData?: Function,
     getHistory?: Function
 }
@@ -86,9 +90,17 @@ function getHistoryFactory(device: Device) {
  */
 export const deviceMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     const deviceName = req.params?.deviceName;
-    const device: Device = devices.devices.filter((value) => {
-        return value.name === deviceName
-    })[0];
+    
+    // Get device from database
+    const device = await client.db().collection("devices")
+        .findOne<Device>(
+            { name: deviceName },
+            { 
+                projection: {
+                    _id: 0
+                } 
+            }
+        );
 
     if (!device) {
         return next({

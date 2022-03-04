@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
-import { deviceMiddleware } from "../middleware";
-import devices from "../data/devices.json"
+import client from "../database";
+import { Device, deviceMiddleware } from "../middleware";
 
 export const router = express.Router()
 
@@ -11,7 +11,12 @@ export const router = express.Router()
  * Methods: GET, POST
  */
 const listDevices = async (req: Request, res: Response) => {
-    res.status(200).json(devices);
+    const devices = await client.db().collection("devices")
+        .find<Device>({})
+        .project({_id: 0})
+        .toArray();
+    
+    res.status(200).json({devices});
 }
 
 /**
