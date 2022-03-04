@@ -1,5 +1,5 @@
 import api from "./api";
-import { PORT } from './constants';
+import { PORT } from './api/constants';
 
 // Start api
 api.listen(PORT, () => {
