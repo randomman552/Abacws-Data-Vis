@@ -1,33 +1,102 @@
 import { NextFunction, Request, Response } from "express";
 import devices from "../data/devices.json"
+import client from "../database";
 
+// Types
 export interface Device {
     name: string,
     getData?: Function,
     getHistory?: Function
 }
 
-export interface DeviceRequest extends Request {
-    device?: Device
+// Required for non optional additions to 'Request'
+declare module 'express-serve-static-core' {
+    interface Request {
+        device: Device
+    }
 }
 
+
+// Function factories
+function getDataFactory(device: Device) {
+    return async () => {
+        const [data] = await client.db()
+            .collection(device.name)
+            .aggregate([
+                {
+                    '$sort': {
+                        '_id': -1
+                    }
+                },
+                {
+                    '$set': {
+                        'timestamp': {
+                            '$toDate': '$_id'
+                        }
+                    }
+                },
+                {
+                    '$project': {
+                        '_id': 0
+                    }
+                },
+                {
+                    '$limit': 1
+                }
+            ])
+            .toArray();
+
+        return data;
+    }
+}
+
+function getHistoryFactory(device: Device) {
+    return async () => {
+        const history = await client.db()
+            .collection(device.name)
+            .aggregate([
+                {
+                    '$sort': {
+                        '_id': -1
+                    }
+                },
+                {
+                    '$set': {
+                        'timestamp': {
+                            '$toDate': '$_id'
+                        }
+                    }
+                },
+                {
+                    '$project': {
+                        '_id': 0
+                    }
+                }
+            ])
+            .toArray();
+
+        return history;
+    }
+}
+
+
+// Middleware
 /**
- * Middleware to get the device details and add them to the request object for futher handlers.
- * Should be used before any route that requries device details.
+ * Gets device details by deviceName parameter and adds it to the Request object.
  */
-export const deviceMiddleware = async (req: DeviceRequest, res: Response, next: NextFunction) => {
+export const deviceMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     const deviceName = req.params?.deviceName;
-    const device: Device = devices.devices.filter((value) => { 
-        return value.name === deviceName 
+    const device: Device = devices.devices.filter((value) => {
+        return value.name === deviceName
     })[0];
 
     if (!device) {
         res.status(404).json({ "msg": "Not found" });
         return;
     }
-    
-    device.getData = () => {};
-    device.getHistory = () => {};
+
+    device.getData = getDataFactory(device);
+    device.getHistory = getHistoryFactory(device);
 
     req.device = device;
     next();

@@ -1,1 +1,1 @@
-export { deviceMiddleware, DeviceRequest, Device } from "./deviceMiddleware"
+export { deviceMiddleware, Device } from "./deviceMiddleware"

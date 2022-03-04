@@ -1,16 +1,16 @@
-import express, { NextFunction, Request, Response } from "express";
+import express, { Request, Response } from "express";
+import { deviceMiddleware } from "../middleware";
 import devices from "../data/devices.json"
-import client from "../database";
 
 export const router = express.Router()
 
-// Endpoint handlers
+// Define handlers
 /**
  * Endpoint handler to return a the details of all devices
  * URL: '/'
  * Methods: GET, POST
  */
-const listDevices = async (req: Request, res: Response, next: NextFunction) => {
+const listDevices = async (req: Request, res: Response) => {
     res.status(200).json(devices);
 }
 
@@ -19,8 +19,16 @@ const listDevices = async (req: Request, res: Response, next: NextFunction) => {
  * URL: '/:deviceName'
  * Methods: GET, POST
  */
-const getData = async (req: Request, res: Response, next: NextFunction) => {
-    res.json({"msg": `GET DATA FOR '${req.params.deviceName}'`});
+const getData = async (req: Request, res: Response) => {
+    const device = req.device;
+    const data = (device.getData) ? await device.getData() : undefined;
+
+    res.status(200).json(
+        {
+            ...device,
+            data
+        }
+    );
 }
 
 /**
@@ -28,8 +36,14 @@ const getData = async (req: Request, res: Response, next: NextFunction) => {
  * URL: '/:deviceName/history'
  * Methods: GET, POST
  */
-const getHistoricalData = async (req: Request, res: Response, next: NextFunction) => {
-    res.json({"msg": `GET HISTORICAL DATA FOR '${req.params.deviceName}'`});
+const getHistoricalData = async (req: Request, res: Response) => {
+    const device = req.device;
+    const history = (device.getHistory) ? await device.getHistory() : undefined;
+    
+    res.status(200).json({
+        ...device,
+        history
+    });
 }
 
 /**
@@ -37,7 +51,8 @@ const getHistoricalData = async (req: Request, res: Response, next: NextFunction
  * URL: '/:deviceName'
  * Methods: PUT
  */
-const addData = async (req: Request, res: Response, next: NextFunction) => {
+const addData = async (req: Request, res: Response) => {
+    // TODO
     res.json({"msg": `ADD DATA FOR '${req.params.deviceName}'`});
 }
 
@@ -46,7 +61,8 @@ const addData = async (req: Request, res: Response, next: NextFunction) => {
  * URL '/:deviceName/history'
  * Methods: DELETE
  */
-const deleteData = async (req: Request, res: Response, next: NextFunction) => {
+const deleteData = async (req: Request, res: Response) => {
+    // TODO
     res.json({"msg": `DELETE DATA FOR '${req.params.deviceName}'`});
 }
 
@@ -55,6 +71,7 @@ const deleteData = async (req: Request, res: Response, next: NextFunction) => {
 router.get("/", listDevices);
 router.post("/", listDevices);
 
+router.use("/:deviceName", deviceMiddleware);
 router.get("/:deviceName", getData);
 router.post("/:deviceName", getData);
 
