@@ -20,5 +20,6 @@ export interface Device {
     },
     getData?: Function,
     getHistory?: Function,
-    addData?: Function
+    addData?: Function,
+    deleteData?: Function
 }

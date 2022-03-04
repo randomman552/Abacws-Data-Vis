@@ -13,6 +13,7 @@ export { Device };
 
 
 // Function factories
+// TODO: Can cast to a class instead of manually creating methods on each device object
 function getDataFactory(device: Device) {
     return async () => {
         const [data] = await client.db()
@@ -48,6 +49,12 @@ function addDataFactory(device: Device) {
     }
 }
 
+function deleteDataFactory(device: Device) {
+    return async (data: any) => {
+        return client.db().collection(device.name).drop();
+    }
+}
+
 
 // Middleware
 /**
@@ -79,6 +86,7 @@ export const deviceMiddleware = async (req: Request, res: Response, next: NextFu
     device.getData = getDataFactory(device);
     device.getHistory = getHistoryFactory(device);
     device.addData = addDataFactory(device);
+    device.deleteData = deleteDataFactory(device);
 
     req.device = device;
     next();

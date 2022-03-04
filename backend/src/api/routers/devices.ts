@@ -71,8 +71,9 @@ const addData = async (req: Request, res: Response) => {
  * Methods: DELETE
  */
 const deleteData = async (req: Request, res: Response) => {
-    // TODO
-    res.json({"msg": `DELETE DATA FOR '${req.params.deviceName}'`});
+    const device = req.device;
+    (device.deleteData) ? await device.deleteData() : undefined;
+    res.status(200).json();
 }
 
 
