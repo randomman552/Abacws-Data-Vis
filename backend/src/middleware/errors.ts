@@ -11,9 +11,5 @@ export const consoleLogErrors = (err: APIError, req: Request, res: Response, nex
 }
 
 export const errorHandler = (err: APIError, req: Request, res: Response, next: NextFunction) => {
-    if (err?.name !== "NOT FOUND") {
-        return next(err);
-    }
-
-    res.status(404).json({ "msg": err.message });
+    res.status(err.code).json({ "error": err.message });
 }
