@@ -13,7 +13,10 @@
         "name": "Debug backend",
         "request": "launch",
         "type": "node-terminal",
-        "cwd": "${workspaceFolder}/backend"
+        "cwd": "${workspaceFolder}/backend",
+        "env": {
+          "NODE_ENV": "development"
+        }
       },
       {
         "command": "npm run start",

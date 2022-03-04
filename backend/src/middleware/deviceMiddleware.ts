@@ -91,8 +91,12 @@ export const deviceMiddleware = async (req: Request, res: Response, next: NextFu
     })[0];
 
     if (!device) {
-        res.status(404).json({ "msg": "Not found" });
-        return;
+        return next({
+            code: 404,
+            url: req.originalUrl,
+            name: "NOT FOUND",
+            message: "Device does not exist"
+        });
     }
 
     device.getData = getDataFactory(device);
