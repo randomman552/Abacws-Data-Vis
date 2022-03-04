@@ -1,7 +1,7 @@
 {
     "openapi": "3.1.0",
     "info": {
-        "version": "1.0.0",
+        "version": "1.0.2",
         "title": "Abacws Data Visualiser",
         "description": "Data visualing tool for the Cardiff University Comptuer Science Building (Abacws)",
         "license": {
@@ -10,7 +10,7 @@
     },
     "servers": [
         {
-            "url": "/api"
+            "url": "localhost:5000/api"
         }
     ],
     "paths": {
@@ -67,16 +67,10 @@
         },
         "/devices/{deviceName}": {
             "summary": "Get data for a device",
-            "parameters": [ 
+            "parameters": [
                 { 
-                    "in": "path",
-                    "name": "deviceName",
-                    "required": true,
-                    "schema": {
-                        "type": "string",
-                        "example": "0.01"
-                    }
-                } 
+                    "$ref": "#/components/parameters/deviceName"
+                }
             ],
             "get": {
                 "responses": {
@@ -167,16 +161,10 @@
         },
         "/devices/{deviceName}/history": {
             "summary": "Get historical data for a device",
-            "parameters": [ 
+            "parameters": [
                 { 
-                    "in": "path",
-                    "name": "deviceName",
-                    "required": true,
-                    "schema": {
-                        "type": "string",
-                        "example": "0.01"
-                    }
-                } 
+                    "$ref": "#/components/parameters/deviceName"
+                }
             ],
             "get": {
                 "responses": {
@@ -276,6 +264,18 @@
         }
     },
     "components": {
+        "parameters": {
+            "deviceName": { 
+                "in": "path",
+                "name": "deviceName",
+                "required": true,
+                "description": "Name of the the device to query",
+                "schema": {
+                    "type": "string",
+                    "example": "Room-0.01"
+                }
+            }
+        },
         "schemas": {
             "devices": {
                 "type": "object",
