@@ -1,2 +1,2 @@
 export { deviceMiddleware, Device } from "./deviceMiddleware"
-export { APIError, errorHandler, consoleLogErrors } from "./errors"
+export { errorHandler, consoleLogErrors, mongodbLogErrors } from "./errors"

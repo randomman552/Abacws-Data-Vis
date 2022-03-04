@@ -1,12 +1,24 @@
 import { NextFunction, Request, Response } from "express";
-
-export interface APIError extends Error {
-    code: number,
-    url?: string
-}
+import { LOG_LEVEL } from "../constants";
+import client from "../database";
+import { APIError } from "../types";
 
 export const consoleLogErrors = (err: APIError, req: Request, res: Response, next: NextFunction) => {
-    console.error(err);
+    if (err?.level || 0 <= LOG_LEVEL) {
+        console.error(err);
+    }
+    next(err);
+}
+
+export const mongodbLogErrors = (err: APIError, req: Request, res: Response, next: NextFunction) => {
+    if (!err.timestamp) {
+        err.timestamp = Date.now();
+    }
+
+    // Only log this according to current LOG_LEVEL set
+    if (err?.level || 0 <= LOG_LEVEL) {
+        client.db().collection("log").insertOne(err);
+    }
     next(err);
 }
 

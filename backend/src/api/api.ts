@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express';
-import { consoleLogErrors, errorHandler } from './middleware';
+import { consoleLogErrors, errorHandler, mongodbLogErrors } from './middleware';
 import { devices, healthcheck } from './routers';
 import openapi from "./openapi.json"
 
@@ -18,6 +18,7 @@ api.use("/api/healthcheck", healthcheck);
 api.use("/api/devices", devices);
 
 // Register error handlers
+api.use(mongodbLogErrors);
 api.use(consoleLogErrors);
 api.use(errorHandler);
 
