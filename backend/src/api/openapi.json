@@ -1,9 +1,9 @@
 {
     "openapi": "3.1.0",
     "info": {
-        "version": "1.0.3",
+        "version": "1.0.4",
         "title": "Abacws Data Visualiser",
-        "description": "Data visualing tool for the Cardiff University Comptuer Science Building (Abacws)",
+        "description": "API for a data visualing tool for the Cardiff University Comptuer Science Building (Abacws)",
         "license": {
             "name": "MIT"
         }
@@ -16,7 +16,9 @@
     "paths": {
         "/devices": {
             "summary": "Get a list of all devices",
+            "description": "Get a list of all devices stored in the database",
             "get": {
+                "description": "Get a list of all devices stored in the database.",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -29,50 +31,21 @@
                         }
                     },
                     "503": {
-                        "description": "Unable to read/write from database",
-                        "content": {
-                            "application/json" : {
-                                "schema": {
-                                    "$ref": "#/components/schemas/error"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "post": {
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/devices"
-                                }
-                            }
-                        }
-                    },
-                    "503": {
-                        "description": "Unable to read/write from database",
-                        "content": {
-                            "application/json" : {
-                                "schema": {
-                                    "$ref": "#/components/schemas/error"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/databaseFailure"
                     }
                 }
             }
         },
         "/devices/{deviceName}": {
             "summary": "Get data for a device",
+            "description": "Get basic information and current data for a device",
             "parameters": [
                 { 
                     "$ref": "#/components/parameters/deviceName"
                 }
             ],
             "get": {
+                "description": "Get basic information and current data for a device",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -85,63 +58,15 @@
                         }
                     },
                     "404": {
-                        "description": "Device doesn't exist",
-                        "content": {
-                            "application/json" : {
-                                "schema": {
-                                    "$ref": "#/components/schemas/error"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/deviceNotFound"
                     },
                     "503": {
-                        "description": "Unable to read/write from database",
-                        "content": {
-                            "application/json" : {
-                                "schema": {
-                                    "$ref": "#/components/schemas/error"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "post": {
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json" : {
-                                "schema": {
-                                    "$ref": "#/components/schemas/deviceWithData"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Device doesn't exist",
-                        "content": {
-                            "application/json" : {
-                                "schema": {
-                                    "$ref": "#/components/schemas/error"
-                                }
-                            }
-                        }
-                    },
-                    "503": {
-                        "description": "Unable to read/write from database",
-                        "content": {
-                            "application/json" : {
-                                "schema": {
-                                    "$ref": "#/components/schemas/error"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/databaseFailure"
                     }
                 }
             },
             "put": {
-                "description": "Add data to device",
+                "description": "Add data to the specified device",
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -155,21 +80,18 @@
                     "202": {
                         "description": "Data accepted"
                     },
+                    "404": {
+                        "$ref": "#/components/responses/deviceNotFound"
+                    },
                     "503": {
-                        "description": "Unable to read/write from database",
-                        "content": {
-                            "application/json" : {
-                                "schema": {
-                                    "$ref": "#/components/schemas/error"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/databaseFailure"
                     }
                 }
             }
         },
         "/devices/{deviceName}/history": {
             "summary": "Get historical data for a device",
+            "description": "Get basic information for a device and a list of previous data entries",
             "parameters": [
                 { 
                     "$ref": "#/components/parameters/deviceName"
@@ -188,91 +110,58 @@
                         }
                     },
                     "404": {
-                        "description": "Device doesn't exist",
-                        "content": {
-                            "application/json" : {
-                                "schema": {
-                                    "$ref": "#/components/schemas/error"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/deviceNotFound"
                     },
                     "503": {
-                        "description": "Unable to read/write from database",
-                        "content": {
-                            "application/json" : {
-                                "schema": {
-                                    "$ref": "#/components/schemas/error"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "post": {
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json" : {
-                                "schema": {
-                                    "$ref": "#/components/schemas/deviceWithHistory"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Device doesn't exist",
-                        "content": {
-                            "application/json" : {
-                                "schema": {
-                                    "$ref": "#/components/schemas/error"
-                                }
-                            }
-                        }
-                    },
-                    "503": {
-                        "description": "Unable to read/write from database",
-                        "content": {
-                            "application/json" : {
-                                "schema": {
-                                    "$ref": "#/components/schemas/error"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/databaseFailure"
                     }
                 }
             },
             "delete": {
+                "description": "Delete all historical data for the specified device",
                 "responses": {
                     "200": {
                         "description": "OK"
                     },
                     "404": {
-                        "description": "Device doesn't exist",
-                        "content": {
-                            "application/json" : {
-                                "schema": {
-                                    "$ref": "#/components/schemas/error"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/deviceNotFound"
                     },
                     "503": {
-                        "description": "Unable to read/write from database",
-                        "content": {
-                            "application/json" : {
-                                "schema": {
-                                    "$ref": "#/components/schemas/error"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/databaseFailure"
                     }
                 }
             }
         }
     },
     "components": {
+        "responses": {
+            "deviceNotFound": {
+                "description": "Device doesn't exist",
+                "content": {
+                    "application/json" : {
+                        "schema": {
+                            "$ref": "#/components/schemas/error"
+                        },
+                        "example": {
+                            "error": "Device does not exist"
+                        }
+                    }
+                }
+            },
+            "databaseFailure": {
+                "description": "Unable to read/write from/to database",
+                "content": {
+                    "application/json" : {
+                        "schema": {
+                            "$ref": "#/components/schemas/error"
+                        },
+                        "example": {
+                            "error": "Unable to read/write from/to database"
+                        }
+                    }
+                }
+            }
+        },
         "parameters": {
             "deviceName": { 
                 "in": "path",
@@ -288,43 +177,100 @@
         "schemas": {
             "devices": {
                 "type": "object",
+                "description": "A list of all devices",
                 "properties": {
-                    "offset": {
-                        "type": "object",
-                        "properties": {
-                            "x": { "type": "number" },
-                            "y": { "type": "number" },
-                            "z": { "type": "number" }
-                        }
-                    },
                     "devices": {
                         "type": "array",
                         "items": {
-                            "type": "object"
+                            "$ref": "#/components/schemas/device"
                         }
                     }
                 }
+            },
+            "device": {
+                "type": "object",
+                "description": "Basic information about a device",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "examples": [ "Room-0.01" ]
+                    },
+                    "position": { 
+                        "$ref": "#/components/schemas/position"
+                    }
+                }
+            },
+            "position": {
+                "type": "object",
+                "description": "The absolute position of a device in the world",
+                "properties": {
+                    "x": {
+                        "type": "number",
+                        "examples": [ 0, 50, 12.5, 16.8 ]
+                    },
+                    "y": {
+                        "type": "number",
+                        "examples": [ 0, 50, 12.5, 16.8 ]
+                    },
+                    "z": {
+                        "type": "number",
+                        "examples": [ 0, 50, 12.5, 16.8 ]
+                    }
+                }
+            },
+            "data": {
+                "type": "object",
+                "description": "Data from the database, can have any number of fields.",
+                "properties": {
+                    "timestamp": {
+                        "type": "number",
+                        "description": "Timestamp of this data in unix time"
+                    }
+                },
+                "examples": [
+                    {
+                        "temperature": 20,
+                        "timestamp": 123871236
+                    },
+                    {
+                        "temperature": 21,
+                        "timestamp": 123871237
+                    }
+                ]
             },
             "deviceWithData": {
                 "type": "object",
-                "properties": {
-                    "name": { "type": "string" },
-                    "data": {
-                        "type": "object"
+                "description": "Device details with current data",
+                "allOf": [
+                    { "$ref": "#/components/schemas/device" },
+                    { 
+                        "type": "object",
+                        "properties": {
+                            "data": {
+                                "$ref": "#/components/schemas/data"
+                            }
+                        }
                     }
-                }
+                ]
             },
             "deviceWithHistory": {
                 "type": "object",
-                "properties": {
-                    "name": { "type": "string" },
-                    "history": {
-                        "type": "array",
-                        "items": {
-                            "type": "object"
+                "description": "Device details with array of historical data",
+                "allOf": [
+                    { "$ref": "#/components/schemas/device" },
+                    { 
+                        "type": "object",
+                        "properties": {
+                            "history": {
+                                "type": "array",
+                                "minItems": 0,
+                                "items": {
+                                    "$ref": "#/components/schemas/data"
+                                }
+                            }
                         }
                     }
-                }
+                ]
             },
             "error": {
                 "type": "object",
