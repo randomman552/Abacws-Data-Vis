@@ -8,7 +8,7 @@ export const router = express.Router()
 /**
  * Endpoint handler to return a the details of all devices
  * URL: '/'
- * Methods: GET, POST
+ * Methods: GET
  */
 const listDevices = async (req: Request, res: Response) => {
     const devices = await client.db().collection("devices")
@@ -22,7 +22,7 @@ const listDevices = async (req: Request, res: Response) => {
 /**
  * Endpoint handler to return current data for a given device
  * URL: '/:deviceName'
- * Methods: GET, POST
+ * Methods: GET
  */
 const getData = async (req: Request, res: Response) => {
     const device = req.device;
@@ -39,7 +39,7 @@ const getData = async (req: Request, res: Response) => {
 /**
  * Endpoint handler to get historical data for a device
  * URL: '/:deviceName/history'
- * Methods: GET, POST
+ * Methods: GET
  */
 const getHistoricalData = async (req: Request, res: Response) => {
     const device = req.device;
@@ -78,14 +78,8 @@ const deleteData = async (req: Request, res: Response) => {
 
 // Register handlers
 router.get("/", listDevices);
-router.post("/", listDevices);
-
 router.use("/:deviceName", deviceMiddleware);
 router.get("/:deviceName", getData);
-router.post("/:deviceName", getData);
-
 router.get("/:deviceName/history", getHistoricalData);
-router.post("/:deviceName/history", getHistoricalData);
-
 router.put("/:deviceName", addData);
 router.delete("/:deviceName/history", deleteData);
