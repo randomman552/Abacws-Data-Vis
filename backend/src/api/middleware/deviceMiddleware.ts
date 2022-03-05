@@ -1,23 +1,19 @@
 import { NextFunction, Request, Response } from "express";
 import client from "../database";
-import { Device } from "../types";
+import { Device as DeviceInterface, Position } from "../types";
 
+export class Device implements DeviceInterface {
+    public name: string
+    public position: Position
 
-// Required for non optional additions to 'Request'
-declare module 'express-serve-static-core' {
-    interface Request {
-        device: Device
+    constructor(obj: DeviceInterface) {
+        this.name = obj.name;
+        this.position = obj.position;
     }
-}
-export { Device };
 
-
-// Function factories
-// TODO: Can cast to a class instead of manually creating methods on each device object
-function getDataFactory(device: Device) {
-    return async () => {
+    async getData() {
         const [data] = await client.db()
-            .collection(device.name)
+            .collection(this.name)
             .find({})
             .sort({ timestamp: -1 })
             .limit(1)
@@ -26,32 +22,32 @@ function getDataFactory(device: Device) {
 
         return data;
     }
-}
 
-function getHistoryFactory(device: Device) {
-    return async () => {
-        const history = await client.db()
-            .collection(device.name)
+    async getHistory() {
+        return await client.db()
+            .collection(this.name)
             .find({})
             .sort({ timestamp: -1 })
             .project({ _id: 0 })
             .toArray();
-
-        return history;
     }
-}
-
-function addDataFactory(device: Device) {
-    return async (data: any) => {
-        // Add timestamp to data and insert into database
+    
+    async addData(data: any) {
         data.timestamp = Date.now();
-        return client.db().collection(device.name).insertOne(data);
+        return client.db().collection(this.name).insertOne(data);
+    }
+
+    async deleteData() {
+        return client.db().collection(this.name).drop();
     }
 }
 
-function deleteDataFactory(device: Device) {
-    return async (data: any) => {
-        return client.db().collection(device.name).drop();
+
+
+// Required for non optional additions to 'Request'
+declare module 'express-serve-static-core' {
+    interface Request {
+        device: Device
     }
 }
 
@@ -67,7 +63,7 @@ export const deviceMiddleware = async (req: Request, res: Response, next: NextFu
     const device = await client.db().collection("devices")
         .findOne<Device>(
             { name: deviceName },
-            { 
+            {
                 projection: {
                     _id: 0
                 } 
@@ -83,11 +79,7 @@ export const deviceMiddleware = async (req: Request, res: Response, next: NextFu
         });
     }
 
-    device.getData = getDataFactory(device);
-    device.getHistory = getHistoryFactory(device);
-    device.addData = addDataFactory(device);
-    device.deleteData = deleteDataFactory(device);
-
-    req.device = device;
+    // Convert device to an object of the Device class
+    req.device = new Device(device);
     next();
 }

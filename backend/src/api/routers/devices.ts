@@ -1,7 +1,6 @@
 import express, { Request, Response } from "express";
 import client from "../database";
-import { deviceMiddleware } from "../middleware";
-import { Device } from "../types";
+import { deviceMiddleware, Device } from "../middleware";
 
 export const router = express.Router()
 
@@ -27,7 +26,7 @@ const listDevices = async (req: Request, res: Response) => {
  */
 const getData = async (req: Request, res: Response) => {
     const device = req.device;
-    const data = (device.getData) ? await device.getData() : undefined;
+    const data = await device.getData();
 
     res.status(200).json(
         {
@@ -44,7 +43,7 @@ const getData = async (req: Request, res: Response) => {
  */
 const getHistoricalData = async (req: Request, res: Response) => {
     const device = req.device;
-    const history = (device.getHistory) ? await device.getHistory() : undefined;
+    const history = await device.getHistory();
     
     res.status(200).json({
         ...device,
@@ -61,7 +60,7 @@ const addData = async (req: Request, res: Response) => {
     const device = req.device;
     const data = req.body;
 
-    (device.addData) ? await device.addData(data) : undefined;
+    device.addData(data)
     res.status(202).json();
 }
 
@@ -72,7 +71,7 @@ const addData = async (req: Request, res: Response) => {
  */
 const deleteData = async (req: Request, res: Response) => {
     const device = req.device;
-    (device.deleteData) ? await device.deleteData() : undefined;
+    await device.deleteData()
     res.status(200).json();
 }
 

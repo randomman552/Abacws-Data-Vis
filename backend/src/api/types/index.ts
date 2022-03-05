@@ -11,15 +11,14 @@ export interface APIError extends Error {
     url?: string
 }
 
+
+export interface Position {
+    x: number,
+    y: number,
+    z: number
+}
+
 export interface Device {
     name: string,
-    position: {
-        x: number,
-        y: number,
-        z: number
-    },
-    getData?: Function,
-    getHistory?: Function,
-    addData?: Function,
-    deleteData?: Function
+    position: Position
 }
