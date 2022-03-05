@@ -1,7 +1,12 @@
 import { NextFunction, Request, Response } from "express";
+import { DEVICE_COLLECTION_PREFIX } from "../constants";
 import client from "../database";
 import { Device as DeviceInterface, Position } from "../types";
 
+/**
+ * Device class encapsulating all operations related to devices.
+ * Includes getters and setters to abstract away interaction with the database
+ */
 export class Device implements DeviceInterface {
     public name: string
     public position: Position
@@ -11,34 +16,51 @@ export class Device implements DeviceInterface {
         this.position = obj.position;
     }
 
-    async getData() {
-        const [data] = await client.db()
-            .collection(this.name)
-            .find({})
-            .sort({ timestamp: -1 })
-            .limit(1)
-            .project({ _id: 0 })
-            .toArray();
+    get collection() {
+        const collectionName = `${DEVICE_COLLECTION_PREFIX}_${this.name}`;
+        return client.db().collection(collectionName);
+    }
 
-        return data;
+    async getData() {
+        return this.collection
+            .findOne(
+                {},
+                {
+                    limit: 1,
+                    sort: {
+                        timestamp: -1
+                    },
+                    projection: {
+                        _id: 0
+                    }
+                }
+            )
     }
 
     async getHistory() {
-        return await client.db()
-            .collection(this.name)
-            .find({})
-            .sort({ timestamp: -1 })
-            .project({ _id: 0 })
+        return this.collection
+            .find(
+                {},
+                {
+                    limit: 10000,
+                    sort: {
+                        timestamp: -1
+                    },
+                    projection: {
+                        _id: 0
+                    }
+                }
+            )
             .toArray();
     }
     
     async addData(data: any) {
         data.timestamp = Date.now();
-        return client.db().collection(this.name).insertOne(data);
+        return this.collection.insertOne(data);
     }
 
     async deleteData() {
-        return client.db().collection(this.name).drop();
+        return this.collection.drop();
     }
 }
 
