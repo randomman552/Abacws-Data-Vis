@@ -1,12 +1,9 @@
 import './App.scss';
-import { useEffect } from 'react';
-import { apiFetch } from './api/util';
 import { ModelView, DataView } from './views';
+import { useAPI } from './hooks';
 
 export default function App() {
-    useEffect(() => {
-        apiFetch("/api/healthcheck").then((json) => { console.log(json) })
-    }, []);
+    const healthcheck = useAPI("/api/healthcheck");
 
     return (
         <div className="app">
