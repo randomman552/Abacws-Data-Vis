@@ -13,7 +13,7 @@ export function useAPI<Body=any>(url: string) {
         apiFetch<Body>(url).then((res) => {
             setResponse(res);
         });
-    }, []);
+    }, [url]);
 
     return response;
 }
@@ -44,7 +44,7 @@ export function useAPISubscription<Body=any>(url: string, interval: number=10000
 
         // Cleanup function to remove interval
         return () => { clearInterval(intervalID) };
-    }, []);
+    }, [url, interval]);
 
     return response;
 }
