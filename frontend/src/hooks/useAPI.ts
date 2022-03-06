@@ -20,12 +20,12 @@ export function useAPI<Body=any>(url: string) {
 
 /**
  * React hook to subscribe to an API request to the given URL.
- * Refreshes the result every 60 seconds by default
+ * Refreshes the result every 10 seconds by default
  * @param url The URL to query
- * @param interval The interval (in ms) to refresh the results after (default 60000)
+ * @param interval The interval (in ms) to refresh the results after (default 10000)
  * @returns The results
  */
-export function useAPISubscription<Body=any>(url: string, interval: number=60000) {
+export function useAPISubscription<Body=any>(url: string, interval: number=10000) {
     const [response, setResponse] = useState<APIResponse<Body>>();
     
     // Set interval to regularly refresh the response value
