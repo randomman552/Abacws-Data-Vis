@@ -7,7 +7,7 @@ interface Position {
     z: number
 }
 
-interface Device {
+export interface Device {
     name: string
     position: Position
 }

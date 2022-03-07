@@ -3,6 +3,7 @@ import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import Stats from "three/examples/jsm/libs/stats.module";
 import React from "react";
+import { Device } from "../../hooks";
 
 /**
  * Singleton class encapsulating three-js code for creating and rendering the building model in the canvas.
@@ -16,9 +17,14 @@ export default class Graphics {
 
     private resizeListener = () => { this.resize(); };
     private animateListener = () => { this.animate(); };
+    /**
+     * Attribute to store the interval ID for the interval used to rotate the device cubes in the scene.
+     */
+    private deviceIntervalID;
 
     private camera: THREE.PerspectiveCamera;
     private scene: THREE.Scene;
+    private deviceScene: THREE.Scene;
     private renderer: THREE.WebGLRenderer;
 
     private clippingPlane: THREE.Plane;
@@ -33,11 +39,13 @@ export default class Graphics {
         this.stats = Stats();
 
         this.scene = new THREE.Scene();
+        this.deviceScene = new THREE.Scene();
 
         this.camera = new THREE.PerspectiveCamera(75, this.width/this.height, 0.1, 1000);
 
         // Renderer setup
         this.renderer = new THREE.WebGLRenderer();
+        this.renderer.autoClear = false;
         this.renderer.setPixelRatio(2);
         this.renderer.setSize(this.width, this.height);
         this.renderer.setClearColor(0x000000);
@@ -52,6 +60,16 @@ export default class Graphics {
         // Clipping plane setup
         this.clippingPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 100);
         this.renderer.clippingPlanes = [ this.clippingPlane ];
+
+        // Start device rotation interval
+        this.deviceIntervalID = setInterval(() => {
+            const angle = 1*(Math.PI/180);
+            this.deviceScene.children.forEach((child) => {
+                child.rotateX(angle);
+                child.rotateY(angle);
+                child.rotateZ(angle);
+            });
+        }, 10)
     }
 
     /**
@@ -95,9 +113,6 @@ export default class Graphics {
         lights[2].position.set(100, 100, 100);
         this.scene.add(...lights);
 
-        // Clipping plane
-
-
         // Load model as the last step
         const loader = new GLTFLoader();
         return loader.loadAsync("/assets/abacws.glb").then((gltf: GLTF) => {
@@ -123,6 +138,21 @@ export default class Graphics {
     }
 
     /**
+     * Add the given devices to the current scene for rendering
+     * @param devices The devices to add to the scene
+     */
+    setDevices(devices: Device[]) {
+        this.deviceScene.clear();
+        const geom = new THREE.BoxGeometry(3, 3, 3);
+        const mat = new THREE.MeshBasicMaterial({color: 0xff0000});
+        for (const device of devices) {
+            const cube = new THREE.Mesh(geom, mat);
+            cube.position.set(device.position.x, device.position.y, device.position.z);
+            this.deviceScene.add(cube);
+        }
+    }
+
+    /**
      * Method to update the size of the canvas and camera when the window changes size.
      */
     resize() {
@@ -137,8 +167,10 @@ export default class Graphics {
      * Method to draw a frame on the canvas
      */
     animate() {
+        this.renderer.clear();
         this.controls.update();
         this.renderer.render(this.scene, this.camera);
+        this.renderer.render(this.deviceScene, this.camera);
         this.stats.update();
     }
 
@@ -152,6 +184,9 @@ export default class Graphics {
         // Remove event listeners
         window.removeEventListener('resize', this.resizeListener);
         this.animateListener = () => { this.animate() };
+
+        // Clear intervals
+        clearInterval(this.deviceIntervalID)
 
         // Remove old instance
         Graphics.instance = undefined;

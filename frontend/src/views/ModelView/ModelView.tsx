@@ -1,23 +1,29 @@
 import { useEffect, useRef, useState } from "react"
 import { useSearchParams } from "react-router-dom";
 import { Spinner } from "../../components";
+import { useDevices } from "../../hooks";
 import Graphics from "./Graphics"
 
 export interface ModelViewProps {}
 
 export function ModelView(props: ModelViewProps) {
+    const graphics = Graphics.getInstance();
+    const devices = useDevices();
+    if (devices)
+        graphics.setDevices(devices);
+        
     const [loaded, setLoaded] = useState(false);
     const [searchParams, setSearchParams] = useSearchParams();
     const mountRef = useRef<any>(null);
+
     
     // Setup canvas when this component is first created
     useEffect(() => {
-        const graphics = Graphics.getInstance();
         graphics.init(mountRef).finally(() => { setLoaded(true) });
 
         // Return cleanup function
         return () => { graphics.dispose() }
-    }, []);
+    }, [graphics]);
 
     // Set floor if search param is set
     if (searchParams.has("floor")) {
