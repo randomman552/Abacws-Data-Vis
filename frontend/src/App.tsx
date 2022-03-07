@@ -4,6 +4,7 @@ import { useAPI } from './hooks';
 
 export default function App() {
     const healthcheck = useAPI("/api/healthcheck");
+    console.log(healthcheck);
 
     return (
         <div className="app">
