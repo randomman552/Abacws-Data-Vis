@@ -3,7 +3,8 @@ import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import Stats from "three/examples/jsm/libs/stats.module";
 import React from "react";
-import { Device } from "../../hooks";
+import { Device } from "..";
+import { Spinner } from "../../components";
 
 /**
  * Singleton class encapsulating three-js code for creating and rendering the building model in the canvas.
@@ -32,7 +33,9 @@ export default class Graphics {
     private controls: OrbitControls;
     private stats: Stats
     
-    private constructor() {
+    constructor() {
+        console.log("Graphics created");
+        
         this.width = window.innerWidth;
         this.height = window.innerHeight;
 
@@ -178,6 +181,7 @@ export default class Graphics {
      * Method called to dispose of resources when this object is no longer required.
      */
     dispose() {
+        console.log("Graphics destroyed");
         this.ref.removeChild(this.renderer.domElement);
         this.ref.removeChild(this.stats.dom);
 
