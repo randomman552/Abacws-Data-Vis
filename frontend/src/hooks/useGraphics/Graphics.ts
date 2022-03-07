@@ -147,12 +147,17 @@ export default class Graphics {
     setDevices(devices: Device[]) {
         this.deviceScene.clear();
         const geom = new THREE.BoxGeometry(3, 3, 3);
-        const mat = new THREE.MeshBasicMaterial({color: 0xff0000});
+        const mat = new THREE.MeshPhongMaterial({color: 0xff0000});
         for (const device of devices) {
             const cube = new THREE.Mesh(geom, mat);
             cube.position.set(device.position.x, device.position.y, device.position.z);
             this.deviceScene.add(cube);
         }
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0x404040);
+        const light = new THREE.DirectionalLight(0xf4f4f4);
+        light.position.set(-100, 100, -100);
+        this.deviceScene.add(light, ambientLight);
     }
 
     /**
