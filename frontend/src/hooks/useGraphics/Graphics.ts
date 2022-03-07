@@ -33,7 +33,7 @@ export default class Graphics {
     private controls: OrbitControls;
     private stats: Stats
     
-    constructor() {
+    private constructor() {
         console.log("Graphics created");
         
         this.width = window.innerWidth;
@@ -107,14 +107,10 @@ export default class Graphics {
         this.animateListener();
 
         // Lighting
-        const lights : THREE.Light[] = [];
-        lights.push(new THREE.AmbientLight(0x404040));
-        lights.push(new THREE.DirectionalLight(0xf4f4f4));
-        lights.push(new THREE.DirectionalLight(0xf4f4af));
-
-        lights[1].position.set(-100, 100, -100);
-        lights[2].position.set(100, 100, 100);
-        this.scene.add(...lights);
+        const ambientLight = new THREE.AmbientLight(0x404040);
+        const light = new THREE.DirectionalLight(0xf4f4f4);
+        light.position.set(-100, 100, -100);
+        this.scene.add(ambientLight, light);
 
         // Load model as the last step
         const loader = new GLTFLoader();
