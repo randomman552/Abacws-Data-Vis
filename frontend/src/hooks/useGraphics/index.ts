@@ -1,1 +1,1 @@
-export { useGraphics, useCreateGraphics } from "./useGraphics"
+export { useGraphics, useGraphicsInit } from "./useGraphics"

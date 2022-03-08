@@ -10,7 +10,7 @@ import Graphics from "./Graphics";
  * @param onLoad Callback to call when the graphics has completed loading
  * @returns The mountRef which should be used to mount the Threejs graphics to the DOM
  */
-export function useCreateGraphics(onLoad?: CallableFunction) {
+export function useGraphicsInit(onLoad?: CallableFunction) {
     const graphics = Graphics.getInstance();
     const devices = useDevices();
     const mountRef = useRef<any>(null);

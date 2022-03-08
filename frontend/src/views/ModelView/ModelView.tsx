@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState } from "react"
+import { useState } from "react"
 import { Spinner } from "../../components";
-import { useCreateGraphics } from "../../hooks";
+import { useGraphicsInit } from "../../hooks";
 
 export interface ModelViewProps {}
 
 export function ModelView(props: ModelViewProps) {
     const [loaded, setLoaded] = useState(false);
-    const mountRef = useCreateGraphics(() => { setLoaded(true) });
+    const mountRef = useGraphicsInit(() => { setLoaded(true) });
 
     // Render loading spinner until the model is finished loading
     const loadingSpinner = (!loaded) ? <Spinner/> : null;
