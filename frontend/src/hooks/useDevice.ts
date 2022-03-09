@@ -39,7 +39,7 @@ export function useDevices() {
  * @param deviceName The name of the device to query
  * @returns 
  */
-export function useDeviceData(deviceName: string) {
+export function useDeviceData(deviceName: string|undefined) {
     const url = `/api/devices/${deviceName}`;
     return useAPISubscription<DeviceData>(url)?.body.data;
 }
@@ -50,7 +50,7 @@ export function useDeviceData(deviceName: string) {
  * @param deviceName The name of the device we want to query
  * @returns 
  */
-export function useDeviceHistory(deviceName: string) {
+export function useDeviceHistory(deviceName: string|undefined) {
     const url = `/api/devices/${deviceName}/history`;
     return useAPISubscription<DeviceHistory>(url)?.body.history;
 }
