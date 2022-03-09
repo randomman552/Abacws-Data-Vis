@@ -1,26 +1,27 @@
 import { useEffect, useRef } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDevices } from "../";
 import Graphics from "./Graphics";
 
 /**
  * Hook specifically for use in the ModelView component.
- * Automatically hooks into URL parameters to change the state of the scene.
- * TODO: Is there any real point to extracting this as a hook? It's only used in one place?
+ * This hook automatically hooks the 3D model into the state of the application
+ * TODO: Move this all into the ModelView component, no real point making it a hook as it is not reusable anywhere else.
  * @param onLoad Callback to call when the graphics has completed loading
  * @returns The mountRef which should be used to mount the Threejs graphics to the DOM
  */
 export function useGraphicsInit(onLoad?: CallableFunction) {
-    const graphics = Graphics.getInstance();
+    const graphics = useGraphics();
     const devices = useDevices();
     const mountRef = useRef<any>(null);
-    const searchParams = useSearchParams()[0];
-    
-    // Setup canvas when the graphics object changes
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+
+    // Setup canvas when the graphics or mountRef changes
     useEffect(() => {
         graphics.init(mountRef).then(() => { if (onLoad) onLoad() });
         return () => { graphics.dispose() }
-    }, [mountRef]); 
+    }, [graphics, mountRef, onLoad]); 
 
 
     // Set floor if search param is set
@@ -29,14 +30,28 @@ export function useGraphicsInit(onLoad?: CallableFunction) {
             const floor = Number(searchParams.get("floor"));
             graphics.setFloor(floor);
         }
-    }, [searchParams.get("floor")])
+    }, [graphics, searchParams]);
 
     
     // Add devices after they have been loaded
     useEffect(() => {
         if (devices)
             graphics.setDevices(devices);
-    }, [devices])   
+    }, [graphics, devices]);
+
+
+    // Update selected device parameter when changed in Graphics object
+    useEffect(() => {
+        graphics.changeListeners.onDeviceSelected = (device) => {
+            const url = `/devices/${device.name}`;
+            const params = `?${searchParams.toString()}`;
+            navigate({
+                pathname: url,
+                search: params
+            });
+        }
+    }, [graphics, searchParams, navigate]);
+
 
     return mountRef;
 }
