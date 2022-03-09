@@ -5,12 +5,14 @@ import Stats from "three/examples/jsm/libs/stats.module";
 import React from "react";
 import { Device } from "..";
 
+
 const DEVICE_GEOM = new THREE.BoxGeometry(3, 3, 3);
 const DEVICE_COLOR = 0xff0000;
 const DEVICE_HOVER_GEOM = new THREE.BoxGeometry(4, 4, 4);
 const DEVICE_HOVER_COLOR = 0x00aaff;
 const DEVICE_SELECTED_GEOM = new THREE.BoxGeometry(4, 4, 4);
 const DEVICE_SELECTED_COLOR = 0x00ffaa;
+
 
 /**
  * Singleton class encapsulating three-js code for creating and rendering the building model in the canvas.
@@ -46,6 +48,14 @@ export default class Graphics {
     private pointer = { x:0, y:0 };
     private _hoveredDevice?: THREE.Object3D<THREE.Event>;
     private _selectedDevice?: THREE.Object3D<THREE.Event>;
+
+    /**
+     * Listeners called when a specific change occurs.
+     * Used to bind the state of the Graphics instance to the rest of the React application.
+     */
+    public changeListeners = {
+        onDeviceSelected: (device: Device) => {}
+    };
     
     private constructor() {
         console.log("Graphics created");
@@ -92,7 +102,6 @@ export default class Graphics {
         this.instance = obj;
         return obj;
     }
-
 
     /**
      * Method to initalise the scene.
@@ -163,6 +172,7 @@ export default class Graphics {
         Graphics.instance = undefined;
     }
 
+
     // Setters
     /**
      * Method moves the clipping plane to hide floors above the given floor number.
@@ -187,8 +197,8 @@ export default class Graphics {
     setDevices(devices: Device[]) {
         this.deviceScene.clear();
         const geom = DEVICE_GEOM;
-        const mat = new THREE.MeshPhongMaterial({color: DEVICE_COLOR});
         for (const device of devices) {
+            const mat = new THREE.MeshPhongMaterial({color: DEVICE_COLOR});
             const cube = new THREE.Mesh(geom, mat);
             cube.position.set(device.position.x, device.position.y, device.position.z);
             cube.userData = device;
@@ -199,11 +209,6 @@ export default class Graphics {
         const light = new THREE.DirectionalLight(0xf4f4f4);
         light.position.set(-100, 100, -100);
         this.deviceScene.add(light, ambientLight);
-    }
-
-    // Getters
-    get selectedDevice(): Device {
-        return this._selectedDevice?.userData as Device
     }
 
 
@@ -290,5 +295,8 @@ export default class Graphics {
             device.material.color.set(DEVICE_SELECTED_COLOR);
             device.geometry = DEVICE_SELECTED_GEOM;
         }
+
+        // Call change listener
+        this.changeListeners.onDeviceSelected(device.userData as Device)
     }
 }
