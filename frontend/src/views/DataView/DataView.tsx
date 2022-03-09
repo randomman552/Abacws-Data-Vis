@@ -1,14 +1,17 @@
 import "./DataView.scss"
-import { useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { DeviceDetails, FloorSelector, GraphContainer } from "./components";
+import { useDeviceData } from "../../hooks";
 
 export interface DataViewProps {}
 
 export function DataView(props: DataViewProps) {
     const [searchParams, setSearchParams] = useSearchParams();
+    const params = useParams();
+    const deviceData = useDeviceData(params.deviceName);
+
     const hidden = searchParams.get("hidePanel") === "true"    
     const className = (hidden) ? "data-container hidden" : "data-container"
-
     const selectedFloor = (searchParams.has("floor"))? Number(searchParams.get("floor")) : -1;
 
     return (
@@ -32,7 +35,11 @@ export function DataView(props: DataViewProps) {
                         setSearchParams(searchParams);
                     }}
                 />
-                <DeviceDetails/>
+
+                <DeviceDetails
+                    data={deviceData}
+                />
+                
                 <GraphContainer/>
             </article>
         </div>

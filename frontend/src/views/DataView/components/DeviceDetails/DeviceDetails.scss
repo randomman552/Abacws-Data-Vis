@@ -1,0 +1,10 @@
+@use "../../../../styles/_variables.scss";
+
+.device-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.device-container table.data th {
+    text-transform: capitalize;
+}

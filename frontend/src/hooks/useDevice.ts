@@ -12,16 +12,16 @@ export interface Device {
     position: Position
 }
 
-interface Data {
+interface Data extends Object {
     timestamp: number
     [fields: string]: unknown
 }
 
-interface DeviceData extends Device {
+export interface DeviceData extends Device {
     data: Data
 }
 
-interface DeviceHistory extends Device {
+export interface DeviceHistory extends Device {
     history: Data[]
 }
 

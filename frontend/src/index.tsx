@@ -9,7 +9,8 @@ ReactDOM.render(
     <React.StrictMode>
         <BrowserRouter>
             <Routes>
-                <Route path='' element={<App/>}/>
+                <Route path='/' element={<App/>}/>
+                <Route path='/devices/:deviceName' element={<App/>}/>
             </Routes>
         </BrowserRouter>
     </React.StrictMode>,
