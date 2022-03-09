@@ -11,13 +11,17 @@ export function DeviceDetails(props: DeviceDetailsProps) {
     const rows = (data) ? Object.entries(data).map((entry) => {
         const key = entry[0];
         const value = entry[1];
+
+        let displayValue = String(value);
+        if (key === "timestamp") displayValue = new Date(Number(value)).toLocaleString();
+
         return (
             <tr>
                 <th headers="field" scope="row">
                     {key}
                 </th>
                 <td headers={`value ${key}`}>
-                    {String(value)}
+                    {displayValue}
                 </td>
             </tr>
         )
