@@ -30,11 +30,15 @@ export function DeviceDetails(props: DeviceDetailsProps) {
     return (
         <article className="device-container">
             <table className="data">
-                <tr>
-                    <th scope="column">field</th>
-                    <th scope="column">value</th>
-                </tr>
-                {rows}
+                <thead>
+                    <tr>
+                        <th scope="column">field</th>
+                        <th scope="column">value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {rows}
+                </tbody>
             </table>
         </article>
     )
