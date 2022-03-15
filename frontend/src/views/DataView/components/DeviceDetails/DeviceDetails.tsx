@@ -16,7 +16,7 @@ export function DeviceDetails(props: DeviceDetailsProps) {
         if (key === "timestamp") displayValue = new Date(Number(value)).toLocaleString();
 
         return (
-            <tr>
+            <tr key={key}>
                 <th headers="field" scope="row">
                     {key}
                 </th>
