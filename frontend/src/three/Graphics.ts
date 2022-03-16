@@ -3,9 +3,9 @@ import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import Stats from "three/examples/jsm/libs/stats.module";
 import React from "react";
-import { Device } from "..";
 import { DeviceSelectEvent, FloorSelectEvent, LoadEvent } from "./events";
-import { apiFetch } from "../../api";
+import { apiFetch } from "../api";
+import { Device } from "../hooks";
 
 
 const DEVICE_GEOM = new THREE.BoxGeometry(3, 3, 3);

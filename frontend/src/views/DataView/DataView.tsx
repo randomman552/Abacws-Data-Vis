@@ -1,8 +1,8 @@
 import "./DataView.scss"
 import { DeviceDetails, FloorSelector, GraphContainer } from "./components";
-import { useDeviceData, useSelectedDevice } from "../../hooks";
+import { useDeviceData } from "../../hooks";
 import { useState } from "react";
-import { useSelectedFloor } from "../../hooks/useGraphics/useGraphics";
+import { useSelectedDevice, useSelectedFloor } from "../../three";
 
 export interface DataViewProps {}
 
