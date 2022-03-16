@@ -4,6 +4,8 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import Stats from "three/examples/jsm/libs/stats.module";
 import React from "react";
 import { Device } from "..";
+import { DeviceSelectEvent, FloorSelectEvent, LoadEvent } from "./events";
+import { apiFetch } from "../../api";
 
 
 const DEVICE_GEOM = new THREE.BoxGeometry(3, 3, 3);
@@ -16,6 +18,7 @@ const DEVICE_SELECTED_COLOR = 0x00ffaa;
 
 /**
  * Singleton class encapsulating three-js code for creating and rendering the building model in the canvas.
+ * Communicates with the rest of the application using events which are targetted at the window.
  */
 export default class Graphics {
     private static instance?: Graphics;
@@ -34,28 +37,29 @@ export default class Graphics {
      */
     private deviceIntervalID;
 
+    // Window event listeners
+    // These event handlers listen to events fired on the window 
+    // and change the state of the Three scene accordingly
+    private onFloorSelect = (event: Event) => { 
+        const e = event as FloorSelectEvent;
+        this.setFloor(e.detail.floor);
+    }
+
+    // Rendering components
     private camera = new THREE.PerspectiveCamera();
     private scene = new THREE.Scene();
     private deviceScene = new THREE.Scene();
     private renderer = new THREE.WebGLRenderer();
     private rayCaster = new THREE.Raycaster();
-
     private clippingPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 100);
 
     private controls = new OrbitControls(this.camera, this.renderer.domElement);
     private stats = Stats()
 
+    // Attributes used for the selection of devices
     private pointer = { x:0, y:0 };
     private _hoveredDevice?: THREE.Object3D<THREE.Event>;
     private _selectedDevice?: THREE.Object3D<THREE.Event>;
-
-    /**
-     * Listeners called when a specific change occurs.
-     * Used to bind the state of the Graphics instance to the rest of the React application.
-     */
-    public changeListeners = {
-        onDeviceSelected: (device: Device) => {}
-    };
     
     private constructor() {
         console.log("Graphics created");
@@ -118,6 +122,9 @@ export default class Graphics {
         window.addEventListener('pointermove', this.onPointerMove);
         window.addEventListener('pointerdown', this.onPointerDown);
 
+        // Add custom event listeners
+        window.addEventListener(FloorSelectEvent.TYPE, this.onFloorSelect);
+
         // Start animation
         this.onAnimate = () => {
             requestAnimationFrame(this.onAnimate);
@@ -131,11 +138,24 @@ export default class Graphics {
         light.position.set(0, 100, -100);
         this.scene.add(ambientLight, light);
 
-        // Load model as the last step
+        // Load model
         const loader = new GLTFLoader();
-        return loader.loadAsync("/assets/abacws.glb").then((gltf: GLTF) => {
+        return loader.loadAsync("/assets/abacws.glb")
+        .then((gltf: GLTF) => {
             this.scene.add(gltf.scene);
             return gltf;
+        })
+
+        // Then load devices
+        .then(() => {
+            apiFetch("/api/devices").then((json) => {
+                this.setDevices(json.body.devices);
+            });
+        })
+
+        // Then fire an event to let the rest of the application know we are done loading
+        .then(() => {
+            window.dispatchEvent(new LoadEvent())
         });
     }
 
@@ -296,7 +316,7 @@ export default class Graphics {
             device.geometry = DEVICE_SELECTED_GEOM;
         }
 
-        // Call change listener
-        this.changeListeners.onDeviceSelected(device.userData as Device)
+        // Fire device selected event
+        window.dispatchEvent(new DeviceSelectEvent(device.userData.name));
     }
 }

@@ -1,16 +1,15 @@
-import { useCallback, useState } from "react"
 import { Spinner } from "../../components";
 import { useGraphicsInit } from "../../hooks";
+import { useGraphicsLoaded } from "../../hooks/useGraphics/useGraphics";
 
 export interface ModelViewProps {}
 
 export function ModelView(props: ModelViewProps) {
-    const [loaded, setLoaded] = useState(false);
-    const onLoad = useCallback(() => { setLoaded(true) }, [])
-    const mountRef = useGraphicsInit(onLoad);
+    const loaded = useGraphicsLoaded();
+    const mountRef = useGraphicsInit();
 
     // Render loading spinner until the model is finished loading
-    const loadingSpinner = (!loaded) ? <Spinner/> : null;
+    const loadingSpinner = (loaded) ? null : <Spinner/>;
     return (
         <div ref={mountRef} className="model-container">
             {loadingSpinner}

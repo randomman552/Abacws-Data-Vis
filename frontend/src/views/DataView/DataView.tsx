@@ -1,25 +1,23 @@
 import "./DataView.scss"
-import { useParams, useSearchParams } from "react-router-dom";
 import { DeviceDetails, FloorSelector, GraphContainer } from "./components";
-import { useDeviceData } from "../../hooks";
+import { useDeviceData, useSelectedDevice } from "../../hooks";
+import { useState } from "react";
+import { useSelectedFloor } from "../../hooks/useGraphics/useGraphics";
 
 export interface DataViewProps {}
 
 export function DataView(props: DataViewProps) {
-    const [searchParams, setSearchParams] = useSearchParams();
-    const params = useParams();
-    const deviceData = useDeviceData(params.deviceName);
+    const deviceName = useSelectedDevice();
+    const [floor, setFloor] = useSelectedFloor();
+    
+    const deviceData = useDeviceData(deviceName);
 
-    const hidden = searchParams.get("hidePanel") === "true"    
+    const [hidden, setHidden] = useState(false);    
     const className = (hidden) ? "data-container hidden" : "data-container"
-    const selectedFloor = (searchParams.has("floor"))? Number(searchParams.get("floor")) : -1;
 
     return (
         <div className={className}>
-            <div className="toggle" onClick={() => {
-                    searchParams.set("hidePanel", `${!hidden}`);
-                    setSearchParams(searchParams);
-                }}>
+            <div className="toggle" onClick={() => { setHidden(!hidden) }}>
                 <div className="indicator">&rsaquo;</div>
             </div>
 
@@ -29,11 +27,8 @@ export function DataView(props: DataViewProps) {
                 </h1>
 
                 <FloorSelector
-                    current={ selectedFloor }
-                    onSelect={(i: number) => {
-                        searchParams.set("floor", `${i}`);
-                        setSearchParams(searchParams);
-                    }}
+                    current={floor}
+                    onSelect={(i: number) => { setFloor(i) }}
                 />
 
                 <DeviceDetails

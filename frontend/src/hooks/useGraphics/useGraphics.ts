@@ -1,6 +1,5 @@
-import { useEffect, useRef } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { useDevices } from "../";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { DeviceSelectEvent, FloorSelectEvent, LoadEvent } from "./events";
 import Graphics from "./Graphics";
 
 /**
@@ -10,57 +9,85 @@ import Graphics from "./Graphics";
  * @param onLoad Callback to call when the graphics has completed loading
  * @returns The mountRef which should be used to mount the Threejs graphics to the DOM
  */
-export function useGraphicsInit(onLoad?: CallableFunction) {
-    const graphics = useGraphics();
-    const devices = useDevices();
+export function useGraphicsMount() {
+    const graphics = Graphics.getInstance();
     const mountRef = useRef<any>(null);
-    const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
 
     // Setup canvas when the graphics or mountRef changes
     useEffect(() => {
-        graphics.init(mountRef).then(() => { if (onLoad) onLoad() });
+        graphics.init(mountRef).then();
         return () => { graphics.dispose() }
-    }, [graphics, mountRef, onLoad]); 
-
-
-    // Set floor if search param is set
-    useEffect(() => {
-        if (searchParams.has("floor")) {
-            const floor = Number(searchParams.get("floor"));
-            graphics.setFloor(floor);
-        }
-    }, [graphics, searchParams]);
-
-    
-    // Add devices after they have been loaded
-    useEffect(() => {
-        if (devices)
-            graphics.setDevices(devices);
-    }, [graphics, devices]);
-
-
-    // Update selected device parameter when changed in Graphics object
-    useEffect(() => {
-        graphics.changeListeners.onDeviceSelected = (device) => {
-            const url = `/devices/${device.name}`;
-            const params = `?${searchParams.toString()}`;
-            navigate({
-                pathname: url,
-                search: params
-            });
-        }
-    }, [graphics, searchParams, navigate]);
-
+    }, [graphics, mountRef]);
 
     return mountRef;
 }
 
 /**
- * React hook to get the current graphics object.
- * Can be used by other components to directly interact with the Three.js scene
- * @returns The current {@link Graphics} singleton object
+ * React hook to inform the application when the Graphics object has finished loading
+ * @returns Boolean defining whether the three-js scene has fully loaded or not
  */
-export function useGraphics() {
-    return Graphics.getInstance();
+export function useGraphicsLoaded() {
+    const [loaded, setLoaded] = useState(false);
+    useEffect(() => {
+        const type = LoadEvent.TYPE;
+        window.addEventListener(type, (e: Event) => {
+            const ev = e as LoadEvent;
+            setLoaded(ev.detail.success);
+        });
+    }, []);
+
+    return loaded;
+}
+
+/**
+ * React hook to get the currently selected device from the three-js scene
+ * @returns The currently selected device from the three-js scene
+ */
+export function useSelectedDevice() {
+    // Internal state for this function, causes a re-render whenever changed
+    const [state, setState] = useState("");
+    
+    // Callback called when DeviceSelectEvent occurs
+    const callback = useCallback((e: Event) => {
+        const ev = e as DeviceSelectEvent;
+        setState(ev.detail.deviceName);
+    }, [setState]);
+
+    // Attach the callback as an event listener
+    useEffect(() => {
+        const type = DeviceSelectEvent.TYPE;
+        window.addEventListener(type, callback);
+        return () => { window.removeEventListener(type, callback) };
+    }, [callback]);
+
+    return state;
+}
+
+/**
+ * React hook to interact with the currently selected floor in the three-js scene.
+ * @returns The currently selected floor, alongside a function to set the current floor.
+ */
+export function useSelectedFloor() : [number|undefined, (floor: number) => void ]{
+    // Internal state for this function, causes a re-render whenever changed
+    const [state, setState] = useState<number>();
+    
+    // Callback called when FloorSelectedEvent occurs
+    const callback = useCallback((e: Event) => {
+        const ev = e as FloorSelectEvent;
+        setState(ev.detail.floor);
+    }, [setState])
+
+    // Attach the callback as an event listener
+    useEffect(() => {
+        const type = FloorSelectEvent.TYPE;
+        window.addEventListener(type, callback);
+        return () => { window.removeEventListener(type, callback) };
+    }, [callback]);
+
+    // Return a setter to allow the React app to set the selected floor
+    const setter = useCallback((floor: number) => {
+        window.dispatchEvent(new FloorSelectEvent(floor));
+    }, [])
+
+    return [state, setter];
 }

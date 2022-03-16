@@ -1,1 +1,1 @@
-export { useGraphics, useGraphicsInit } from "./useGraphics"
+export { useSelectedDevice, useGraphicsMount as useGraphicsInit } from "./useGraphics"
