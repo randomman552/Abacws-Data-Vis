@@ -1,0 +1,316 @@
+openapi: 3.1.0
+info:
+  version: 1.0.5
+  title: Abacws Data Visualiser
+  description: >
+    API for the storage and query of IoT data for the Cardiff University Comptuer Science building (Abacws).
+  license:
+    name: MIT
+
+tags:
+  - name: Devices
+    description: > 
+        Endpoints relating to all devices
+
+  - name: Device Data
+    description: > 
+        Endpoints relating to the devices current details.
+
+  - name: Device History
+    description: > 
+        Endpoints relating to the devices historical data
+
+servers:
+    - url: https://abacws.ggrainger.uk/api
+      description: >
+        Current production deployment server.
+    
+    - url: http://localhost:3000/api
+      description: >
+        Local development server.
+    
+    - url: /api
+      description: >
+        Relative url
+
+paths:
+  /devices:
+    summary: Device listing endpoint
+    get:
+      summary: Get list of devices
+      description: >
+        Get a list of all available devices handled by the API.
+      tags: 
+        - Devices
+      responses:
+        '200':
+          description: >
+            A list of devices was returned by the API
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/devices"
+        
+        '503':
+          $ref: "#/components/responses/databaseFailure"
+
+  /devices/{deviceName}:
+    summary: Data interaction endpoint for a device
+    description: >
+        Endpoint for interacting with a given device and it's data
+        Takes the unique name of a device as a parameter.
+    parameters:
+    - $ref: "#/components/parameters/deviceName"
+    
+    get:
+      summary: Get the basic details of a device.
+      description: >
+        Get the basic details of a device.
+        Also returns the most recent data entry for the device as the data field if there is any.
+      tags: 
+        - Device Data
+      responses:
+        '200':
+          description: >
+            Device details and data was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/deviceWithData"
+        
+        '404':
+          $ref: "#/components/responses/deviceNotFound"
+        
+        '503':
+          $ref: "#/components/responses/databaseFailure"
+    
+    put:
+      summary: Add data for a device
+      description: >
+        Insert data into the database for the given device
+      tags: 
+        - Device Data
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/data"
+            example:
+              temperature:
+                value: 21
+                units: °C
+      responses:
+        '202':
+          description: >
+            The data was accepted by the API and will be inserted into the database.
+        
+        '404':
+          $ref: "#/components/responses/deviceNotFound"
+        
+        '503':
+          $ref: "#/components/responses/databaseFailure"
+
+  /devices/{deviceName}/history:
+    summary: Historical data endpoint.
+    description: >
+        Endpoint for interacting with the historical data for a given device.
+        Takes the unique name of a device as a parameter.
+    parameters:
+    - $ref: "#/components/parameters/deviceName"
+    
+    get:
+      summary: Get historical data
+      description: >
+        Get the historical data for the given device.
+        If the device does not exist, this method will return a 404 code.
+      tags: 
+        - Device History
+      responses:
+        '200':
+          description: >
+            The data was retreived
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/deviceWithHistory"
+        
+        '404':
+          $ref: "#/components/responses/deviceNotFound"
+        
+        '503':
+          $ref: "#/components/responses/databaseFailure"
+    
+    delete:
+      summary: Clear historical data
+      description: >
+        Clear historical data for a given device
+      tags: 
+        - Device History
+      responses:
+        '200':
+          description: >
+            The historical data was cleared
+        
+        '404':
+          $ref: "#/components/responses/deviceNotFound"
+        
+        '503':
+          $ref: "#/components/responses/databaseFailure"
+
+components:
+  responses:
+    deviceNotFound:
+      description: >
+        The requested device does not exist in the database.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/error"
+          example:
+            error: Device does not exist
+
+    databaseFailure:
+      description: >
+        The API was unable to read/write from the database.
+        This may mean that the database is unreachable or that the api lacks the permissions to read/write from/to it.
+        Check your logs for more information.
+      content:
+        application/json:
+          schema:
+            "$ref": "#/components/schemas/error"
+          example:
+            error: Unable to read/write from/to database
+
+  parameters:
+    deviceName:
+      in: path
+      name: deviceName
+      required: true
+      description: >
+        Name of the the device you wish to query
+      schema:
+        type: string
+        example: Room-0.01
+
+  schemas:
+    devices:
+      type: object
+      description: >
+        A list of all devices currently available
+      properties:
+        devices:
+          type: array
+          items:
+            $ref: "#/components/schemas/device"
+    
+    device:
+      type: object
+      description: >
+        A device represents a real world IoT device with:
+            A known location
+            A unique name which can be used to identify it.
+      properties:
+        name:
+          type: string
+          description: >
+            Unique name of the device
+          examples:
+          - Room-0.01
+        position:
+          $ref: "#/components/schemas/position"
+    
+    position:
+      type: object
+      description: >
+        The absolute position of a device in the world
+      properties:
+        x:
+          type: number
+          examples:
+          - 0
+          - 50
+          - 12.5
+          - 16.8
+        y:
+          type: number
+          examples:
+          - 0
+          - 50
+          - 12.5
+          - 16.8
+        z:
+          type: number
+          examples:
+          - 0
+          - 50
+          - 12.5
+          - 16.8
+    
+    data:
+      type: object
+      description: > 
+        Data from the database, can have any number of fields as defined by whatever device is providing the data.
+      examples:
+      - temperature:
+          value: 20
+          units: °C
+        boolean value:
+          value: true
+    
+    dataWithTimestamp:
+      type: object
+      description: >
+        Data from the database, can have any number of fields.
+        Will always include a timestamp field indiciating when this data was provided in UNIX time.
+      allOf:
+      - $ref: "#/components/schemas/data"
+      - type: object
+        properties:
+            timestamp:
+                type: number
+                description: Timestamp of this data in unix time
+        examples:
+            - timestamp: 1647527656
+              temperature:
+                value: 20
+                units: °C
+              boolean value:
+                value: true
+    
+    deviceWithData:
+      type: object
+      description: >
+        Device details with current data
+      allOf:
+      - $ref: "#/components/schemas/device"
+      - type: object
+        properties:
+          data:
+            $ref: "#/components/schemas/dataWithTimestamp"
+    
+    deviceWithHistory:
+      type: object
+      description: >
+        Device details with array of historical data.
+      allOf:
+      - $ref: "#/components/schemas/device"
+      - type: object
+        properties:
+          history:
+            type: array
+            minItems: 0
+            items:
+              $ref: "#/components/schemas/dataWithTimestamp"
+    
+    error:
+      type: object
+      description: >
+        An error of some description was encountered by the API.
+        A summary of this error will be provided as part of the error field.
+      properties:
+        error:
+          type: string
+          examples:
+          - Not Found
+          - Could not read/write from database
