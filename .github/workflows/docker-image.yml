@@ -14,23 +14,22 @@ jobs:
       with:
         lfs: true
 
-    - name: Login to ghcr.io
+    - name: Login to DockerHub
       uses: docker/login-action@v1 
       with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+        username: ${{ secrets.DOCKER_HUB_USERNAME }}
+        password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
-    - name: Build and push api
+    - name: Build and push API
       uses: docker/build-push-action@v2
       with:
-        context: "{{defaultContext}}:backend"
+        context: "{{ defaultContext }}:backend"
         push: true
-        tags: ghcr.io/${{ github.actor }}/abacws-data-api:latest
+        tags: ${{ secrets.DOCKER_HUB_USERNAME }}/abacws-data-api:latest
 
     - name: Build and push visualiser
       uses: docker/build-push-action@v2
       with:
-        context: "{{defaultContext}}:frontend"
+        context: "{{ defaultContext }}:frontend"
         push: true
-        tags: ghcr.io/${{ github.actor }}/abacws-data-visualiser:latest
+        tags: ${{ secrets.DOCKER_HUB_USERNAME }}/abacws-data-visualiser:latest
