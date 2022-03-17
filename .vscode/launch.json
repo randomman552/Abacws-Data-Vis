@@ -10,10 +10,10 @@
     },
       {
         "command": "npm run dev",
-        "name": "Debug backend",
+        "name": "Debug api",
         "request": "launch",
         "type": "node-terminal",
-        "cwd": "${workspaceFolder}/backend",
+        "cwd": "${workspaceFolder}/api",
         "env": {
           "NODE_ENV": "development",
           "PRODUCTION": ""
@@ -21,10 +21,10 @@
       },
       {
         "command": "npm run start",
-        "name": "Start frontend",
+        "name": "Start visualiser",
         "request": "launch",
         "type": "node-terminal",
-        "cwd": "${workspaceFolder}/frontend"
+        "cwd": "${workspaceFolder}/visualiser"
       },
     ]
   }
