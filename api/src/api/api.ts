@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import { consoleLogErrors, errorHandler, mongodbLogErrors } from './middleware';
 import { devices, docs, healthcheck } from './routers';
 
@@ -8,8 +8,8 @@ const api = express();
 api.use(express.json());
 
 // Register routes
-api.use("/api/healthcheck", healthcheck);
-api.use("/api/devices", devices);
+api.use("/healthcheck", healthcheck);
+api.use("/devices", devices);
 
 // Register error handlers
 api.use(mongodbLogErrors);
@@ -17,6 +17,6 @@ api.use(consoleLogErrors);
 api.use(errorHandler);
 
 // Register documentation router
-api.use("/api", docs);
+api.use("/", docs);
 
 export = api;

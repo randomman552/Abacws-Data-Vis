@@ -1,7 +1,11 @@
+import express from "express";
 import api from "./api";
-import { PORT } from './api/constants';
+import { PORT, URL_PREFIX } from './api/constants';
+
+const app = express()
+app.use(URL_PREFIX, api);
 
 // Start api
-api.listen(PORT, () => {
+app.listen(PORT, () => {
     console.log(`API is listening on '${PORT}'...`)
 });
