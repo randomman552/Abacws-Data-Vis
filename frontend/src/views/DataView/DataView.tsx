@@ -32,6 +32,7 @@ export function DataView(props: DataViewProps) {
                 />
 
                 <DeviceDetails
+                    deviceName={deviceName}
                     data={deviceData}
                 />
                 

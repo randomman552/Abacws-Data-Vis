@@ -1,6 +1,11 @@
 @use "../../../../styles/_variables.scss";
 
 .device-container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-top: 1px solid variables.$color;
+    border-bottom: 1px solid variables.$color;
     display: flex;
     flex-direction: column;
 }

@@ -20,12 +20,11 @@ function DataRow({field, value}: DataRowProps) {
 }
 
 export interface DeviceDetailsProps {
+    deviceName?: string,
     data?: DeviceData["data"]
 }
 
-export function DeviceDetails(props: DeviceDetailsProps) {
-    const data = props.data;
-
+export function DeviceDetails({deviceName, data}: DeviceDetailsProps) {
     // Generate the timestamp row separately as it requires special handling
     const timestamp = new Date(Number(data?.timestamp)).toLocaleString();
     const timestampRow = <DataRow field="timestamp" value={timestamp} />
@@ -48,6 +47,7 @@ export function DeviceDetails(props: DeviceDetailsProps) {
 
     return (
         <article className="device-container">
+            <h2>{(deviceName)? deviceName : "No device selected"}</h2>
             <table className="data">
                 <thead>
                     <tr>
