@@ -23,13 +23,13 @@ jobs:
     - name: Build and push API
       uses: docker/build-push-action@v2
       with:
-        context: "{{ defaultContext }}:backend"
+        context: "./backend"
         push: true
         tags: ${{ secrets.DOCKER_HUB_USERNAME }}/abacws-data-api:latest
 
     - name: Build and push visualiser
       uses: docker/build-push-action@v2
       with:
-        context: "{{ defaultContext }}:frontend"
+        context: "./frontend"
         push: true
         tags: ${{ secrets.DOCKER_HUB_USERNAME }}/abacws-data-visualiser:latest
