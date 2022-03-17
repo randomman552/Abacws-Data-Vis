@@ -80,7 +80,7 @@ export function DeviceDetails({deviceName, data}: DeviceDetailsProps) {
                     </tr>
                 </thead>
                 <tbody>
-                    {rows}
+                    {(data) ? rows : <tr><td colSpan={3}>No data</td></tr>}
                 </tbody>
             </table>
         </article>
