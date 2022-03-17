@@ -1,27 +1,53 @@
 {
     "openapi": "3.1.0",
     "info": {
-        "version": "1.0.4",
+        "version": "1.0.5",
         "title": "Abacws Data Visualiser",
-        "description": "API for a data visualing tool for the Cardiff University Comptuer Science Building (Abacws)",
+        "description": "API for the storage and query of IoT data for the Cardiff University Comptuer Science building (Abacws).\n",
         "license": {
             "name": "MIT"
         }
     },
+    "tags": [
+        {
+            "name": "Devices",
+            "description": "Endpoints relating to all devices\n"
+        },
+        {
+            "name": "Device Data",
+            "description": "Endpoints relating to the devices current details.\n"
+        },
+        {
+            "name": "Device History",
+            "description": "Endpoints relating to the devices historical data\n"
+        }
+    ],
     "servers": [
         {
-            "url": "/api"
+            "url": "https://abacws.ggrainger.uk/api",
+            "description": "Current production deployment server.\n"
+        },
+        {
+            "url": "http://localhost:3000/api",
+            "description": "Local development server.\n"
+        },
+        {
+            "url": "/api",
+            "description": "Relative url\n"
         }
     ],
     "paths": {
         "/devices": {
-            "summary": "Get a list of all devices",
-            "description": "Get a list of all devices stored in the database",
+            "summary": "Device listing endpoint",
             "get": {
-                "description": "Get a list of all devices stored in the database.",
+                "summary": "Get list of devices",
+                "description": "Get a list of all available devices handled by the API.\n",
+                "tags": [
+                    "Devices"
+                ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "A list of devices was returned by the API\n",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -37,20 +63,24 @@
             }
         },
         "/devices/{deviceName}": {
-            "summary": "Get data for a device",
-            "description": "Get basic information and current data for a device",
+            "summary": "Data interaction endpoint for a device",
+            "description": "Endpoint for interacting with a given device and it's data Takes the unique name of a device as a parameter.\n",
             "parameters": [
-                { 
+                {
                     "$ref": "#/components/parameters/deviceName"
                 }
             ],
             "get": {
-                "description": "Get basic information and current data for a device",
+                "summary": "Get the basic details of a device.",
+                "description": "Get the basic details of a device. Also returns the most recent data entry for the device as the data field if there is any.\n",
+                "tags": [
+                    "Device Data"
+                ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "Device details and data was successfully retrieved.\n",
                         "content": {
-                            "application/json" : {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/deviceWithData"
                                 }
@@ -66,19 +96,30 @@
                 }
             },
             "put": {
-                "description": "Add data to the specified device",
+                "summary": "Add data for a device",
+                "description": "Insert data into the database for the given device\n",
+                "tags": [
+                    "Device Data"
+                ],
                 "requestBody": {
+                    "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "type": "object"
+                                "$ref": "#/components/schemas/data"
+                            },
+                            "example": {
+                                "temperature": {
+                                    "value": 21,
+                                    "units": "°C"
+                                }
                             }
                         }
                     }
                 },
                 "responses": {
                     "202": {
-                        "description": "Data accepted"
+                        "description": "The data was accepted by the API and will be inserted into the database.\n"
                     },
                     "404": {
                         "$ref": "#/components/responses/deviceNotFound"
@@ -90,19 +131,24 @@
             }
         },
         "/devices/{deviceName}/history": {
-            "summary": "Get historical data for a device",
-            "description": "Get basic information for a device and a list of previous data entries",
+            "summary": "Historical data endpoint.",
+            "description": "Endpoint for interacting with the historical data for a given device. Takes the unique name of a device as a parameter.\n",
             "parameters": [
-                { 
+                {
                     "$ref": "#/components/parameters/deviceName"
                 }
             ],
             "get": {
+                "summary": "Get historical data",
+                "description": "Get the historical data for the given device. If the device does not exist, this method will return a 404 code.\n",
+                "tags": [
+                    "Device History"
+                ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "The data was retreived\n",
                         "content": {
-                            "application/json" : {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/deviceWithHistory"
                                 }
@@ -118,10 +164,14 @@
                 }
             },
             "delete": {
-                "description": "Delete all historical data for the specified device",
+                "summary": "Clear historical data",
+                "description": "Clear historical data for a given device\n",
+                "tags": [
+                    "Device History"
+                ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "The historical data was cleared\n"
                     },
                     "404": {
                         "$ref": "#/components/responses/deviceNotFound"
@@ -136,9 +186,9 @@
     "components": {
         "responses": {
             "deviceNotFound": {
-                "description": "Device doesn't exist",
+                "description": "The requested device does not exist in the database.\n",
                 "content": {
-                    "application/json" : {
+                    "application/json": {
                         "schema": {
                             "$ref": "#/components/schemas/error"
                         },
@@ -149,9 +199,9 @@
                 }
             },
             "databaseFailure": {
-                "description": "Unable to read/write from/to database",
+                "description": "The API was unable to read/write from the database. This may mean that the database is unreachable or that the api lacks the permissions to read/write from/to it. Check your logs for more information.\n",
                 "content": {
-                    "application/json" : {
+                    "application/json": {
                         "schema": {
                             "$ref": "#/components/schemas/error"
                         },
@@ -163,11 +213,11 @@
             }
         },
         "parameters": {
-            "deviceName": { 
+            "deviceName": {
                 "in": "path",
                 "name": "deviceName",
                 "required": true,
-                "description": "Name of the the device to query",
+                "description": "Name of the the device you wish to query\n",
                 "schema": {
                     "type": "string",
                     "example": "Room-0.01"
@@ -177,7 +227,7 @@
         "schemas": {
             "devices": {
                 "type": "object",
-                "description": "A list of all devices",
+                "description": "A list of all devices currently available\n",
                 "properties": {
                     "devices": {
                         "type": "array",
@@ -189,65 +239,110 @@
             },
             "device": {
                 "type": "object",
-                "description": "Basic information about a device",
+                "description": "A device represents a real world IoT device with:\n    A known location\n    A unique name which can be used to identify it.\n",
                 "properties": {
                     "name": {
                         "type": "string",
-                        "examples": [ "Room-0.01" ]
+                        "description": "Unique name of the device\n",
+                        "examples": [
+                            "Room-0.01"
+                        ]
                     },
-                    "position": { 
+                    "position": {
                         "$ref": "#/components/schemas/position"
                     }
                 }
             },
             "position": {
                 "type": "object",
-                "description": "The absolute position of a device in the world",
+                "description": "The absolute position of a device in the world\n",
                 "properties": {
                     "x": {
                         "type": "number",
-                        "examples": [ 0, 50, 12.5, 16.8 ]
+                        "examples": [
+                            0,
+                            50,
+                            12.5,
+                            16.8
+                        ]
                     },
                     "y": {
                         "type": "number",
-                        "examples": [ 0, 50, 12.5, 16.8 ]
+                        "examples": [
+                            0,
+                            50,
+                            12.5,
+                            16.8
+                        ]
                     },
                     "z": {
                         "type": "number",
-                        "examples": [ 0, 50, 12.5, 16.8 ]
+                        "examples": [
+                            0,
+                            50,
+                            12.5,
+                            16.8
+                        ]
                     }
                 }
             },
             "data": {
                 "type": "object",
-                "description": "Data from the database, can have any number of fields.",
-                "properties": {
-                    "timestamp": {
-                        "type": "number",
-                        "description": "Timestamp of this data in unix time"
-                    }
-                },
+                "description": "Data from the database, can have any number of fields as defined by whatever device is providing the data.\n",
                 "examples": [
                     {
-                        "temperature": 20,
-                        "timestamp": 123871236
+                        "temperature": {
+                            "value": 20,
+                            "units": "°C"
+                        },
+                        "boolean value": {
+                            "value": true
+                        }
+                    }
+                ]
+            },
+            "dataWithTimestamp": {
+                "type": "object",
+                "description": "Data from the database, can have any number of fields. Will always include a timestamp field indiciating when this data was provided in UNIX time.\n",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/data"
                     },
                     {
-                        "temperature": 21,
-                        "timestamp": 123871237
+                        "type": "object",
+                        "properties": {
+                            "timestamp": {
+                                "type": "number",
+                                "description": "Timestamp of this data in unix time"
+                            }
+                        },
+                        "examples": [
+                            {
+                                "timestamp": 1647527656,
+                                "temperature": {
+                                    "value": 20,
+                                    "units": "°C"
+                                },
+                                "boolean value": {
+                                    "value": true
+                                }
+                            }
+                        ]
                     }
                 ]
             },
             "deviceWithData": {
                 "type": "object",
-                "description": "Device details with current data",
+                "description": "Device details with current data\n",
                 "allOf": [
-                    { "$ref": "#/components/schemas/device" },
-                    { 
+                    {
+                        "$ref": "#/components/schemas/device"
+                    },
+                    {
                         "type": "object",
                         "properties": {
                             "data": {
-                                "$ref": "#/components/schemas/data"
+                                "$ref": "#/components/schemas/dataWithTimestamp"
                             }
                         }
                     }
@@ -255,17 +350,19 @@
             },
             "deviceWithHistory": {
                 "type": "object",
-                "description": "Device details with array of historical data",
+                "description": "Device details with array of historical data.\n",
                 "allOf": [
-                    { "$ref": "#/components/schemas/device" },
-                    { 
+                    {
+                        "$ref": "#/components/schemas/device"
+                    },
+                    {
                         "type": "object",
                         "properties": {
                             "history": {
                                 "type": "array",
                                 "minItems": 0,
                                 "items": {
-                                    "$ref": "#/components/schemas/data"
+                                    "$ref": "#/components/schemas/dataWithTimestamp"
                                 }
                             }
                         }
@@ -274,6 +371,7 @@
             },
             "error": {
                 "type": "object",
+                "description": "An error of some description was encountered by the API. A summary of this error will be provided as part of the error field.\n",
                 "properties": {
                     "error": {
                         "type": "string",

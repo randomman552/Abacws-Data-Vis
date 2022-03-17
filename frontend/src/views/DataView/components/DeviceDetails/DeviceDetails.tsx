@@ -3,10 +3,11 @@ import "./DeviceDetails.scss"
 
 interface DataRowProps {
     field: string,
-    value: string
+    value: string,
+    units?: string
 }
 
-function DataRow({field, value}: DataRowProps) {
+function DataRow({field, value, units}: DataRowProps) {
     return (
         <tr>
             <th headers="field" scope="row">
@@ -14,6 +15,9 @@ function DataRow({field, value}: DataRowProps) {
             </th>
             <td headers={`value ${field}`}>
                 {value}
+            </td>
+            <td headers={`units ${field}`}>
+                {(units)? units : "N/A"}
             </td>
         </tr>
     )
@@ -25,25 +29,44 @@ export interface DeviceDetailsProps {
 }
 
 export function DeviceDetails({deviceName, data}: DeviceDetailsProps) {
+    const rows: any[] = [];
+
     // Generate the timestamp row separately as it requires special handling
     const timestamp = new Date(Number(data?.timestamp)).toLocaleString();
-    const timestampRow = <DataRow field="timestamp" value={timestamp} />
+    rows.push(<DataRow field="timestamp" value={timestamp} />)
 
-    // Generate rows for non time stamp rows
-    const rows = (data) ? Object.entries(data).map((entry) => {
-        const key = entry[0];
-        const value = String(entry[1]);
+    // Generate other rows if provided
+    if (data) {
+        rows.push(Object.entries(data).map((entry) => {
+            const key = entry[0];
+            // Skip timestamp row
+            if (key === "timestamp") return;
 
-        // Skip timestamp row
-        if (key === "timestamp") return;
+            const value = entry[1];
 
-        return (
-            <DataRow
-                field={key}
-                value={value}
-            />
-        )
-    }) : <tr><td colSpan={2}>No data found</td></tr>
+            // Check if value has additional properties (such as units)
+            if (value?.value) {
+                return (
+                    <DataRow
+                        key={key}
+                        field={key}
+                        value={value.value}
+                        units={value?.units}
+                    />
+                )
+            }
+
+            // If no additional properties are present,
+            // just render the value as text
+            return (
+                <DataRow
+                    key={key}
+                    field={key}
+                    value={String(value)}
+                />
+            )
+        }));
+    }
 
     return (
         <article className="device-container">
@@ -53,10 +76,10 @@ export function DeviceDetails({deviceName, data}: DeviceDetailsProps) {
                     <tr>
                         <th scope="column">field</th>
                         <th scope="column">value</th>
+                        <th scope="column">units</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {timestampRow}
                     {rows}
                 </tbody>
             </table>

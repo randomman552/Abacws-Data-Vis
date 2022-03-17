@@ -14,7 +14,10 @@ export interface Device {
 
 interface Data extends Object {
     timestamp: number
-    [fields: string]: unknown
+    [fields: string]: {
+        value: unknown,
+        units: string
+    } | any
 }
 
 export interface DeviceData extends Device {
