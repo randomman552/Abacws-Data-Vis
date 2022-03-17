@@ -6,7 +6,7 @@
     },
     "devices": [
         {
-            "name": "0.01",
+            "name": "Room 0.01",
             "position": {
                 "x": -60,
                 "y": 5,
@@ -14,7 +14,7 @@
             }
         },
         {
-            "name": "0.04",
+            "name": "Room 0.04",
             "position": {
                 "x": -115,
                 "y": 5,
