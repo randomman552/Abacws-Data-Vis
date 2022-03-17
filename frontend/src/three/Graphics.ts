@@ -133,9 +133,9 @@ export default class Graphics {
         this.onAnimate();
 
         // Lighting
-        const ambientLight = new THREE.AmbientLight(0x404040);
+        const ambientLight = new THREE.AmbientLight(0xb0b0b0);
         const light = new THREE.DirectionalLight(0xf4f4f4);
-        light.position.set(0, 100, -100);
+        light.position.set(0, 100, 0);
         this.scene.add(ambientLight, light);
 
         // Load model
