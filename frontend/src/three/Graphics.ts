@@ -183,6 +183,7 @@ export default class Graphics {
         window.removeEventListener('resize', this.onReize);
         window.removeEventListener('pointermove', this.onPointerMove);
         window.removeEventListener('pointerdown', this.onPointerDown);
+        window.removeEventListener(FloorSelectEvent.TYPE, this.onFloorSelect);
         this.onAnimate = () => { this.animate() };
 
         // Clear intervals
