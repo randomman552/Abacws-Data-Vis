@@ -6,6 +6,7 @@ import { useSelectedDevice, useSelectedFloor } from "../../three";
 
 export interface DataViewProps {}
 
+// TODO: Add a spinner so the user knows when data is being loaded
 export function DataView(props: DataViewProps) {
     const deviceName = useSelectedDevice();
     const [floor, setFloor] = useSelectedFloor();
