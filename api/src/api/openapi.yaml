@@ -21,9 +21,13 @@ tags:
         Endpoints relating to the devices historical data
 
 servers:
+    - url: https://api.abacws.ggrainger.uk
+      description: >
+        Current production deployment
+    
     - url: https://abacws.ggrainger.uk/api
       description: >
-        Current production deployment server.
+        Alternative route to current production deployment
     
     - url: http://localhost:3000/api
       description: >

@@ -24,8 +24,12 @@
     ],
     "servers": [
         {
+            "url": "https://api.abacws.ggrainger.uk",
+            "description": "Current production deployment\n"
+        },
+        {
             "url": "https://abacws.ggrainger.uk/api",
-            "description": "Current production deployment server.\n"
+            "description": "Alternative route to current production deployment\n"
         },
         {
             "url": "http://localhost:3000/api",
