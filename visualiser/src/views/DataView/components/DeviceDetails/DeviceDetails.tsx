@@ -4,10 +4,19 @@ import "./DeviceDetails.scss"
 interface DataRowProps {
     field: string,
     value: string,
-    units?: string
+    units?: string,
+    onViewHistory?: () => void
 }
 
-function DataRow({field, value, units}: DataRowProps) {
+function DataRow({field, value, units, onViewHistory}: DataRowProps) {
+    const options = (onViewHistory) ? (
+        <button onClick={() => { onViewHistory() }} className="primary">
+            View History
+        </button>
+    ) : (
+        "N/A"
+    )
+
     return (
         <tr>
             <th headers="field" scope="row">
@@ -19,21 +28,25 @@ function DataRow({field, value, units}: DataRowProps) {
             <td headers={`units ${field}`}>
                 {(units)? units : "N/A"}
             </td>
+            <td headers={`options ${field}`}>
+                {options}
+            </td>
         </tr>
     )
 }
 
 export interface DeviceDetailsProps {
-    deviceName?: string,
+    onViewHistory: (deviceName: string, field: string) => void
+    deviceName: string,
     data?: DeviceData["data"]
 }
 
-export function DeviceDetails({deviceName, data}: DeviceDetailsProps) {
+export function DeviceDetails({deviceName, data, onViewHistory}: DeviceDetailsProps) {
     const rows: any[] = [];
 
     // Generate the timestamp row separately as it requires special handling
     const timestamp = new Date(Number(data?.timestamp)).toLocaleString();
-    rows.push(<DataRow field="timestamp" value={timestamp} />)
+    rows.push(<DataRow field="timestamp" value={timestamp} />);
 
     // Generate other rows if provided
     if (data) {
@@ -50,6 +63,7 @@ export function DeviceDetails({deviceName, data}: DeviceDetailsProps) {
                     <DataRow
                         key={key}
                         field={key}
+                        onViewHistory={() => { onViewHistory(deviceName, key) }}
                         value={value.value}
                         units={value?.units}
                     />
@@ -62,6 +76,7 @@ export function DeviceDetails({deviceName, data}: DeviceDetailsProps) {
                 <DataRow
                     key={key}
                     field={key}
+                    onViewHistory={() => { onViewHistory(deviceName, key) }}
                     value={String(value)}
                 />
             )
@@ -77,6 +92,7 @@ export function DeviceDetails({deviceName, data}: DeviceDetailsProps) {
                         <th scope="column">field</th>
                         <th scope="column">value</th>
                         <th scope="column">units</th>
+                        <th scope="column">options</th>
                     </tr>
                 </thead>
                 <tbody>
