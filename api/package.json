@@ -21,6 +21,7 @@
   "dependencies": {
     "express": "^4.17.2",
     "mongodb": "^4.4.0",
-    "swagger-ui-express": "^4.3.0"
+    "swagger-ui-express": "^4.3.0",
+    "yaml": "^2.0.0-11"
   }
 }

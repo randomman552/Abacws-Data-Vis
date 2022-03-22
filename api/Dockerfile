@@ -20,6 +20,7 @@ EXPOSE ${API_PORT}
 WORKDIR /api
 COPY --from=node /api/build /api
 COPY --from=node /api/node_modules /api/node_modules
+COPY openapi.yaml /api/
 
 ENTRYPOINT [ "node" ]
 CMD [ "app.js" ]
