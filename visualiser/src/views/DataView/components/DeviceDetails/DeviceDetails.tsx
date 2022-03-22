@@ -63,7 +63,7 @@ export function DeviceDetails({deviceName, data, onViewHistory}: DeviceDetailsPr
                     <DataRow
                         key={key}
                         field={key}
-                        onViewHistory={() => { onViewHistory(deviceName, key) }}
+                        onViewHistory={() => { onViewHistory(deviceName, `${key}.value`) }}
                         value={value.value}
                         units={value?.units}
                     />
