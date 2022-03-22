@@ -1,4 +1,4 @@
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Label } from 'recharts';
 
 export interface GraphProps {
     data: any[],
@@ -8,29 +8,57 @@ export interface GraphProps {
 export function Graph({data, dataKey}: GraphProps) {
     return (
         <ResponsiveContainer width="100%" height="100%">
-        <LineChart
-            width={500}
-            height={300}
-            data={data}
-            margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
-            }}
-        >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="timestamp" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line
-                type="monotone"
-                dataKey={dataKey}
-                stroke="#8884d8"
-                activeDot={{ r: 8 }}
-            />
-        </LineChart>
+            <LineChart
+                data={data}
+                margin={{
+                    top: 5,
+                    right: 10,
+                    left: 20,
+                    bottom: 20,
+                }}
+            >
+                <Tooltip/>
+                <CartesianGrid
+                    strokeDasharray="3 3"
+                />
+
+                <XAxis
+                    type='number'
+                    domain={["dataMin", "dataMax"]}
+                    dataKey="timestamp"
+                >
+                    <Label
+                        value="time"
+                        position="bottom"
+                        fill="#c4c4c4"
+                        style={{
+                            textTransform: "capitalize",
+                            textAnchor: "middle"
+                        }}
+                    />
+                </XAxis>
+
+                <YAxis>
+                    <Label
+                        value={dataKey.split(".")[0]}
+                        position="left"
+                        angle={-90}
+                        style={{
+                            textTransform: "capitalize",
+                            textAnchor: "middle"
+                        }}
+                        fill="#c4c4c4"
+                    />
+                </YAxis>
+
+                <Line
+                    type="monotone"
+                    dataKey={dataKey}
+                    stroke="#8884d8"
+                    activeDot={{ r: 8 }}
+                />
+                
+            </LineChart>
         </ResponsiveContainer>
     );
 }
