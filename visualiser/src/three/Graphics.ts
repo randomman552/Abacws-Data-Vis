@@ -32,10 +32,6 @@ export default class Graphics {
     private onAnimate = () => { this.animate(); };
     private onPointerMove = (event: PointerEvent) => { this.pointerMove(event); }
     private onPointerDown = (event: PointerEvent) => { this.pointerDown(event); }
-    /**
-     * Attribute to store the interval ID for the interval used to rotate the device cubes in the scene.
-     */
-    private deviceIntervalID;
 
     // Window event listeners
     // These event handlers listen to events fired on the window 
@@ -52,6 +48,7 @@ export default class Graphics {
     private renderer = new THREE.WebGLRenderer({powerPreference: "high-performance"});
     private rayCaster = new THREE.Raycaster();
     private clippingPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 100);
+    private clock = new THREE.Clock();
 
     private controls = new OrbitControls(this.camera, this.renderer.domElement);
     private stats = Stats()
@@ -84,16 +81,6 @@ export default class Graphics {
         
         // Clipping plane setup
         this.renderer.clippingPlanes = [ this.clippingPlane ];
-
-        // Start device rotation interval
-        this.deviceIntervalID = setInterval(() => {
-            const angle = THREE.MathUtils.degToRad(1);
-            this.deviceScene.children.forEach((child) => {
-                child.rotateX(angle);
-                child.rotateY(angle);
-                child.rotateZ(angle);
-            });
-        }, 10)
     }
 
     /**
@@ -175,6 +162,13 @@ export default class Graphics {
      * Method to draw a frame on the canvas
      */
     animate() {
+        // Rotate the devices
+        const angle = THREE.MathUtils.degToRad(180) * this.clock.getDelta();
+        this.deviceScene.children.forEach((child) => {
+            const r = child.rotation;
+            r.set(r.x + angle, r.y + angle, r.z);
+        });
+
         this.renderer.clear();
         this.controls.update();
         this.renderer.render(this.scene, this.camera);
@@ -196,9 +190,6 @@ export default class Graphics {
         window.removeEventListener('pointerdown', this.onPointerDown);
         window.removeEventListener(FloorSelectEvent.TYPE, this.onFloorSelect);
         this.onAnimate = () => { this.animate() };
-
-        // Clear intervals
-        clearInterval(this.deviceIntervalID)
 
         // Remove old instance
         Graphics.instance = undefined;
