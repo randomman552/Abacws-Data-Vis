@@ -43,7 +43,14 @@ const getData = async (req: Request, res: Response) => {
  */
 const getHistoricalData = async (req: Request, res: Response) => {
     const device = req.device;
-    const history = await device.getHistory();
+    const now = Date.now();
+    const yesterday = now - (24*60*60*1000);
+
+    // Get query parameters
+    const from = Number(req.query.from) || yesterday;
+    const to = Number(req.query.to) || now;
+
+    const history = await device.getHistory(from, to);
     
     res.status(200).json({
         ...device,

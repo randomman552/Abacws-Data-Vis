@@ -122,6 +122,9 @@ paths:
         Takes the unique name of a device as a parameter.
     parameters:
     - $ref: "#/components/parameters/deviceName"
+    - $ref: "#/components/parameters/fromTime"
+    - $ref: "#/components/parameters/toTime"
+
     
     get:
       summary: Get historical data
@@ -196,6 +199,28 @@ components:
       schema:
         type: string
         example: Room-0.01
+    fromTime:
+      in: query
+      name: from
+      required: false
+      description: >
+        Parameter defining the start of a date range for history requests.
+        If specified will only allow data points with a time larger than the provided value.
+        Should be formatted in UNIX time.
+      schema:
+        type: number
+        example: 1647971257460
+    toTime:
+      in: query
+      name: to
+      required: false
+      description: >
+        Parameter defining the end of a date range for history requests.
+        If specified will only allow data points with a time smaller than the provided value.
+        Should be formatted in UNIX time.
+      schema:
+        type: number
+        example: 1647971257520
 
   schemas:
     devices:

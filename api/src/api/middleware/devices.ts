@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { Filter } from "mongodb";
 import { DEVICE_COLLECTION_PREFIX } from "../constants";
 import client from "../database";
 import { Device as DeviceInterface, Position } from "../types";
@@ -37,10 +38,23 @@ export class Device implements DeviceInterface {
             )
     }
 
-    async getHistory() {
+    /**
+     * Convinience method to get the history for the given device.
+     * @param from OPTIONAL: Start of time query range (in UNIX time)
+     * @param to OPTIONAL: End of time query range (in UNIX time)
+     * @returns Promise of history from this device
+     */
+    async getHistory(from: number=0, to: number=Number.MAX_SAFE_INTEGER) {
+        const filter: Filter<Device> = {
+            timestamp: {
+                "$gte": from,
+                "$lte": to
+            }
+        }
+
         return this.collection
             .find(
-                {},
+                filter,
                 {
                     limit: 10000,
                     sort: {
