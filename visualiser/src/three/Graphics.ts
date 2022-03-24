@@ -1,5 +1,5 @@
 import * as THREE from "three"
-import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import Stats from "three/examples/jsm/libs/stats.module";
 import React from "react";
@@ -138,25 +138,28 @@ export default class Graphics {
         light.position.set(0, 100, 0);
         this.scene.add(ambientLight, light);
 
-        // Load model
+        // Load devices
+        const devices = (await apiFetch<{devices: Device[]}>("/api/devices")).body.devices;
+        this.setDevices(devices);
+
+        // Load building model
         const loader = new GLTFLoader();
-        return loader.loadAsync("/assets/abacws.glb")
-        .then((gltf: GLTF) => {
-            this.scene.add(gltf.scene);
-            return gltf;
-        })
+        const loadLayer = async(fileName: string) => {
+            const layer = await loader.loadAsync(`/assets/${fileName}.glb`);
+            this.scene.add(layer.scene);
+        }
 
-        // Then load devices
-        .then(() => {
-            apiFetch("/api/devices").then((json) => {
-                this.setDevices(json.body.devices);
-            });
-        })
+        // Load all layers
+        await loadLayer("decoration");
+        await loadLayer("exterior-walls");
+        await loadLayer("floors");
+        await loadLayer("glass");
+        await loadLayer("interior-walls");
+        await loadLayer("stairs");
+        await loadLayer("windows");
 
-        // Then fire an event to let the rest of the application know we are done loading
-        .then(() => {
-            window.dispatchEvent(new LoadEvent())
-        });
+        // Inform the application everything is loaded
+        window.dispatchEvent(new LoadEvent());
     }
 
 
