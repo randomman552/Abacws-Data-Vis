@@ -38,9 +38,12 @@ export async function apiFetch<Body=any>(url: string, method: string="GET", body
 
     // Dispatch request
     const res = await fetch(url, options);
+    let resBody = {} as Body;
+    try {
+        resBody = await res.json() as Body;
+    } catch (e) { console.error(e); }
 
     // Put response into APIResponse form
-    const resBody = await res.json() as Body;
     const json: APIResponse<Body> = {
         body: resBody,
         status: res.status,

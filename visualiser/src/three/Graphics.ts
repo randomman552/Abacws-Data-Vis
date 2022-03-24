@@ -77,9 +77,9 @@ export default class Graphics {
         this.renderer.setClearColor(0x000000);
 
         // Controls setup
-        this.controls.target.set(0, 25, 0);
+        this.controls.target.set(160, 25, -120);
         this.controls.minDistance = 50;
-        this.camera.position.set(150, 80, -150)
+        this.camera.position.set(0, 100, 20)
         this.controls.update();
         
         // Clipping plane setup
@@ -138,7 +138,7 @@ export default class Graphics {
         light.position.set(0, 100, 0);
         this.scene.add(ambientLight, light);
 
-        // Load devices
+        // Load devices (catch error if API is unavailable)
         const devices = (await apiFetch<{devices: Device[]}>("/api/devices")).body.devices;
         this.setDevices(devices);
 
@@ -150,13 +150,13 @@ export default class Graphics {
         }
 
         // Load all layers
-        await loadLayer("decoration");
-        await loadLayer("exterior-walls");
         await loadLayer("floors");
-        await loadLayer("glass");
+        await loadLayer("exterior-walls");
         await loadLayer("interior-walls");
-        await loadLayer("stairs");
         await loadLayer("windows");
+        await loadLayer("stairs");
+        await loadLayer("decoration");
+        await loadLayer("glass");
 
         // Inform the application everything is loaded
         window.dispatchEvent(new LoadEvent());
@@ -219,6 +219,8 @@ export default class Graphics {
      * @param devices The devices to add to the scene
      */
     setDevices(devices: Device[]) {
+        // Stop if devices is empty or undefined
+        if (!devices) return;
         this.deviceScene.clear();
         const geom = DEVICE_GEOM;
         for (const device of devices) {
