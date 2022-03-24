@@ -14,7 +14,7 @@ services:
       - mongo
     labels:
       - "traefik.enable=true"
-      - "traefik.http.services.abacws-api.loadbalancer.server.port=80"
+      - "traefik.http.services.abacws-api.loadbalancer.server.port=5000"
       - "traefik.http.routers.abacws-api.rule=Host(`api.abacws.example.com`)"
       - "traefik.http.routers.abacws-api.entrypoints=https"
       - "traefik.http.routers.abacws-api.tls=true"
