@@ -6,7 +6,7 @@
     },
     "devices": [
         {
-            "name": "Room 0.01",
+            "name": "Room-0.01",
             "position": {
                 "x": 60,
                 "y": 5,
@@ -14,11 +14,51 @@
             }
         },
         {
-            "name": "Room 0.04",
+            "name": "Room-1.34",
             "position": {
-                "x": 115,
-                "y": 5,
-                "z": 5
+                "x": -40,
+                "y": 18,
+                "z": 0
+            }
+        },
+        {
+            "name": "Room-2.47",
+            "position": {
+                "x": -88,
+                "y": 31,
+                "z": -34
+            }
+        },
+        {
+            "name": "Room-3.27",
+            "position": {
+                "x": 67,
+                "y": 44,
+                "z": -5
+            }
+        },
+        {
+            "name": "Room-4.69",
+            "position": {
+                "x": -43,
+                "y": 57,
+                "z": 34
+            }
+        },
+        {
+            "name": "Room-5.26",
+            "position": {
+                "x": 84,
+                "y": 70,
+                "z": 10
+            }
+        },
+        {
+            "name": "Roof",
+            "position": {
+                "x": -40,
+                "y": 83,
+                "z": 0
             }
         }
     ]
