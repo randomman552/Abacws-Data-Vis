@@ -49,7 +49,7 @@ export default class Graphics {
     private camera = new THREE.PerspectiveCamera();
     private scene = new THREE.Scene();
     private deviceScene = new THREE.Scene();
-    private renderer = new THREE.WebGLRenderer();
+    private renderer = new THREE.WebGLRenderer({powerPreference: "high-performance"});
     private rayCaster = new THREE.Raycaster();
     private clippingPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 100);
 
