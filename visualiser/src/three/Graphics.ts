@@ -142,6 +142,14 @@ export default class Graphics {
         const devices = (await apiFetch<{devices: Device[]}>("/api/devices")).body.devices;
         this.setDevices(devices);
 
+        // Add ground plane
+        const groundGeom = new THREE.PlaneBufferGeometry(300, 300, 8, 8);
+        const groundMat = new THREE.MeshBasicMaterial({color: 0x3f3f3f, side: THREE.DoubleSide});
+        const groundPlane = new THREE.Mesh(groundGeom, groundMat);
+        groundPlane.rotateX(-Math.PI/2);
+        groundPlane.position.set(160, 0.5, -120);
+        this.scene.add(groundPlane);
+
         // Load building model
         const loader = new GLTFLoader();
         const loadLayer = async(fileName: string) => {
