@@ -55,7 +55,8 @@ export function Graph({data, dataKey}: GraphProps) {
                     type="monotone"
                     dataKey={dataKey}
                     stroke="#8884d8"
-                    activeDot={{ r: 8 }}
+                    dot={false}
+                    activeDot={{ r: 3 }}
                 />
                 
             </LineChart>
