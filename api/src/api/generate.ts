@@ -1,8 +1,8 @@
 // Script to generate random data for the last 24 hours
 // Used for testing
 import { exit } from "process";
-import { DEVICE_COLLECTION_PREFIX } from "./src/api/constants";
-import client from "./src/api/database";
+import { DEVICE_COLLECTION_PREFIX } from "./constants";
+import client from "./database";
 
 /**
  * Generate a random series of
