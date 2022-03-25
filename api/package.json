@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --inspect src/app.ts",
-    "generate": "ts-node generate.ts",
+    "generate": "ts-node src/generate.ts",
     "build": "rm -rf build && tsc"
   },
   "keywords": [],
