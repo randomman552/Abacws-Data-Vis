@@ -1,4 +1,5 @@
-// Script to generate random data for testing
+// Script to generate random data for the last 24 hours
+// Used for testing
 import { exit } from "process";
 import { DEVICE_COLLECTION_PREFIX } from "./src/api/constants";
 import client from "./src/api/database";
@@ -10,15 +11,23 @@ import client from "./src/api/database";
  * @param to The unix time to end with
  */
 function genData(name: string, from: number, to: number, interval: number) {
+    const collection = client.db().collection(`${DEVICE_COLLECTION_PREFIX}_${name}`);
+    collection.drop();
     const temp = [];
+    
     // Generate random documents
-    for (let i = from; i < to; i = i + interval) {
+    for (let i = 0; i < (to-from)/interval; i++) {
+        const timestamp = (interval * i) + from;
+
+        // Use random and sin to generate a random looking temperature curve
         temp.push({
-            timestamp: i,
-            temperature: Math.floor(Math.random() * (25 - 18) ) + 18
+            timestamp,
+            temperature: (Math.random()+0.5 * Math.sin(i)) + 20
         });
     }
-    client.db().collection(`${DEVICE_COLLECTION_PREFIX}_${name}`).insertMany(temp)
+    
+    // Insert the documents, then exit this script
+    collection.insertMany(temp)
     .then(() => {
         console.log("DONE");
         exit(0);
