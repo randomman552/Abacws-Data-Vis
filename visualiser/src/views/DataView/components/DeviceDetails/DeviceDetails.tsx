@@ -46,7 +46,7 @@ export function DeviceDetails({deviceName, data, onViewHistory}: DeviceDetailsPr
 
     // Generate the timestamp row separately as it requires special handling
     const timestamp = new Date(Number(data?.timestamp)).toLocaleString();
-    rows.push(<DataRow field="timestamp" value={timestamp} />);
+    rows.push(<DataRow field="timestamp" key="timestamp" value={timestamp} />);
 
     // Generate other rows if provided
     if (data) {
