@@ -1,6 +1,5 @@
 version: '3.8'
 services:
-  # Database
   mongo:
     image: mongo
     container_name: abacws-mongo
@@ -12,12 +11,6 @@ services:
     restart: always
     depends_on:
       - mongo
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.abacws-api.loadbalancer.server.port=5000"
-      - "traefik.http.routers.abacws-api.rule=Host(`api.abacws.example.com`)"
-      - "traefik.http.routers.abacws-api.entrypoints=https"
-      - "traefik.http.routers.abacws-api.tls=true"
 
   visualiser:
     image: ghcr.io/randomman552/abacws-visualiser:latest
@@ -25,6 +18,7 @@ services:
     restart: always
     depends_on:
       - api
+    # Traefik is recommended, you can set up a NGINX or Apache proxy instead, but traefik is much easier.
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.abacws-visualiser.loadbalancer.server.port=80"
