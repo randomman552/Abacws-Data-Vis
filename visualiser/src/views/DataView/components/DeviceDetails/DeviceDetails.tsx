@@ -96,7 +96,7 @@ export function DeviceDetails({deviceName, data, onViewHistory}: DeviceDetailsPr
                     </tr>
                 </thead>
                 <tbody>
-                    {(data) ? rows : <tr><td colSpan={3}>No data</td></tr>}
+                    {(data) ? rows : <tr><td colSpan={4}>No data</td></tr>}
                 </tbody>
             </table>
         </article>
