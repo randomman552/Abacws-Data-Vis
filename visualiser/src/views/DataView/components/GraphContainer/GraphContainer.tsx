@@ -12,12 +12,18 @@ export interface GraphContainerProps {
 }
 
 export function GraphContainer({options, history}: GraphContainerProps) {
-    return (
-        <article className="graph-container">
-            <Graph
-                data={history || []}
-                dataKey={options.field || ""}
-            />
-        </article>
-    )
+    const {deviceName} = options;
+
+    // Only display graph if a device name is specified
+    if (deviceName) {
+        return (
+            <article className="graph-container">
+                <Graph
+                    data={history || []}
+                    dataKey={options.field || ""}
+                />
+            </article>
+        )
+    }
+    return (<></>)
 }

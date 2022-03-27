@@ -11,7 +11,7 @@ interface DataRowProps {
 function DataRow({field, value, units, onViewHistory}: DataRowProps) {
     const options = (onViewHistory) ? (
         <button onClick={() => { onViewHistory() }} className="primary">
-            View History
+            History
         </button>
     ) : (
         "N/A"
