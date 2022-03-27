@@ -1,0 +1,38 @@
+@use "../../styles/variables";
+
+.hamburger-toggle {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+    box-sizing: border-box;
+    width: 50px;
+    height: 50px;
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid variables.$color;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.hamburger-toggle:hover {
+    border: 1px solid variables.$hover-color;
+    background-color: variables.$background-hover-color;
+    box-shadow: 0px 0px 20px 5px rgba($color: variables.$background-hover-color, $alpha: 0.5)
+}
+
+.hamburger-toggle .slice {
+    transition: inherit;
+    width: 100%;
+    background-color: variables.$color;
+    margin: 3px 0 3px 0;
+    height: 3px;
+    border-radius: 2px;
+}
+
+.hamburger-toggle:hover .slice {
+    background-color: variables.$hover-color;
+}
