@@ -277,6 +277,7 @@ export default class Graphics {
      * @param event 
      */
     private pointerDown(event: PointerEvent) {
+        this.pointerMove(event);
         if (this._hoveredDevice && event.button === 0)
             this.devicePointerDown(this._hoveredDevice);
     }
