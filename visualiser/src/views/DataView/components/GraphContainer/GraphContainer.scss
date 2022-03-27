@@ -1,3 +1,14 @@
 .graph-container {
     height: 200px;
 }
+
+.time-tooltip {
+    display: flex;
+    flex-direction: column;
+}
+
+.time-tooltip .label {
+    margin: 0;
+    padding: 0;
+    text-transform: capitalize;
+}

@@ -1,11 +1,48 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Label } from 'recharts';
 
+function unixTimeFormatter(value: string) {
+    return new Date(Number(value)).toLocaleTimeString();
+}
+
+
+interface TimeTooltipProps {
+    active?: any,
+    payload?: any,
+    label?: string
+}
+
+/**
+ * Custom recharts tooltip that correctly formats time for us.
+ * @returns 
+ */
+function TimeTooltip ({ active, payload }: TimeTooltipProps) {
+    if (active && payload && payload.length) {
+        const timestamp = payload[0].payload.timestamp;
+        const name = String(payload[0].name);
+        const value = String(payload[0].value);
+        return (
+        <div className="time-tooltip">
+            <p className="label">{`Timestamp : ${unixTimeFormatter(timestamp)}`}</p>
+            <p className="label">{`${name} : ${value.substring(0, 5)}`}</p>
+        </div>
+        );
+    }
+
+    return null;
+};
+
+
 export interface GraphProps {
     data: any[],
     dataKey: string
 }
 
+/**
+ * React component encapsulating our recharts based graph logic.
+ * @returns 
+ */
 export function Graph({data, dataKey}: GraphProps) {
+
     return (
         <ResponsiveContainer width="100%" height="100%">
             <LineChart
@@ -17,7 +54,7 @@ export function Graph({data, dataKey}: GraphProps) {
                     bottom: 20,
                 }}
             >
-                <Tooltip/>
+                <Tooltip content={<TimeTooltip/>}/>
                 <CartesianGrid
                     strokeDasharray="3 3"
                 />
@@ -26,6 +63,7 @@ export function Graph({data, dataKey}: GraphProps) {
                     type='number'
                     domain={["dataMin", "dataMax"]}
                     dataKey="timestamp"
+                    tickFormatter={unixTimeFormatter}
                 >
                     <Label
                         value="time"
@@ -54,7 +92,7 @@ export function Graph({data, dataKey}: GraphProps) {
                 <Line
                     type="monotone"
                     dataKey={dataKey}
-                    stroke="#8884d8"
+                    stroke="#00ffff"
                     dot={false}
                     activeDot={{ r: 3 }}
                 />
