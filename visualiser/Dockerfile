@@ -13,7 +13,7 @@ RUN npm i --only=prod
 FROM nginx:alpine
 ENV PRODUCTION=true
 ENV WEB_PORT=80
-ENV API_PORT=5000
+ENV API_HOST=api:5000
 
 EXPOSE ${WEB_PORT}
 
