@@ -7,9 +7,11 @@ $width: 500px;
     right: 0;
     top: 0;
     width: $width;
+    max-height: 100vh;
     background-color: rgba($color: variables.$background_color, $alpha: 0.75);
     transition: 0.3s;
     z-index: 2;
+    overflow: auto;
 }
 
 .data-container.hidden {
