@@ -11,7 +11,6 @@ RUN npm i --only=prod
 
 # Application layer
 FROM nginx:alpine
-ENV PRODUCTION=true
 ENV WEB_PORT=80
 ENV API_HOST=api:5000
 
