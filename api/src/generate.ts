@@ -22,7 +22,7 @@ function genData(name: string, from: number, to: number, interval: number) {
         // Use random and sin to generate a random looking temperature curve
         temp.push({
             timestamp,
-            temperature: (Math.random()+0.5 * Math.sin(i)) + 20
+            temperature: ((Math.random()+0.5 * Math.sin(i)) + 20).toFixed(2)
         });
     }
     

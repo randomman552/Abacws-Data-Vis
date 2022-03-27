@@ -23,7 +23,7 @@ function TimeTooltip ({ active, payload }: TimeTooltipProps) {
         return (
         <div className="time-tooltip">
             <p className="label">{`Timestamp : ${unixTimeFormatter(timestamp)}`}</p>
-            <p className="label">{`${name} : ${value.substring(0, 5)}`}</p>
+            <p className="label">{`${name} : ${value}`}</p>
         </div>
         );
     }
