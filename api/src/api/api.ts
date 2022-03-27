@@ -1,3 +1,4 @@
+import cors from 'cors';
 import express from 'express';
 import { consoleLogErrors, errorHandler, mongodbLogErrors } from './middleware';
 import { devices, docs, healthcheck } from './routers';
@@ -5,6 +6,7 @@ import { devices, docs, healthcheck } from './routers';
 /** Express app */
 const api = express();
 // Api will only respond to JSON
+api.use(cors());
 api.use(express.json());
 
 // Register routes
