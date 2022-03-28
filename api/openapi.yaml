@@ -343,3 +343,9 @@ components:
           examples:
           - Not Found
           - Could not read/write from database
+  
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key

@@ -13,6 +13,7 @@ RUN npm i --only=prod
 FROM node:16.13.2-alpine
 ENV PRODUCTION=true
 ENV API_PORT=5000
+ENV API_KEY=V3rySecur3Pas3word
 ENV MONGODB_URI=mongodb://mongo:27017/abacws
 
 EXPOSE ${API_PORT}
