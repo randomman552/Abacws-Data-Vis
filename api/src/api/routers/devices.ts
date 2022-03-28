@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import client from "../database";
-import { deviceMiddleware, Device } from "../middleware";
+import { deviceMiddleware, Device, apiKeyAuth } from "../middleware";
 
 export const router = express.Router()
 
@@ -88,5 +88,5 @@ router.get("/", listDevices);
 router.use("/:deviceName", deviceMiddleware);
 router.get("/:deviceName", getData);
 router.get("/:deviceName/history", getHistoricalData);
-router.put("/:deviceName", addData);
-router.delete("/:deviceName/history", deleteData);
+router.put("/:deviceName", apiKeyAuth, addData);
+router.delete("/:deviceName/history", apiKeyAuth, deleteData);

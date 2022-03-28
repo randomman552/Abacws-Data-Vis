@@ -94,6 +94,8 @@ paths:
         Insert data into the database for the given device
       tags: 
         - Device Data
+      security:
+        apiKeyAuth: []
       requestBody:
         required: true
         content:
@@ -114,6 +116,9 @@ paths:
         
         '503':
           $ref: "#/components/responses/databaseFailure"
+        
+        '403':
+          $ref: "#/components/responses/authFailure"
 
   /devices/{deviceName}/history:
     summary: Historical data endpoint.
@@ -154,6 +159,8 @@ paths:
         Clear historical data for a given device
       tags: 
         - Device History
+      security:
+        apiKeyAuth: []
       responses:
         '200':
           description: >
@@ -164,6 +171,9 @@ paths:
         
         '503':
           $ref: "#/components/responses/databaseFailure"
+
+        '403':
+          $ref: "#/components/responses/authFailure"
 
 components:
   responses:
@@ -188,6 +198,17 @@ components:
             "$ref": "#/components/schemas/error"
           example:
             error: Unable to read/write from/to database
+
+    authFailure:
+      description: >
+        The authorisation provided was insufficient for this endpoint.
+      content:
+        application/json:
+          schema:
+            "$ref": "#/components/schemas/error"
+          example:
+            error: You do not have permission to access this resource
+
 
   parameters:
     deviceName:
