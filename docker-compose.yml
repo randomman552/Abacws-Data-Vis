@@ -4,6 +4,8 @@ services:
     image: mongo
     container_name: abacws-mongo
     restart: always
+    volumes:
+      - ./mongo:/data/db
 
   api:
     image: ghcr.io/randomman552/abacws-api:latest

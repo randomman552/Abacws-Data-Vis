@@ -22,6 +22,8 @@ services:
     image: mongo
     container_name: abacws-mongo
     restart: always
+    volumes:
+      - ./mongo:/data/db
 
   api:
     image: ghcr.io/randomman552/abacws-api:latest
@@ -43,6 +45,4 @@ services:
       - "traefik.http.routers.abacws-visualiser.rule=Host(`visualiser.abacws.example.com`)"
       - "traefik.http.routers.abacws-visualiser.entrypoints=https"
       - "traefik.http.routers.abacws-visualiser.tls=true"
-
-  
 ```
