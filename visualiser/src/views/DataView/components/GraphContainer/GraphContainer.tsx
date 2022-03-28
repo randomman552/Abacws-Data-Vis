@@ -13,12 +13,13 @@ export interface GraphContainerProps {
 
 export function GraphContainer({options, history}: GraphContainerProps) {
     const {deviceName} = options;
+    const field = options.field?.split(".")[0];
 
     // Only display graph if a device name is specified
     if (deviceName) {
         return (
             <article className="graph-container">
-                <h2 className="text-capitalize">{`Last 12 hours: '${options.field}'`}</h2>
+                <h2 className="text-capitalize">{`Last 12 hours: '${field}'`}</h2>
                 <Graph
                     data={history || []}
                     dataKey={options.field || ""}
