@@ -14,6 +14,7 @@ export default function App() {
             
             <HamburgerToggle
                 onClick={() => { setHideDataView(!hideDataView) }}
+                close={!hideDataView}
             />
             <DataView
                 hidden={hideDataView}
