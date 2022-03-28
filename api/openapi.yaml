@@ -125,6 +125,7 @@ paths:
     description: >
         Endpoint for interacting with the historical data for a given device.
         Takes the unique name of a device as a parameter.
+        Optionally, can provide a "from" or "to" parameter to constrain the timeframe for the request.
     parameters:
     - $ref: "#/components/parameters/deviceName"
     - $ref: "#/components/parameters/fromTime"

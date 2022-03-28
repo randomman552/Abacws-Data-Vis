@@ -54,6 +54,11 @@ export function useDeviceData(deviceName: string|undefined) {
  * @returns 
  */
 export function useDeviceHistory(deviceName: string|undefined) {
-    const url = `/api/devices/${deviceName}/history`;
+    // Constrain query to the last 12 hours
+    // Use round here to prevent this hook from refreshing constantly
+    const to = Math.round(Date.now()/20000)*20000;
+    const from = to - (12*60*60*1000);
+
+    const url = `/api/devices/${deviceName}/history?to=${to}&from=${from}`;
     return useAPISubscription<DeviceHistory>(url)?.body.history;
 }
