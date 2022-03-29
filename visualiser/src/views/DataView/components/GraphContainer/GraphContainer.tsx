@@ -20,10 +20,10 @@ export function GraphContainer({options, history}: GraphContainerProps) {
         return (
             <article className="graph-container">
                 <h2 className="text-capitalize">{`Last 12 hours: '${field}'`}</h2>
-                <Graph
-                    data={history || []}
-                    dataKey={options.field || ""}
-                />
+                    <Graph
+                        data={history || []}
+                        dataKey={options.field || ""}
+                    />
             </article>
         )
     }

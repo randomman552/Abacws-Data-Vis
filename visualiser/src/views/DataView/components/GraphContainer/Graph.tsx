@@ -44,60 +44,62 @@ export interface GraphProps {
 export function Graph({data, dataKey}: GraphProps) {
 
     return (
-        <ResponsiveContainer width="100%" height="100%">
-            <LineChart
-                data={data}
-                margin={{
-                    top: 5,
-                    right: 10,
-                    left: 20,
-                    bottom: 20,
-                }}
-            >
-                <Tooltip content={<TimeTooltip/>}/>
-                <CartesianGrid
-                    strokeDasharray="3 3"
-                />
-
-                <XAxis
-                    type='number'
-                    domain={["dataMin", "dataMax"]}
-                    dataKey="timestamp"
-                    tickFormatter={unixTimeFormatter}
+        <article className="graph">
+            <ResponsiveContainer width="100%" height="100%">
+                <LineChart
+                    data={data}
+                    margin={{
+                        top: 5,
+                        right: 10,
+                        left: 20,
+                        bottom: 20,
+                    }}
                 >
-                    <Label
-                        value="time"
-                        position="bottom"
-                        fill="#c4c4c4"
-                        style={{
-                            textTransform: "capitalize",
-                            textAnchor: "middle"
-                        }}
+                    <Tooltip content={<TimeTooltip/>}/>
+                    <CartesianGrid
+                        strokeDasharray="3 3"
                     />
-                </XAxis>
 
-                <YAxis>
-                    <Label
-                        value={dataKey.split(".")[0]}
-                        position="left"
-                        angle={-90}
-                        style={{
-                            textTransform: "capitalize",
-                            textAnchor: "middle"
-                        }}
-                        fill="#c4c4c4"
+                    <XAxis
+                        type='number'
+                        domain={["dataMin", "dataMax"]}
+                        dataKey="timestamp"
+                        tickFormatter={unixTimeFormatter}
+                    >
+                        <Label
+                            value="time"
+                            position="bottom"
+                            fill="#c4c4c4"
+                            style={{
+                                textTransform: "capitalize",
+                                textAnchor: "middle"
+                            }}
+                        />
+                    </XAxis>
+
+                    <YAxis>
+                        <Label
+                            value={dataKey.split(".")[0]}
+                            position="left"
+                            angle={-90}
+                            style={{
+                                textTransform: "capitalize",
+                                textAnchor: "middle"
+                            }}
+                            fill="#c4c4c4"
+                        />
+                    </YAxis>
+
+                    <Line
+                        type="monotone"
+                        dataKey={dataKey}
+                        stroke="#00ffff"
+                        dot={false}
+                        activeDot={{ r: 3 }}
                     />
-                </YAxis>
-
-                <Line
-                    type="monotone"
-                    dataKey={dataKey}
-                    stroke="#00ffff"
-                    dot={false}
-                    activeDot={{ r: 3 }}
-                />
-                
-            </LineChart>
-        </ResponsiveContainer>
+                    
+                </LineChart>
+            </ResponsiveContainer>
+        </article>
     );
 }
