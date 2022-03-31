@@ -70,6 +70,10 @@ export class Device implements DeviceInterface {
     
     async addData(data: any) {
         data.timestamp = Date.now();
+        // Create index if it doesn't already exist
+        if (!(this.collection.indexExists("timestamp")))
+            this.collection.createIndex({timestamp: 1}, {name: "timestamp"});
+
         return this.collection.insertOne(data);
     }
 

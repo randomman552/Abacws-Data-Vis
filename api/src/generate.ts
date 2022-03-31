@@ -30,6 +30,7 @@ function genData(name: string, from: number, to: number, interval: number) {
     }
     
     // Insert the documents, then exit this script
+    collection.createIndex({timestamp: 1}, {name: "timestamp"});
     collection.insertMany(temp)
     .then(() => {
         console.log("DONE");
