@@ -7,6 +7,19 @@ import { DeviceSelectEvent, FloorSelectEvent, LoadEvent } from "./events";
 import { apiFetch } from "../api";
 import { Device } from "../hooks";
 
+/**
+ * Array containing the names of all layers to request from the server.
+ * It is assumed that these layers are stored under the /assets directory and are of the GLTF format (*.gltf or *.glb).
+ */
+const LAYERS = [
+    "floors.glb",
+    "exterior-walls.glb",
+    "interior-walls.glb",
+    "windows.glb",
+    "stairs.glb",
+    "decoration.glb",
+    "glass.glb"
+]
 
 const DEVICE_GEOM = new THREE.BoxGeometry(3, 3, 3);
 const DEVICE_COLOR = 0xff0000;
@@ -140,18 +153,14 @@ export default class Graphics {
         // Load building model
         const loader = new GLTFLoader();
         const loadLayer = async(fileName: string) => {
-            const layer = await loader.loadAsync(`/assets/${fileName}.glb`);
+            const layer = await loader.loadAsync(`/assets/${fileName}`);
             this.scene.add(layer.scene);
         }
 
         // Load all layers
-        await loadLayer("floors");
-        await loadLayer("exterior-walls");
-        await loadLayer("interior-walls");
-        await loadLayer("windows");
-        await loadLayer("stairs");
-        await loadLayer("decoration");
-        await loadLayer("glass");
+        for (const layerName of LAYERS) {
+            await loadLayer(layerName);
+        }
 
         // Inform the application everything is loaded
         window.dispatchEvent(new LoadEvent());
