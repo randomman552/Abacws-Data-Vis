@@ -1,3 +1,4 @@
+import { Icons } from "../../../../components"
 import { DeviceData } from "../../../../hooks"
 import "./DeviceDetails.scss"
 
@@ -83,9 +84,19 @@ export function DeviceDetails({deviceName, data, onViewHistory}: DeviceDetailsPr
         }));
     }
 
+    // Only render export icon if we have a device selected
+    const exportIcon = (deviceName) ? (
+        <Icons.Export
+            onClick={() => {
+                window.open(`/api/devices/${deviceName}/history`, "_blank")
+            }}
+        />
+    ) : undefined;
+
     return (
         <article className="device-container">
             <h2>{(deviceName)? deviceName : "No device selected"}</h2>
+            {exportIcon}
             <table className="data">
                 <thead>
                     <tr>

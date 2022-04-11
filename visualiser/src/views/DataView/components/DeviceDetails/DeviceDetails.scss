@@ -1,6 +1,7 @@
 @use "../../../../styles/_variables.scss";
 
 .device-container {
+    position: relative;
     margin-top: 20px;
     margin-bottom: 20px;
     padding-bottom: 10px;
@@ -12,4 +13,12 @@
 
 .device-container table.data th {
     text-transform: capitalize;
+}
+
+.device-container .icon.export {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 20px;
 }
