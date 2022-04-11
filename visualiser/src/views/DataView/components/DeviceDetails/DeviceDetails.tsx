@@ -86,7 +86,7 @@ export function DeviceDetails({deviceName, data, onViewHistory}: DeviceDetailsPr
 
     // Only render export icon if we have a device selected
     const exportIcon = (deviceName) ? (
-        <a href={`/api/devices/${deviceName}/history`}>
+        <a href={`/api/devices/${deviceName}/history`} className="export-link">
             <Icons.Export/>
         </a>
     ) : undefined;
