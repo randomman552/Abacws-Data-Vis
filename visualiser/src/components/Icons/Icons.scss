@@ -1,0 +1,12 @@
+@use "../../styles/variables";
+
+.icon {
+    width: 32px;
+    height: 32px;
+    background-color: variables.$color;
+    mask-size: contain;
+}
+
+.icon.export {
+    mask-image: url("/icons/export.svg");
+}
