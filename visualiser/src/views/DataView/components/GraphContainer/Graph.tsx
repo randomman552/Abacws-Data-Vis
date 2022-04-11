@@ -1,8 +1,5 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Label } from 'recharts';
-
-function unixTimeFormatter(value: string) {
-    return new Date(Number(value)).toLocaleTimeString();
-}
+import { fieldNameFormatter, unixTimeFormatter } from './util';
 
 
 interface TimeTooltipProps {
@@ -16,14 +13,19 @@ interface TimeTooltipProps {
  * @returns 
  */
 function TimeTooltip ({ active, payload }: TimeTooltipProps) {
+    console.log(payload);
+    
     if (active && payload && payload.length) {
-        const timestamp = payload[0].payload.timestamp;
-        const name = String(payload[0].name);
+        const timestamp = unixTimeFormatter(payload[0].payload.timestamp);
+        const name = fieldNameFormatter(String(payload[0].name));
         const value = String(payload[0].value);
+        const units = payload[0].payload[name].units || "";
+
+
         return (
         <div className="time-tooltip">
-            <p className="label">{`Timestamp : ${unixTimeFormatter(timestamp)}`}</p>
-            <p className="label">{`${name} : ${value}`}</p>
+            <p className="label">{`Timestamp : ${timestamp}`}</p>
+            <p className="label">{`${name} : ${value}${units}`}</p>
         </div>
         );
     }
@@ -79,7 +81,7 @@ export function Graph({data, dataKey}: GraphProps) {
 
                     <YAxis>
                         <Label
-                            value={dataKey.split(".")[0]}
+                            value={dataKey}
                             position="left"
                             angle={-90}
                             style={{
@@ -87,6 +89,7 @@ export function Graph({data, dataKey}: GraphProps) {
                                 textAnchor: "middle"
                             }}
                             fill="#c4c4c4"
+                            formatter={fieldNameFormatter}
                         />
                     </YAxis>
 
