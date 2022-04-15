@@ -25,6 +25,18 @@ function genData(name: string, from: number, to: number, interval: number) {
             temperature: {
                 value: ((Math.random()+0.5 * Math.sin(i)) + 20).toFixed(2),
                 units: "°C"
+            },
+            "light level": {
+                value: (i % 100 > 30) ? 10000 : 1000,
+                units: "lux"
+            },
+            humidity: {
+                value: ((8 * Math.sin(0.1*i)) + 74).toFixed(0),
+                units: "%"
+            },
+            "CO₂": {
+                value: ((30 * Math.sin(0.01*i)) + 440).toFixed(0),
+                units: "ppm"
             }
         });
     }
