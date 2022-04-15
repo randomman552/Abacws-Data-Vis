@@ -45,8 +45,8 @@ const getHistoricalData = async (req: Request, res: Response) => {
     const device = req.device;
 
     // Get query parameters
-    const from = Number(req.query.from) || 0;
-    const to = Number(req.query.to) || Date.now();
+    const from = Number(req.query.from) ?? 0;
+    const to = Number(req.query.to) ?? Date.now();
 
     const history = await device.getHistory(from, to);
     
