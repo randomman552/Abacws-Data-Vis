@@ -31,9 +31,6 @@ export class Device implements DeviceInterface {
                     sort: {
                         timestamp: -1
                     },
-                    projection: {
-                        _id: 0
-                    }
                 }
             )
     }

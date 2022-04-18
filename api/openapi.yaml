@@ -34,6 +34,46 @@ servers:
         Local development server.
 
 paths:
+  /query:
+    summary: Advanced query endpoint
+    parameters:
+      - $ref: "#/components/parameters/deviceType"
+      - $ref: "#/components/parameters/fromTime"
+      - $ref: "#/components/parameters/toTime"
+      - in: query
+        name: data
+        description: >
+          What type of data we want.
+          Can be 'history', 'data', or 'info'.
+          Defaults to 'info'
+            - Specifying 'history' will return device details and history.
+            - Specifying 'data' will return device details and the most recent data entry.
+            - Specifying 'info' will return only device details
+          
+          **NOTE**: *Setting this to history can result in a very large response, use carefully*
+        type: string
+        enum: [ history, data, info ]
+
+    get:
+      summary: Advanced query endpoint
+      description: >
+        Get a filtered list of devices and associated data or history
+      tags:
+        - Devices
+        - Device Data
+        - Device History
+      responses:
+        '200':
+          description: >
+            A list of the devices matching the provided parameters.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/devices"
+
+        '503':
+          $ref: "#/components/responses/databaseFailure"
+
   /devices:
     summary: Device listing endpoint
     get:
@@ -238,11 +278,10 @@ components:
       required: false
       description: >
         Defines the start of a date range for history requests.
-        If specified will only allow data points with a time larger than the provided value.
-        Should be formatted in UNIX time.
+          - If specified will only allow data points with a time larger than the provided value.
+          - Should be formatted in UNIX time.
       schema:
         type: number
-        example: 1647971257460
     
     toTime:
       in: query
@@ -250,11 +289,10 @@ components:
       required: false
       description: >
         Defines the end of a date range for history requests.
-        If specified will only allow data points with a time smaller than the provided value.
-        Should be formatted in UNIX time.
+          - If specified will only allow data points with a time smaller than the provided value.
+          - Should be formatted in UNIX time.
       schema:
         type: number
-        example: 1647971257520
 
     deviceType:
       in: query
