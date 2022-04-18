@@ -155,7 +155,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/device"
+                $ref: "#/components/schemas/history"
 
         
         '404':
@@ -168,7 +168,7 @@ paths:
       summary: Clear historical data
       description: >
         Clear historical data for a given device
-      tags: 
+      tags:
         - Device History
       security:
         apiKeyAuth: []
@@ -237,7 +237,7 @@ components:
       name: from
       required: false
       description: >
-        Parameter defining the start of a date range for history requests.
+        Defines the start of a date range for history requests.
         If specified will only allow data points with a time larger than the provided value.
         Should be formatted in UNIX time.
       schema:
@@ -249,7 +249,7 @@ components:
       name: to
       required: false
       description: >
-        Parameter defining the end of a date range for history requests.
+        Defines the end of a date range for history requests.
         If specified will only allow data points with a time smaller than the provided value.
         Should be formatted in UNIX time.
       schema:
@@ -261,7 +261,7 @@ components:
       name: type
       required: false
       description: >
-        Parameter defining the types of rooms we wish to query.
+        Type of rooms we wish to query.
       schema:
         type: string
         examples: 
@@ -320,7 +320,7 @@ components:
           type: number
     
     timestamp:
-      type: number
+      type: integer
       description: UNIX timestamp
       examples:
         - 1647527656
