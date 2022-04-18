@@ -21,7 +21,7 @@ tags:
         Endpoints relating to the devices historical data
 
 servers:
-    - url: /api
+    - url: ./
       description: >
         Relative url
 
