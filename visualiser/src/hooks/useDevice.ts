@@ -33,7 +33,7 @@ export interface DeviceHistory extends Device {
  * Hook to request list of devices from the API
  */
 export function useDevices() {
-    return useAPI<{devices: Device[]}>("/api/devices")?.body.devices;
+    return useAPI<Device[]>("/api/devices")?.body;
 }
 
 /**

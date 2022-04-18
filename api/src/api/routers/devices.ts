@@ -16,7 +16,7 @@ const listDevices = async (req: Request, res: Response) => {
         .project({_id: 0})
         .toArray();
     
-    res.status(200).json({devices});
+    res.status(200).json(devices);
 }
 
 /**

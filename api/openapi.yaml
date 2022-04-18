@@ -221,6 +221,7 @@ components:
       schema:
         type: string
         example: Room-0.01
+    
     fromTime:
       in: query
       name: from
@@ -232,6 +233,7 @@ components:
       schema:
         type: number
         example: 1647971257460
+    
     toTime:
       in: query
       name: to
@@ -244,32 +246,56 @@ components:
         type: number
         example: 1647971257520
 
-  schemas:
-    devices:
-      type: object
+    deviceType:
+      in: query
+      name: type
+      required: false
       description: >
-        A list of all devices currently available
-      properties:
-        devices:
-          type: array
-          items:
-            $ref: "#/components/schemas/device"
-    
+        Parameter defining the types of rooms we wish to query.
+      schema:
+        type: string
+        examples: 
+          - lecture
+          - office
+
+  schemas:
     device:
       type: object
       description: >
         A device represents a real world IoT device with:
             A known location
             A unique name which can be used to identify it.
+      required:
+        - name
+        - type
+        - position
       properties:
         name:
           type: string
           description: >
             Unique name of the device
           examples:
-          - Room-0.01
+            - Room-0.01
+        type:
+          type: string
+          description: >
+            The type of sensor
+          examples:
+            - lecture
+            - office
         position:
           $ref: "#/components/schemas/position"
+        data:
+          $ref: "#/components/schemas/timestampedData"
+        history:
+          $ref: "#/components/schemas/history"
+    
+    devices:
+      description: >
+        A list of devices
+      type: array
+      items:
+        $ref: "#/components/schemas/device"
     
     position:
       type: object
@@ -278,26 +304,17 @@ components:
       properties:
         x:
           type: number
-          examples:
-          - 0
-          - 50
-          - 12.5
-          - 16.8
         y:
           type: number
-          examples:
-          - 0
-          - 50
-          - 12.5
-          - 16.8
         z:
           type: number
-          examples:
-          - 0
-          - 50
-          - 12.5
-          - 16.8
     
+    timestamp:
+      type: number
+      description: UNIX timestamp
+      examples:
+        - 1647527656
+
     data:
       type: object
       description: > 
@@ -309,7 +326,7 @@ components:
         boolean value:
           value: true
     
-    dataWithTimestamp:
+    timestampedData:
       type: object
       description: >
         Data from the database, can have any number of fields.
@@ -319,8 +336,8 @@ components:
       - type: object
         properties:
             timestamp:
-                type: number
-                description: Timestamp of this data in unix time
+              $ref: "#/components/schemas/timestamp"
+                
         examples:
             - timestamp: 1647527656
               temperature:
@@ -329,30 +346,11 @@ components:
               boolean value:
                 value: true
     
-    deviceWithData:
-      type: object
-      description: >
-        Device details with current data
-      allOf:
-      - $ref: "#/components/schemas/device"
-      - type: object
-        properties:
-          data:
-            $ref: "#/components/schemas/dataWithTimestamp"
-    
-    deviceWithHistory:
-      type: object
-      description: >
-        Device details with array of historical data.
-      allOf:
-      - $ref: "#/components/schemas/device"
-      - type: object
-        properties:
-          history:
-            type: array
-            minItems: 0
-            items:
-              $ref: "#/components/schemas/dataWithTimestamp"
+    history:
+      type: array
+      minItems: 0
+      items:
+        $ref: "#/components/schemas/timestampedData"
     
     error:
       type: object

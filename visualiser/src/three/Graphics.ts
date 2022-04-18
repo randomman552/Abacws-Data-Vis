@@ -139,7 +139,7 @@ export default class Graphics {
         this.scene.add(ambientLight, light);
 
         // Load devices (catch error if API is unavailable)
-        const devices = (await apiFetch<{devices: Device[]}>("/api/devices")).body.devices;
+        const devices = (await apiFetch<Device[]>("/api/devices")).body;
         this.setDevices(devices);
 
         // Add ground plane

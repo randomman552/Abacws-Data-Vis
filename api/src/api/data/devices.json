@@ -7,6 +7,7 @@
     "devices": [
         {
             "name": "Room-0.01",
+            "type": "lecture",
             "position": {
                 "x": 60,
                 "y": 5,
@@ -15,6 +16,7 @@
         },
         {
             "name": "Room-1.34",
+            "type": "lab",
             "position": {
                 "x": -40,
                 "y": 18,
@@ -23,6 +25,7 @@
         },
         {
             "name": "Room-2.47",
+            "type": "office",
             "position": {
                 "x": -88,
                 "y": 31,
@@ -31,6 +34,7 @@
         },
         {
             "name": "Room-3.27",
+            "type": "magic",
             "position": {
                 "x": 67,
                 "y": 44,
@@ -39,6 +43,7 @@
         },
         {
             "name": "Room-4.69",
+            "type": "office",
             "position": {
                 "x": -43,
                 "y": 57,
@@ -47,6 +52,7 @@
         },
         {
             "name": "Room-5.26",
+            "type": "research",
             "position": {
                 "x": 84,
                 "y": 70,
@@ -55,6 +61,7 @@
         },
         {
             "name": "Roof",
+            "type": "roof",
             "position": {
                 "x": -40,
                 "y": 83,
