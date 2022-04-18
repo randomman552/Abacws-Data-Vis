@@ -46,3 +46,7 @@ services:
       - "traefik.http.routers.abacws-visualiser.entrypoints=https"
       - "traefik.http.routers.abacws-visualiser.tls=true"
 ```
+
+## Supported tags
+The `latest` tag should be used to obtain the most recent production ready build.\
+The `main` tag follows the progress on the main branch and is updated on every push.
