@@ -38,7 +38,7 @@ router.get("/query", async (req: Request, res: Response) => {
                 {
                     limit: 10000,
                     sort: {
-                        timestamp: 1
+                        timestamp: -1
                     },
                     projection: {
                         _id: 0
