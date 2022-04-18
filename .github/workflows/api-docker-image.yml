@@ -32,4 +32,4 @@ jobs:
         context: "./api"
         push: true
         tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.outputs.labels }}
+        labels: ${{ steps.meta.outputs.labels }}
