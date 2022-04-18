@@ -1,7 +1,7 @@
 import { useAPI, useAPISubscription } from "./useAPI";
 
 // Types
-interface Position {
+export interface Position {
     x: number
     y: number
     z: number
@@ -12,20 +12,12 @@ export interface Device {
     position: Position
 }
 
-interface Data extends Object {
+export interface Data extends Object {
     timestamp: number
     [fields: string]: {
         value: unknown,
         units: string
     } | any
-}
-
-export interface DeviceData extends Device {
-    data: Data
-}
-
-export interface DeviceHistory extends Device {
-    history: Data[]
 }
 
 // Hooks
@@ -37,14 +29,24 @@ export function useDevices() {
 }
 
 /**
+ * Hook to get a particular devices details from the API
+ * @param deviceName The name of the device to query
+ * @returns 
+ */
+export function useDevice(deviceName: string|undefined) {
+    const url = `/api/devices/${deviceName}`;
+    return useAPI<Device>(url)?.body;
+}
+
+/**
  * Hook to get the data corresponding to a device
  * Uses {@link useAPISubscription}, so automaticaly updates
  * @param deviceName The name of the device to query
  * @returns 
  */
 export function useDeviceData(deviceName: string|undefined) {
-    const url = `/api/devices/${deviceName}`;
-    return useAPISubscription<DeviceData>(url)?.body.data;
+    const url = `/api/devices/${deviceName}/data`;
+    return useAPISubscription<Data>(url)?.body;
 }
 
 /**
@@ -60,5 +62,5 @@ export function useDeviceHistory(deviceName: string|undefined) {
     const from = to - (12*60*60*1000);
 
     const url = `/api/devices/${deviceName}/history?to=${to}&from=${from}`;
-    return useAPISubscription<DeviceHistory>(url)?.body.history;
+    return useAPISubscription<Data[]>(url)?.body;
 }

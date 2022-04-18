@@ -20,20 +20,25 @@ const listDevices = async (req: Request, res: Response) => {
 }
 
 /**
- * Endpoint handler to return current data for a given device
+ * Endpoint handler to return the details of a specific device.
  * URL: '/:deviceName'
+ * Methods: GET
+ */
+const getDevice = async (req: Request, res: Response) => {
+    const device = req.device;
+    res.status(200).json(device);
+}
+
+/**
+ * Endpoint handler to return current data for a given device
+ * URL: '/:deviceName/data'
  * Methods: GET
  */
 const getData = async (req: Request, res: Response) => {
     const device = req.device;
     const data = await device.getData();
 
-    res.status(200).json(
-        {
-            ...device,
-            data
-        }
-    );
+    res.status(200).json(data);
 }
 
 /**
@@ -45,20 +50,17 @@ const getHistoricalData = async (req: Request, res: Response) => {
     const device = req.device;
 
     // Get query parameters
-    const from = Number(req.query.from) ?? 0;
-    const to = Number(req.query.to) ?? Date.now();
+    const from = Number(req.query.from) || 0;
+    const to = Number(req.query.to) || Date.now();
 
     const history = await device.getHistory(from, to);
     
-    res.status(200).json({
-        ...device,
-        history
-    });
+    res.status(200).json(history);
 }
 
 /**
  * Endpoint handler to add data to a given device
- * URL: '/:deviceName'
+ * URL: '/:deviceName/data'
  * Methods: PUT
  */
 const addData = async (req: Request, res: Response) => {
@@ -82,9 +84,13 @@ const deleteData = async (req: Request, res: Response) => {
 
 
 // Register handlers
-router.get("/", listDevices);
 router.use("/:deviceName", deviceMiddleware);
-router.get("/:deviceName", getData);
+
+router.get("/", listDevices);
+router.get("/:deviceName", getDevice);
+
+router.get("/:deviceName/data", getData);
+router.put("/:deviceName/data", apiKeyAuth, addData);
+
 router.get("/:deviceName/history", getHistoricalData);
-router.put("/:deviceName", apiKeyAuth, addData);
 router.delete("/:deviceName/history", apiKeyAuth, deleteData);

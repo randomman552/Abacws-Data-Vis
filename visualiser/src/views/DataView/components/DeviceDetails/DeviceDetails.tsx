@@ -1,5 +1,5 @@
 import { Icons } from "../../../../components"
-import { DeviceData } from "../../../../hooks"
+import { Data } from "../../../../hooks"
 import "./DeviceDetails.scss"
 
 interface DataRowProps {
@@ -39,7 +39,7 @@ function DataRow({field, value, units, onViewHistory}: DataRowProps) {
 export interface DeviceDetailsProps {
     onViewHistory: (deviceName: string, field: string) => void
     deviceName: string,
-    data?: DeviceData["data"]
+    data?: Data
 }
 
 export function DeviceDetails({deviceName, data, onViewHistory}: DeviceDetailsProps) {
@@ -50,7 +50,7 @@ export function DeviceDetails({deviceName, data, onViewHistory}: DeviceDetailsPr
     rows.push(<DataRow field="timestamp" key="timestamp" value={timestamp} />);
 
     // Generate other rows if provided
-    if (data) {
+    if (deviceName && data) {
         rows.push(Object.entries(data).map((entry) => {
             const key = entry[0];
             // Skip timestamp row

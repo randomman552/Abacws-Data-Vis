@@ -21,29 +21,23 @@ tags:
         Endpoints relating to the devices historical data
 
 servers:
+    - url: /api
+      description: >
+        Relative url
+
     - url: https://api.abacws.ggrainger.uk
       description: >
-        Current production deployment
-    
-    - url: https://abacws.ggrainger.uk/api
-      description: >
-        Alternative route to current production deployment
+        Production deployment
     
     - url: http://localhost:5000/api
       description: >
         Local development server.
-    
-    - url: /api
-      description: >
-        Relative url
 
 paths:
   /devices:
     summary: Device listing endpoint
     get:
-      summary: Get list of devices
-      description: >
-        Get a list of all available devices handled by the API.
+      summary: Get list of all devices
       tags: 
         - Devices
       responses:
@@ -59,18 +53,33 @@ paths:
           $ref: "#/components/responses/databaseFailure"
 
   /devices/{deviceName}:
+    summary: Get information about device
+    parameters:
+      - $ref: "#/components/parameters/deviceName"
+
+    get:
+      summary: Get basic information about a device
+      tags:
+        - Devices
+      responses:
+        '200':
+          description: >
+            Device details and data was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/device"
+
+  /devices/{deviceName}/data:
     summary: Data interaction endpoint for a device
     description: >
         Endpoint for interacting with a given device and it's data
         Takes the unique name of a device as a parameter.
     parameters:
-    - $ref: "#/components/parameters/deviceName"
+      - $ref: "#/components/parameters/deviceName"
     
     get:
-      summary: Get the basic details of a device.
-      description: >
-        Get the basic details of a device.
-        Also returns the most recent data entry for the device as the data field if there is any.
+      summary: Get the last data entry for the given device
       tags: 
         - Device Data
       responses:
@@ -80,7 +89,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/deviceWithData"
+                $ref: "#/components/schemas/timestampedData"
         
         '404':
           $ref: "#/components/responses/deviceNotFound"
@@ -127,9 +136,9 @@ paths:
         Takes the unique name of a device as a parameter.
         Optionally, can provide a "from" or "to" parameter to constrain the timeframe for the request.
     parameters:
-    - $ref: "#/components/parameters/deviceName"
-    - $ref: "#/components/parameters/fromTime"
-    - $ref: "#/components/parameters/toTime"
+      - $ref: "#/components/parameters/deviceName"
+      - $ref: "#/components/parameters/fromTime"
+      - $ref: "#/components/parameters/toTime"
 
     
     get:
@@ -146,7 +155,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/deviceWithHistory"
+                $ref: "#/components/schemas/device"
+
         
         '404':
           $ref: "#/components/responses/deviceNotFound"
