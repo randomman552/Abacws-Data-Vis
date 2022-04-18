@@ -21,16 +21,32 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
+    # Metadata extraction
+    - name: Extract metadata (tags, labels) for API
+      id: api-meta
+      uses: docker/metadata-action@v3
+      with:
+        images: ghcr.io/${{ github.actor }}/abacws-api
+
+    - name: Extract metadata (tags, labels) for visualiser
+      id: visualiser-meta
+      uses: docker/metadata-action@v3
+      with:
+        images: ghcr.io/${{ github.actor }}/abacws-visualiser
+
+    # Build images
     - name: Build and push API
       uses: docker/build-push-action@v2
       with:
         context: "./api"
         push: true
-        tags: ghcr.io/${{ github.actor }}/abacws-api
+        tags: ${{ steps.api-meta.outputs.tags }}
+        labels: ${{ steps.api-meta.outputs.labels }}
 
     - name: Build and push visualiser
       uses: docker/build-push-action@v2
       with:
         context: "./visualiser"
         push: true
-        tags: ghcr.io/${{ github.actor }}/abacws-visualiser
+        tags: ${{ steps.visualiser-meta.outputs.tags }}
+        labels: ${{ steps.visualiser-meta.outputs.labels }}
