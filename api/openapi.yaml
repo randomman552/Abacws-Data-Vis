@@ -37,11 +37,9 @@ paths:
   /query:
     summary: Advanced query endpoint
     parameters:
-      - $ref: "#/components/parameters/deviceType"
-      - $ref: "#/components/parameters/fromTime"
-      - $ref: "#/components/parameters/toTime"
-      - in: query
-        name: data
+      # dataType
+      - name: data
+        in: query
         description: >
           What type of data we want.
           Can be 'history', 'data', or 'info'.
@@ -51,13 +49,71 @@ paths:
             - Specifying 'info' will return only device details
           
           **NOTE**: *Setting this to history can result in a very large response, use carefully*
-        type: string
-        enum: [ history, data, info ]
+        schema:
+          type: string
+          enum: [ history, data, info ]
+      
+      # deviceNames
+      - name: name
+        in: query
+        description: >
+          The names of the rooms we want.
+            - Can be a single name, or a list of names with comma delimiting.
+        schema:
+          type: string
+          examples:
+            - room1
+            - room1,room2,room3
+        
+      # deviceType
+      - name: type
+        in: query
+        required: false
+        description: >
+          Types of rooms we wish to query.
+            - Can be a single type, or a list of types with comma delimiting.
+        schema:
+          type: string
+          examples: 
+            - lecture
+            - lecture,office,meeting
+      
+      # deviceFloor
+      - name: floor
+        in: query
+        required: false
+        description: >
+          Floors of the rooms we wish to query
+            - Can be a single floor, or a list of floors with comma delimiting.
+        schema:
+          type: string
+          examples:
+            - 1
+            - 1,2,3
 
+      # deviceFields
+      - name: fields
+        in: query
+        description: >
+          The fields we want our request to contain.
+            - Devices and data not containing these fields will not be returned.
+            - Can be a single field, or a list of fields with comma delimiting.
+        schema:
+          type: string
+          examples:
+            - temperature
+            - temperature,humidity,light level
+      
+      - $ref: "#/components/parameters/fromTime"
+      - $ref: "#/components/parameters/toTime"
+      
     get:
       summary: Advanced query endpoint
       description: >
-        Get a filtered list of devices and associated data or history
+        # Advanced query endpoint
+          Get a filtered list of devices and associated data or history.
+          
+          Takes a series of get parameters to filter devices and their data.
       tags:
         - Devices
         - Device Data
@@ -65,7 +121,8 @@ paths:
       responses:
         '200':
           description: >
-            A list of the devices matching the provided parameters.
+            ##### OK
+              A list of the devices matching the provided parameters was returned.
           content:
             application/json:
               schema:
@@ -76,14 +133,19 @@ paths:
 
   /devices:
     summary: Device listing endpoint
+    
     get:
-      summary: Get list of all devices
+      summary: Get a list of all devices
+      description: >
+        # Device listing endpoint
+          Returns a list of all devices.
       tags: 
         - Devices
       responses:
         '200':
           description: >
-            A list of devices was returned by the API
+            ##### OK
+              List of all devices returned
           content:
             application/json:
               schema:
@@ -98,34 +160,39 @@ paths:
       - $ref: "#/components/parameters/deviceName"
 
     get:
-      summary: Get basic information about a device
+      summary: Get basic info on a device
+      description: >
+        # Get information about device
+          Returns the basic information about a device.
       tags:
         - Devices
       responses:
         '200':
           description: >
-            Device details and data was successfully retrieved.
+            ##### OK
+              Device details returned
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/device"
 
   /devices/{deviceName}/data:
-    summary: Data interaction endpoint for a device
-    description: >
-        Endpoint for interacting with a given device and it's data
-        Takes the unique name of a device as a parameter.
+    summary: Data interaction endpoint
     parameters:
       - $ref: "#/components/parameters/deviceName"
     
     get:
-      summary: Get the last data entry for the given device
+      summary: Get current data for a device
+      description: >
+        # Data interaction endpoint
+          Get the last data entry for the given device
       tags: 
         - Device Data
       responses:
         '200':
           description: >
-            Device details and data was successfully retrieved.
+            ##### OK
+              Device data returned
           content:
             application/json:
               schema:
@@ -138,9 +205,28 @@ paths:
           $ref: "#/components/responses/databaseFailure"
     
     put:
-      summary: Add data for a device
+      summary: Add data to the given device
       description: >
-        Insert data into the database for the given device
+        # Data interaction endpoint
+          Adds data to the given device.
+          Data should be provided in JSON format using a PUT request.
+
+          A timestamp is added to the data automatically and is not required.
+
+          Units can optionally be provided by providing an object with a `value` and `units` field instead of just a value:
+
+        ## Without units
+            {
+              temperature: 20
+            }
+
+        ## With units
+            {
+              temperature: {
+                value: 20,
+                units: "C"
+              }
+            }
       tags: 
         - Device Data
       security:
@@ -158,7 +244,8 @@ paths:
       responses:
         '202':
           description: >
-            The data was accepted by the API and will be inserted into the database.
+            ##### OK
+              Data added
         
         '404':
           $ref: "#/components/responses/deviceNotFound"
@@ -170,28 +257,26 @@ paths:
           $ref: "#/components/responses/authFailure"
 
   /devices/{deviceName}/history:
-    summary: Historical data endpoint.
-    description: >
-        Endpoint for interacting with the historical data for a given device.
-        Takes the unique name of a device as a parameter.
-        Optionally, can provide a "from" or "to" parameter to constrain the timeframe for the request.
+    summary: Historical data endpoint
     parameters:
       - $ref: "#/components/parameters/deviceName"
       - $ref: "#/components/parameters/fromTime"
       - $ref: "#/components/parameters/toTime"
 
-    
     get:
       summary: Get historical data
       description: >
-        Get the historical data for the given device.
-        If the device does not exist, this method will return a 404 code.
+        # Historical data endpoint
+          Get historical data for the specified device.
+          
+          Optionally, can provide a "from" or "to" parameter to constrain the timeframe for the request.
       tags: 
         - Device History
       responses:
         '200':
           description: >
-            The data was retreived
+            ##### OK
+              Historical data returned
           content:
             application/json:
               schema:
@@ -207,7 +292,8 @@ paths:
     delete:
       summary: Clear historical data
       description: >
-        Clear historical data for a given device
+        # Clear historical data
+          Deletes all data for the given device
       tags:
         - Device History
       security:
@@ -215,7 +301,8 @@ paths:
       responses:
         '200':
           description: >
-            The historical data was cleared
+            ##### OK
+              Data was clearned
         
         '404':
           $ref: "#/components/responses/deviceNotFound"
@@ -230,7 +317,8 @@ components:
   responses:
     deviceNotFound:
       description: >
-        The requested device does not exist in the database.
+        ##### Device not found
+          The requested device does not exist in the database.
       content:
         application/json:
           schema:
@@ -240,19 +328,21 @@ components:
 
     databaseFailure:
       description: >
-        The API was unable to read/write from the database.
-        This may mean that the database is unreachable or that the api lacks the permissions to read/write from/to it.
-        Check your logs for more information.
+        ##### Unable to access database
+          The API was unable to read/write from the database.
+          This may mean that the database is unreachable or that the api lacks the permissions to read/write from/to it.
+          Check your logs for more information.
       content:
         application/json:
           schema:
             "$ref": "#/components/schemas/error"
           example:
-            error: Unable to read/write from/to database
+            error: Unable to access database
 
     authFailure:
       description: >
-        The authorisation provided was insufficient for this endpoint.
+        ##### Auth failure
+          The authorisation provided was insufficient for this endpoint.
       content:
         application/json:
           schema:
@@ -294,17 +384,6 @@ components:
       schema:
         type: number
 
-    deviceType:
-      in: query
-      name: type
-      required: false
-      description: >
-        Type of rooms we wish to query.
-      schema:
-        type: string
-        examples: 
-          - lecture
-          - office
 
   schemas:
     device:
