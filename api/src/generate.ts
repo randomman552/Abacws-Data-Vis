@@ -23,7 +23,7 @@ function genData(name: string, from: number, to: number, interval: number) {
         temp.push({
             timestamp,
             temperature: {
-                value: ((Math.random()+0.5 * Math.sin(i)) + 20).toFixed(2),
+                value: Number(((Math.random()+0.5 * Math.sin(i)) + 20).toFixed(2)),
                 units: "°C"
             },
             "light level": {
@@ -31,11 +31,11 @@ function genData(name: string, from: number, to: number, interval: number) {
                 units: "lux"
             },
             humidity: {
-                value: ((8 * Math.sin(0.1*i)) + 74).toFixed(0),
+                value: Number(((8 * Math.sin(0.1*i)) + 74).toFixed(0)),
                 units: "%"
             },
             "CO₂": {
-                value: ((30 * Math.sin(0.01*i)) + 440).toFixed(0),
+                value: Number(((30 * Math.sin(0.01*i)) + 440).toFixed(0)),
                 units: "ppm"
             }
         });
