@@ -11,7 +11,7 @@ api.use(express.json());
 
 // Register routes
 api.use("/healthcheck", healthcheck);
-api.use("/", query)
+api.use("/query", query)
 api.use("/devices", devices);
 
 // Register error handlers
