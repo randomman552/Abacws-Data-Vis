@@ -8,6 +8,7 @@
         {
             "name": "Room-0.01",
             "type": "lecture",
+            "floor": 0,
             "position": {
                 "x": 60,
                 "y": 5,
@@ -17,6 +18,7 @@
         {
             "name": "Room-1.34",
             "type": "lab",
+            "floor": 1,
             "position": {
                 "x": -40,
                 "y": 18,
@@ -26,6 +28,7 @@
         {
             "name": "Room-2.47",
             "type": "office",
+            "floor": 2,
             "position": {
                 "x": -88,
                 "y": 31,
@@ -35,6 +38,7 @@
         {
             "name": "Room-3.27",
             "type": "magic",
+            "floor": 3,
             "position": {
                 "x": 67,
                 "y": 44,
@@ -44,6 +48,7 @@
         {
             "name": "Room-4.69",
             "type": "office",
+            "floor": 4,
             "position": {
                 "x": -43,
                 "y": 57,
@@ -53,6 +58,7 @@
         {
             "name": "Room-5.26",
             "type": "research",
+            "floor": 5,
             "position": {
                 "x": 84,
                 "y": 70,
@@ -62,6 +68,7 @@
         {
             "name": "Roof",
             "type": "roof",
+            "floor": 6,
             "position": {
                 "x": -40,
                 "y": 83,
