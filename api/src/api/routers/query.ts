@@ -1,4 +1,4 @@
-import express, { NextFunction, Request, Response } from "express";
+import express, { Request, Response } from "express";
 import { Document } from "mongodb";
 import { DEVICE_COLLECTION_PREFIX } from "../constants";
 import client from "../database";
@@ -43,7 +43,7 @@ function buildDataQueryParams(has: string[]|undefined, from: number=0, to: numbe
  * Advanced query endpoint that only returns device info
  * Methods: GET
  */
-async function queryInfo(res: Response) {
+async function queryInfo(req: Request, res: Response) {
     const devices = res.locals.devices as Document[];
     res.status(200).json(devices);
 }
