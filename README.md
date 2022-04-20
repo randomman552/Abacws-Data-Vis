@@ -52,7 +52,7 @@ services:
 |:-------------------:|:---------------------------:|
 | `visualiser-latest` | Production ready visualiser |
 | `visualiser-main`   | Development visualiser      |
-| `visualiser-x.y.z`  | Specific visualiser version |
+| `visualiser-vx.y.z`  | Specific visualiser version |
 | `api-latest`        | Production ready API        |
 | `api-main`          | Development API             |
-| `api-x.y.z`         | Specific API version        |
+| `api-vx.y.z`         | Specific API version        |
