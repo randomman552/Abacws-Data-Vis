@@ -4,8 +4,11 @@ import { exit } from "process";
 import { DEVICE_COLLECTION_PREFIX } from "./api/constants";
 import client from "./api/database";
 
+const args = process.argv.slice(2);
+
+
 /**
- * Generate a random series of
+ * Generate a random series of entries for the given room name
  * @param name The device to add data to 
  * @param from The unix time to start with
  * @param to The unix time to end with
@@ -50,10 +53,16 @@ function genData(name: string, from: number, to: number, interval: number) {
     });
 }
 
-const name = "Room-0.01"
+const name = args[0] ?? "Room-0.01";
 const to = Date.now();
 const from = Date.now() - (24*60*60*1000);
 // Once per minute
 const interval = 60*1000;
 
-genData(name, from, to, interval);
+// Check device actually exists before creating data for it
+client.db().collection("devices").findOne({name})
+.then((device) => {
+    if (device) genData(name, from, to, interval);
+    console.error("Device does not exist, skipping...")
+    exit(1);
+});
