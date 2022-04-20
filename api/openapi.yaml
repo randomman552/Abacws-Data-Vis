@@ -254,7 +254,9 @@ paths:
       summary: Advanced query endpoint for device data
       description: >
         # Advanced query endpoint
-          Get a filtered list of devices and their last data entry based on provided parameters
+          Get a filtered list of devices and their last data entry based on provided parameters.
+
+          NOTE: Devices with no data matching the query will not be returned.
       tags:
         - Device Data
         - Advanced Query
@@ -280,6 +282,8 @@ paths:
       description: >
         # Advanced query endpoint
           Get a filtered list of devices and associated historical data based on the provided parameters
+
+          NOTE: Devices with no data matching the query will not be returned.
       tags:
         - Device History
         - Advanced Query
@@ -378,7 +382,7 @@ components:
       in: query
       required: false
       description: >
-        The names of the rooms we want.
+        The names of the devices we wish to query.
           - Can be a single value, or a list of comma-delimited values
       schema:
         type: string
@@ -391,7 +395,7 @@ components:
       in: query
       required: false
       description: >
-        Types of rooms we wish to query.
+        Types of devices we wish to query.
           - Can be a single value, or a list of comma-delimited values
       schema:
         type: string
@@ -404,7 +408,7 @@ components:
       in: query
       required: false
       description: >
-        Floors of the rooms we wish to query
+        Floors on which the devices we wish to query are
           - Can be a single value, or a list of comma-delimited values
       schema:
         type: string
@@ -448,7 +452,7 @@ components:
         type:
           type: string
           description: >
-            The type of sensor
+            The type of device
           examples:
             - lecture
             - office
@@ -487,7 +491,8 @@ components:
     data:
       type: object
       description: >
-        Data from the database, can have any number of fields as defined by whatever device is providing the data.
+        Datapoint provided by a device, can have any number of fields.
+        For example, a device could provide a temperature value.
       examples:
         - temperature:
             value: 20
@@ -498,7 +503,7 @@ components:
     timestampedData:
       type: object
       description: >
-        Data from the database, can have any number of fields.
+        Datapoint provided by a device, can have any number of fields.
         Will always include a timestamp field indiciating when this data was provided in UNIX time.
       allOf:
         - $ref: "#/components/schemas/data"
@@ -518,6 +523,8 @@ components:
     history:
       type: array
       minItems: 0
+      description: >
+        Array of historical, timestamped data.
       items:
         $ref: "#/components/schemas/timestampedData"
 
