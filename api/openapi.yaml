@@ -58,7 +58,7 @@ paths:
         in: query
         description: >
           The names of the rooms we want.
-            - Can be a single name, or a list of names with comma delimiting.
+            - Can be a single value, or a list of comma-delimited values
         schema:
           type: string
           examples:
@@ -71,7 +71,7 @@ paths:
         required: false
         description: >
           Types of rooms we wish to query.
-            - Can be a single type, or a list of types with comma delimiting.
+            - Can be a single value, or a list of comma-delimited values
         schema:
           type: string
           examples: 
@@ -84,7 +84,7 @@ paths:
         required: false
         description: >
           Floors of the rooms we wish to query
-            - Can be a single floor, or a list of floors with comma delimiting.
+            - Can be a single value, or a list of comma-delimited values
         schema:
           type: string
           examples:
@@ -92,12 +92,12 @@ paths:
             - 1,2,3
 
       # deviceFields
-      - name: fields
+      - name: has
         in: query
         description: >
           The fields we want our request to contain.
             - Devices and data not containing these fields will not be returned.
-            - Can be a single field, or a list of fields with comma delimiting.
+            - Can be a single value, or a list of comma-delimited values
         schema:
           type: string
           examples:
