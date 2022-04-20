@@ -18,7 +18,8 @@ const LAYERS = [
     "windows.glb",
     "stairs.glb",
     "decoration.glb",
-    "glass.glb"
+    "glass.glb",
+    "egg.glb"
 ]
 
 const DEVICE_GEOM = new THREE.BoxGeometry(3, 3, 3);
@@ -139,8 +140,10 @@ export default class Graphics {
         this.scene.add(ambientLight, light);
 
         // Load devices (catch error if API is unavailable)
-        const devices = (await apiFetch<Device[]>("/api/devices")).body;
-        this.setDevices(devices);
+        try {
+            const devices = (await apiFetch<Device[]>("/api/devices")).body;
+            this.setDevices(devices);
+        } catch {}
 
         // Add ground plane
         const groundGeom = new THREE.PlaneBufferGeometry(300, 300, 8, 8);
@@ -159,7 +162,9 @@ export default class Graphics {
 
         // Load all layers
         for (const layerName of LAYERS) {
-            await loadLayer(layerName);
+            try {
+                await loadLayer(layerName);
+            } catch {}
         }
 
         // Inform the application everything is loaded
