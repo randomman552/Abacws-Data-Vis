@@ -24,7 +24,7 @@ jobs:
       id: meta
       uses: docker/metadata-action@v3
       with:
-        images: ghcr.io/${{ github.actor }}/abacws-visualiser
+        images: ghcr.io/${{ github.actor }}/abacws-data-vis
         flavor: |
           prefix=api-,onlatest=true
 

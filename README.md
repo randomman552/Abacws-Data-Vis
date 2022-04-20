@@ -26,14 +26,14 @@ services:
       - ./mongo:/data/db
 
   api:
-    image: ghcr.io/randomman552/abacws-api:latest
+    image: ghcr.io/randomman552/abacws-data-vis:api-latest
     container_name: abacws-api
     restart: always
     depends_on:
       - mongo
 
   visualiser:
-    image: ghcr.io/randomman552/abacws-visualiser:latest
+    image: ghcr.io/randomman552/abacws-data-vis:visualiser-latest
     container_name: abacws-visualiser
     restart: always
     depends_on:
@@ -48,5 +48,11 @@ services:
 ```
 
 ## Supported tags
-The `latest` tag should be used to obtain the most recent production ready build.\
-The `main` tag follows the progress on the main branch and is updated on every push.
+| Tag                 | Description                 |
+|:-------------------:|:---------------------------:|
+| `visualiser-latest` | Production ready visualiser |
+| `visualiser-main`   | Development visualiser      |
+| `visualiser-x.y.z`  | Specific visualiser version |
+| `api-latest`        | Production ready API        |
+| `api-main`          | Development API             |
+| `api-x.y.z`         | Specific API version        |
