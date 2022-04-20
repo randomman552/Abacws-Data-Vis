@@ -8,141 +8,48 @@ info:
     name: MIT
 
 tags:
+  - name: Advanced Query
+    description: >
+      Advanced query endpoints for querying the entire dataset
+
   - name: Devices
-    description: > 
-        Endpoints relating to all devices
+    description: >
+      Endpoints relating to device info
 
   - name: Device Data
-    description: > 
-        Endpoints relating to the devices current details.
+    description: >
+      Endpoints relating to device data entry
 
   - name: Device History
-    description: > 
-        Endpoints relating to the devices historical data
+    description: >
+      Endpoints relating to device historical data
 
 servers:
-    - url: ./
-      description: >
-        Relative url
+  - url: ./
+    description: >
+      Relative url
 
-    - url: https://api.abacws.ggrainger.uk
-      description: >
-        Production deployment
-    
-    - url: http://localhost:5000/api
-      description: >
-        Local development server.
+  - url: https://api.abacws.ggrainger.uk
+    description: >
+      Production deployment
+
+  - url: http://localhost:5000/api
+    description: >
+      Local development server.
 
 paths:
-  /query:
-    summary: Advanced query endpoint
-    parameters:
-      # dataType
-      - name: data
-        in: query
-        description: >
-          What type of data we want.
-          Can be 'history', 'data', or 'info'.
-          Defaults to 'info'
-            - Specifying 'history' will return device details and history.
-            - Specifying 'data' will return device details and the most recent data entry.
-            - Specifying 'info' will return only device details
-          
-          **NOTE**: *Setting this to history can result in a very large response, use carefully*
-        schema:
-          type: string
-          enum: [ history, data, info ]
-      
-      # deviceNames
-      - name: name
-        in: query
-        description: >
-          The names of the rooms we want.
-            - Can be a single value, or a list of comma-delimited values
-        schema:
-          type: string
-          examples:
-            - room1
-            - room1,room2,room3
-        
-      # deviceType
-      - name: type
-        in: query
-        required: false
-        description: >
-          Types of rooms we wish to query.
-            - Can be a single value, or a list of comma-delimited values
-        schema:
-          type: string
-          examples: 
-            - lecture
-            - lecture,office,meeting
-      
-      # deviceFloor
-      - name: floor
-        in: query
-        required: false
-        description: >
-          Floors of the rooms we wish to query
-            - Can be a single value, or a list of comma-delimited values
-        schema:
-          type: string
-          examples:
-            - 1
-            - 1,2,3
-
-      # deviceFields
-      - name: has
-        in: query
-        description: >
-          The fields we want our request to contain.
-            - Devices and data not containing these fields will not be returned.
-            - Can be a single value, or a list of comma-delimited values
-        schema:
-          type: string
-          examples:
-            - temperature
-            - temperature,humidity,light level
-      
-      - $ref: "#/components/parameters/fromTime"
-      - $ref: "#/components/parameters/toTime"
-      
-    get:
-      summary: Advanced query endpoint
-      description: >
-        # Advanced query endpoint
-          Get a filtered list of devices and associated data or history.
-          
-          Takes a series of get parameters to filter devices and their data.
-      tags:
-        - Devices
-        - Device Data
-        - Device History
-      responses:
-        '200':
-          description: >
-            ##### OK
-              A list of the devices matching the provided parameters was returned.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/devices"
-
-        '503':
-          $ref: "#/components/responses/databaseFailure"
-
   /devices:
     summary: Device listing endpoint
-    
+
     get:
       summary: Get a list of all devices
       description: >
         # Device listing endpoint
           Returns a list of all devices.
-      tags: 
+      tags:
         - Devices
       responses:
-        '200':
+        "200":
           description: >
             ##### OK
               List of all devices returned
@@ -150,8 +57,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/devices"
-        
-        '503':
+
+        "503":
           $ref: "#/components/responses/databaseFailure"
 
   /devices/{deviceName}:
@@ -167,7 +74,7 @@ paths:
       tags:
         - Devices
       responses:
-        '200':
+        "200":
           description: >
             ##### OK
               Device details returned
@@ -180,16 +87,16 @@ paths:
     summary: Data interaction endpoint
     parameters:
       - $ref: "#/components/parameters/deviceName"
-    
+
     get:
       summary: Get current data for a device
       description: >
         # Data interaction endpoint
           Get the last data entry for the given device
-      tags: 
+      tags:
         - Device Data
       responses:
-        '200':
+        "200":
           description: >
             ##### OK
               Device data returned
@@ -197,13 +104,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/timestampedData"
-        
-        '404':
+
+        "404":
           $ref: "#/components/responses/deviceNotFound"
-        
-        '503':
+
+        "503":
           $ref: "#/components/responses/databaseFailure"
-    
+
     put:
       summary: Add data to the given device
       description: >
@@ -227,7 +134,7 @@ paths:
                 units: "C"
               }
             }
-      tags: 
+      tags:
         - Device Data
       security:
         apiKeyAuth: []
@@ -242,18 +149,18 @@ paths:
                 value: 21
                 units: °C
       responses:
-        '202':
+        "202":
           description: >
             ##### OK
               Data added
-        
-        '404':
+
+        "404":
           $ref: "#/components/responses/deviceNotFound"
-        
-        '503':
+
+        "503":
           $ref: "#/components/responses/databaseFailure"
-        
-        '403':
+
+        "403":
           $ref: "#/components/responses/authFailure"
 
   /devices/{deviceName}/history:
@@ -270,10 +177,10 @@ paths:
           Get historical data for the specified device.
           
           Optionally, can provide a "from" or "to" parameter to constrain the timeframe for the request.
-      tags: 
+      tags:
         - Device History
       responses:
-        '200':
+        "200":
           description: >
             ##### OK
               Historical data returned
@@ -282,13 +189,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/history"
 
-        
-        '404':
+        "404":
           $ref: "#/components/responses/deviceNotFound"
-        
-        '503':
+
+        "503":
           $ref: "#/components/responses/databaseFailure"
-    
+
     delete:
       summary: Clear historical data
       description: >
@@ -299,19 +205,91 @@ paths:
       security:
         apiKeyAuth: []
       responses:
-        '200':
+        "200":
           description: >
             ##### OK
               Data was clearned
-        
-        '404':
+
+        "404":
           $ref: "#/components/responses/deviceNotFound"
-        
-        '503':
+
+        "503":
           $ref: "#/components/responses/databaseFailure"
 
-        '403':
+        "403":
           $ref: "#/components/responses/authFailure"
+
+  # Advanced query endpoints
+  /query:
+    summary: Advanced query endpoint
+    parameters:
+      - $ref: "#/components/parameters/aQueryDeviceNames"
+      - $ref: "#/components/parameters/aQueryDeviceTypes"
+      - $ref: "#/components/parameters/aQueryDeviceFloors"
+
+    get:
+      summary: Advanced query endpoint for device info
+      description: >
+        # Advanced query endpoint
+          Get a filtered list of devices based on provided parameters
+      tags:
+        - Devices
+        - Advanced Query
+
+      responses:
+        "200":
+          $ref: "#components/responses/aQueryOK"
+        "503":
+          $ref: "#/components/responses/databaseFailure"
+
+  /query/data:
+    summary: Advanced query endpoint
+    parameters:
+      - $ref: "#/components/parameters/aQueryDeviceNames"
+      - $ref: "#/components/parameters/aQueryDeviceTypes"
+      - $ref: "#/components/parameters/aQueryDeviceFloors"
+      - $ref: "#/components/parameters/aQueryDeviceHasFields"
+
+    get:
+      summary: Advanced query endpoint for device data
+      description: >
+        # Advanced query endpoint
+          Get a filtered list of devices and their last data entry based on provided parameters
+      tags:
+        - Device Data
+        - Advanced Query
+
+      responses:
+        "200":
+          $ref: "#components/responses/aQueryOK"
+        "503":
+          $ref: "#/components/responses/databaseFailure"
+
+  /query/history:
+    summary: Advanced query endpoint
+    parameters:
+      - $ref: "#/components/parameters/aQueryDeviceNames"
+      - $ref: "#/components/parameters/aQueryDeviceTypes"
+      - $ref: "#/components/parameters/aQueryDeviceFloors"
+      - $ref: "#/components/parameters/aQueryDeviceHasFields"
+      - $ref: "#/components/parameters/fromTime"
+      - $ref: "#/components/parameters/toTime"
+
+    get:
+      summary: Advanced query endpoint for device history
+      description: >
+        # Advanced query endpoint
+          Get a filtered list of devices and associated historical data based on the provided parameters
+      tags:
+        - Device History
+        - Advanced Query
+
+      responses:
+        "200":
+          $ref: "#components/responses/aQueryOK"
+        "503":
+          $ref: "#/components/responses/databaseFailure"
+
 
 components:
   responses:
@@ -350,6 +328,16 @@ components:
           example:
             error: You do not have permission to access this resource
 
+    # Advaned query responses
+    aQueryOK:
+      description: >
+        ##### OK
+          A list of the devices matching the provided parameters was returned.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/devices"
+
 
   parameters:
     deviceName:
@@ -361,7 +349,7 @@ components:
       schema:
         type: string
         example: Room-0.01
-    
+
     fromTime:
       in: query
       name: from
@@ -372,7 +360,7 @@ components:
           - Should be formatted in UNIX time.
       schema:
         type: number
-    
+
     toTime:
       in: query
       name: to
@@ -383,6 +371,60 @@ components:
           - Should be formatted in UNIX time.
       schema:
         type: number
+
+    # Advanced query parameters
+    aQueryDeviceNames:
+      name: name
+      in: query
+      required: false
+      description: >
+        The names of the rooms we want.
+          - Can be a single value, or a list of comma-delimited values
+      schema:
+        type: string
+        examples:
+          - room1
+          - room1,room2,room3
+
+    aQueryDeviceTypes:
+      name: type
+      in: query
+      required: false
+      description: >
+        Types of rooms we wish to query.
+          - Can be a single value, or a list of comma-delimited values
+      schema:
+        type: string
+        examples:
+          - lecture
+          - lecture,office,meeting
+
+    aQueryDeviceFloors:
+      name: floor
+      in: query
+      required: false
+      description: >
+        Floors of the rooms we wish to query
+          - Can be a single value, or a list of comma-delimited values
+      schema:
+        type: string
+        examples:
+          - 1
+          - 1,2,3
+
+    aQueryDeviceHasFields:
+      name: has
+      in: query
+      required: false
+      description: >
+        The fields we want the returned data to contain.
+          - Devices and data not containing these fields will not be returned.
+          - Can be a single value, or a list of comma-delimited values
+      schema:
+        type: string
+        examples:
+          - temperature
+          - temperature,humidity,light level
 
 
   schemas:
@@ -416,14 +458,14 @@ components:
           $ref: "#/components/schemas/timestampedData"
         history:
           $ref: "#/components/schemas/history"
-    
+
     devices:
       description: >
         A list of devices
       type: array
       items:
         $ref: "#/components/schemas/device"
-    
+
     position:
       type: object
       description: >
@@ -435,7 +477,7 @@ components:
           type: number
         z:
           type: number
-    
+
     timestamp:
       type: integer
       description: UNIX timestamp
@@ -444,41 +486,41 @@ components:
 
     data:
       type: object
-      description: > 
+      description: >
         Data from the database, can have any number of fields as defined by whatever device is providing the data.
       examples:
-      - temperature:
-          value: 20
-          units: °C
-        boolean value:
-          value: true
-    
+        - temperature:
+            value: 20
+            units: °C
+          boolean value:
+            value: true
+
     timestampedData:
       type: object
       description: >
         Data from the database, can have any number of fields.
         Will always include a timestamp field indiciating when this data was provided in UNIX time.
       allOf:
-      - $ref: "#/components/schemas/data"
-      - type: object
-        properties:
+        - $ref: "#/components/schemas/data"
+        - type: object
+          properties:
             timestamp:
               $ref: "#/components/schemas/timestamp"
-                
-        examples:
+
+          examples:
             - timestamp: 1647527656
               temperature:
                 value: 20
                 units: °C
               boolean value:
                 value: true
-    
+
     history:
       type: array
       minItems: 0
       items:
         $ref: "#/components/schemas/timestampedData"
-    
+
     error:
       type: object
       description: >
@@ -488,9 +530,10 @@ components:
         error:
           type: string
           examples:
-          - Not Found
-          - Could not read/write from database
-  
+            - Not Found
+            - Could not read/write from database
+
+
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
