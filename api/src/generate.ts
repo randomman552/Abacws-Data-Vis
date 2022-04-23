@@ -51,7 +51,7 @@ async function generateData(name: string) {
 
 
     const collection = client.db().collection(`${DEVICE_COLLECTION_PREFIX}_${name}`);
-    collection.drop();
+    await collection.drop();
     const temp = [];
     
     // Generate random documents
