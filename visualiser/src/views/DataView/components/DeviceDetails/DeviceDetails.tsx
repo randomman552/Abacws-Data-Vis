@@ -1,5 +1,5 @@
 import { Icons } from "../../../../components"
-import { Data } from "../../../../hooks"
+import { Data, Device } from "../../../../hooks"
 import "./DeviceDetails.scss"
 
 interface DataRowProps {
@@ -38,11 +38,11 @@ function DataRow({field, value, units, onViewHistory}: DataRowProps) {
 
 export interface DeviceDetailsProps {
     onViewHistory: (deviceName: string, field: string) => void
-    deviceName: string,
+    device?: Device,
     data?: Data
 }
 
-export function DeviceDetails({deviceName, data, onViewHistory}: DeviceDetailsProps) {
+export function DeviceDetails({device, data, onViewHistory}: DeviceDetailsProps) {
     const rows: any[] = [];
 
     // Generate the timestamp row separately as it requires special handling
@@ -50,7 +50,7 @@ export function DeviceDetails({deviceName, data, onViewHistory}: DeviceDetailsPr
     rows.push(<DataRow field="timestamp" key="timestamp" value={timestamp} />);
 
     // Generate other rows if provided
-    if (deviceName && data) {
+    if (device?.name && data) {
         rows.push(Object.entries(data).map((entry) => {
             const key = entry[0];
             // Skip timestamp row
@@ -64,7 +64,7 @@ export function DeviceDetails({deviceName, data, onViewHistory}: DeviceDetailsPr
                     <DataRow
                         key={key}
                         field={key}
-                        onViewHistory={() => { onViewHistory(deviceName, `${key}.value`) }}
+                        onViewHistory={() => { onViewHistory(device?.name, `${key}.value`) }}
                         value={value.value}
                         units={value?.units}
                     />
@@ -77,7 +77,7 @@ export function DeviceDetails({deviceName, data, onViewHistory}: DeviceDetailsPr
                 <DataRow
                     key={key}
                     field={key}
-                    onViewHistory={() => { onViewHistory(deviceName, key) }}
+                    onViewHistory={() => { onViewHistory(device?.name, key) }}
                     value={String(value)}
                 />
             )
@@ -85,11 +85,11 @@ export function DeviceDetails({deviceName, data, onViewHistory}: DeviceDetailsPr
     }
 
     // Only render export icon if we have a device selected
-    const exportIcon = (deviceName) ? (
+    const exportIcon = (device?.name) ? (
         <a
-            href={`/api/devices/${deviceName}/history`}
+            href={`/api/devices/${device?.name}/history`}
             className="export-link"
-            download={`${deviceName}.json`}
+            download={`${device?.name}.json`}
         >
             <Icons.Export/>
         </a>
@@ -97,7 +97,17 @@ export function DeviceDetails({deviceName, data, onViewHistory}: DeviceDetailsPr
 
     return (
         <article className="device-container">
-            <h2>{(deviceName)? deviceName : "No device selected"}</h2>
+            <h2>Device: '
+                <span className="text-capitalize">
+                    {(device?.name)? device.name : "No device selected"}
+                </span>'
+            </h2>
+            <p>
+                Device Type: <span className="text-capitalize">{ device?.type }</span>
+            </p>
+            <p>
+                Device Floor: <span className="text-capitalize">{ device?.floor }</span>
+            </p>
             {exportIcon}
             <table className="data">
                 <thead>

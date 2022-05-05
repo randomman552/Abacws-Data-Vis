@@ -9,7 +9,9 @@ export interface Position {
 
 export interface Device {
     name: string
+    type: string
     position: Position
+    floor: number
 }
 
 export interface Data extends Object {
@@ -33,7 +35,7 @@ export function useDevices() {
  * @param deviceName The name of the device to query
  * @returns 
  */
-export function useDevice(deviceName: string|undefined) {
+export function useDeviceInfo(deviceName: string|undefined) {
     const url = `/api/devices/${deviceName}`;
     return useAPI<Device>(url)?.body;
 }
