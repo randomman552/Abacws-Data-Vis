@@ -1,6 +1,6 @@
 import "./DataView.scss"
 import { DeviceDetails, FloorSelector, GraphContainer, GraphOptions } from "./components";
-import { useDeviceData, useDeviceHistory } from "../../hooks";
+import { useDeviceData, useDeviceHistory, useDeviceInfo } from "../../hooks";
 import { useState } from "react";
 import { useSelectedDevice, useSelectedFloor } from "../../three";
 
@@ -13,7 +13,7 @@ export function DataView({ hidden }: DataViewProps) {
     const deviceName = useSelectedDevice();
     const [floor, setFloor] = useSelectedFloor();
 
-    
+    const deviceInfo = useDeviceInfo(deviceName);
     const deviceData = useDeviceData(deviceName);
     const deviceHistory = useDeviceHistory(deviceName);
 
@@ -34,7 +34,7 @@ export function DataView({ hidden }: DataViewProps) {
 
                 <DeviceDetails
                     onViewHistory={(deviceName, field) => { setGraphOptions({deviceName, field}) }}
-                    deviceName={deviceName}
+                    device={deviceInfo}
                     data={deviceData}
                 />
                 
