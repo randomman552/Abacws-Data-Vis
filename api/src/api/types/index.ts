@@ -6,19 +6,21 @@ export enum LogLevel {
 
 export interface APIError extends Error {
     code: number,
-    timestamp?: number,
-    level?: LogLevel,
+    timestamp?: number
+    level?: LogLevel
     url?: string
 }
 
 
 export interface Position {
-    x: number,
-    y: number,
+    x: number
+    y: number
     z: number
 }
 
 export interface Device {
-    name: string,
+    name: string
+    type: string
+    floor: number
     position: Position
 }
