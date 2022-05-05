@@ -9,16 +9,38 @@
     border-bottom: 1px solid variables.$color;
     display: flex;
     flex-direction: column;
-}
 
-.device-container table.data th {
-    text-transform: capitalize;
-}
+    .export-link {
+        cursor: pointer;
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 20px;
+    }
 
-.device-container .export-link {
-    cursor: pointer;
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 20px;
+    table.data {
+        margin: 10px;
+        border-collapse: collapse;
+    
+        th {
+            text-transform: capitalize;
+            border-right: 1px dashed variables.$color;
+        }
+
+        tr {
+            border-bottom: 1px solid variables.$color;
+        }
+
+        thead {
+            th:last-child {
+                border-right: none;
+            }
+        }
+
+        tbody {
+            tr:last-child {
+                border-bottom: none;
+            }
+        }
+    }
 }
