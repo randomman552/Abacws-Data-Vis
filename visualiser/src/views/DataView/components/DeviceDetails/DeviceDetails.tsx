@@ -103,10 +103,16 @@ export function DeviceDetails({device, data, onViewHistory}: DeviceDetailsProps)
                 </span>'
             </h2>
             <p>
-                Device Type: <span className="text-capitalize">{ device?.type }</span>
+                Type:&nbsp;
+                <span className="text-capitalize">
+                    { (device?.type) ? device?.type : "N/A" }
+                </span>
             </p>
             <p>
-                Device Floor: <span className="text-capitalize">{ device?.floor }</span>
+                Floor:&nbsp;
+                <span className="text-capitalize">
+                    { (device?.floor) ? device?.floor : "N/A" }
+                </span>
             </p>
             {exportIcon}
             <table className="data">
