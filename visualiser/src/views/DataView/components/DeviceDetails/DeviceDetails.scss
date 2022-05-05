@@ -24,11 +24,19 @@
     
         th {
             text-transform: capitalize;
-            border-right: 1px dashed variables.$color;
+            border-right: 1px dotted variables.$color;
         }
 
         tr {
             border-bottom: 1px solid variables.$color;
+
+            td {
+                border-right: 1px dotted variables.$color;
+            }
+
+            td:last-child {
+                border-right: none;
+            }
         }
 
         thead {
