@@ -24,3 +24,64 @@ $width: 500px;
         width: 100%;
     }
 }
+
+.tabs {
+    .tab {
+        display: none;
+        position: relative;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-top: 1px solid variables.$color;
+        border-bottom: 1px solid variables.$color;
+    }
+
+    .tab.active {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .selectors {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        margin: 5px 0 5px 0;
+        height: 50px;
+        border-top: 1px solid variables.$color;
+
+        .selector {
+            display: flex;
+            position: relative;
+            font-size: large;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: variables.$color;
+            cursor: pointer;
+            text-decoration: none;
+            height: 100%;
+            flex-basis: 50%;
+            margin: 0;
+            padding: 0;
+            transition: 0.3s;
+        }
+
+        .selector::after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 3px;
+            background-color: map-get(variables.$primary, "background");
+            bottom: 0;
+            transition: inherit;
+            border-radius: 2px;
+        }
+
+        .selector:hover::after,
+        .selector:focus::after,
+        .selector.active::after {
+            width: 95%;
+            background-color: map-get(variables.$primary, "background-hover");
+        }
+    }
+}

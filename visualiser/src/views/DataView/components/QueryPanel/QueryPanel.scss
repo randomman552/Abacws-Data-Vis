@@ -1,0 +1,18 @@
+.query-form {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    margin: 10px 0 10px 0;
+    
+    input, select {
+        width: 150px;
+    }
+
+    #queryType {
+        text-transform: capitalize;
+    }
+
+    .footer {
+        margin-top: 10px;
+    }
+}

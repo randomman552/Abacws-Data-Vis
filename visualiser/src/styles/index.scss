@@ -26,3 +26,31 @@ code {
 p {
     margin: 0;
 }
+
+.input-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+
+    .label-container {
+        display: flex;
+        flex-basis: 50%;
+        justify-content: flex-end;
+    }
+}
+
+input, select {
+    background-color: variables.$background_color;
+    color: variables.$color;
+    border-color: #000;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 2px;
+    box-sizing: border-box;
+}
+
+.hidden {
+    display: none;
+}
