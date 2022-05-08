@@ -4,7 +4,7 @@ import { LogLevel } from "../types";
 
 export const apiKeyAuth = (req: Request, res: Response, next: NextFunction) => {
     const apiKey = req.header("x-api-key");
-    if (apiKey === API_KEY) next();
+    if (apiKey === API_KEY) return next();
 
     // If authentication fails, invoke error handlers
     next({
