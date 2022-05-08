@@ -111,11 +111,12 @@ const addData = async (req: Request, res: Response) => {
     data.timestamp = Date.now();
 
     const collection = getDeviceCollection(device.name);
-    // Create index if it doesn't already exist
-    if (!(collection.indexExists("timestamp")))
-        collection.createIndex({timestamp: 1}, {name: "timestamp"});
 
     await collection.insertOne(data);
+
+    // Create index if it doesn't already exist
+    if (!(collection.indexExists("timestamp")))
+        await collection.createIndex({timestamp: 1}, {name: "timestamp"});
 
     res.status(202).json();
 }
