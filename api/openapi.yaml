@@ -136,8 +136,8 @@ paths:
             }
       tags:
         - Device Data
-      security:
-        apiKeyAuth: []
+      security: 
+          - apiKeyAuth: []
       requestBody:
         required: true
         content:
@@ -203,7 +203,7 @@ paths:
       tags:
         - Device History
       security:
-        apiKeyAuth: []
+        - apiKeyAuth: []
       responses:
         "200":
           description: >
