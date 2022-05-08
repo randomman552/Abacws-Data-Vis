@@ -37,11 +37,12 @@ $styles: (
 );
 
 @each $name, $style in $styles {
-    button.#{$name} {
+    button.#{$name},
+    .button.#{$name} {
         @include button($style);
     }
 }
 
-button, button.default {
+button, button.default, .button {
     @include button(variables.$default)
 }
