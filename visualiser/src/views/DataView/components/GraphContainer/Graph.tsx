@@ -13,8 +13,6 @@ interface TimeTooltipProps {
  * @returns 
  */
 function TimeTooltip ({ active, payload }: TimeTooltipProps) {
-    console.log(payload);
-    
     if (active && payload && payload.length) {
         const timestamp = unixTimeFormatter(payload[0].payload.timestamp);
         const name = fieldNameFormatter(String(payload[0].name));
