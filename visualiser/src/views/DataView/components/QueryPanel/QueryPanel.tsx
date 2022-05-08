@@ -19,6 +19,7 @@ export function QueryPanel() {
                 className="query-form"
                 id="query-form"
                 autoComplete="off"
+                onReset={(e) => { setHideHas(true); }}
                 onSubmit={async (e) => {
                     e.preventDefault();
                     const target = e.target as typeof e.target & QueryPanelForm;
