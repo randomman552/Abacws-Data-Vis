@@ -100,7 +100,8 @@ export function DeviceDetails({device, data, onViewHistory}: DeviceDetailsProps)
             <h2>Device: '
                 <span className="text-capitalize">
                     {(device?.name)? device.name : "No device selected"}
-                </span>'
+                </span>
+                '
             </h2>
             <p>
                 Type:&nbsp;
@@ -111,7 +112,8 @@ export function DeviceDetails({device, data, onViewHistory}: DeviceDetailsProps)
             <p>
                 Floor:&nbsp;
                 <span className="text-capitalize">
-                    { (device?.floor) ? device?.floor : "N/A" }
+                    {/** Check for undefined here as floor can be 0 which is falsy */}
+                    { (device?.floor !== undefined) ? device?.floor : "N/A" }
                 </span>
             </p>
             {exportIcon}
