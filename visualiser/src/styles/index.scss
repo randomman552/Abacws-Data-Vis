@@ -38,6 +38,8 @@ p {
         display: flex;
         flex-basis: 50%;
         justify-content: flex-end;
+        box-sizing: border-box;
+        padding-right: 10px;
     }
 }
 
