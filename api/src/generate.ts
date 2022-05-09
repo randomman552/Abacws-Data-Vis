@@ -11,7 +11,14 @@ const INTERVAL = 60*1000;
 const args = process.argv.slice(2);
 
 /**
+ * Function to generate a sine wave with some random noise.
+ * Used as part of the random data generation script.
  * f(x) = A sin(wt + p)
+ * @param length The length of array to generate the sine wave over
+ * @param amp Amplitude of the sine wave
+ * @param freq Frequency of the sine wave
+ * @param noise Factor to multiply random noise by
+ * @returns The sine wave extended over an array of the given length
  */
 function noisySineWave(length: number, amp=1, freq=1, noise=0.2) {
     const result = new Array<number>(length);
@@ -23,6 +30,13 @@ function noisySineWave(length: number, amp=1, freq=1, noise=0.2) {
     return result;
 }
 
+/**
+ * Function to generate a square wave with the given parameters.
+ * @param length The length of array to generate
+ * @param period How many iterations before the square wave begins again
+ * @param dutyCycle Value between 0 and 1, defines the duty cycle (power) of the square wave. A power of 1 is constantly on, and a power of 0 is constantly off.
+ * @returns The generate square wave as an array of numbers
+ */
 function squareWave(length: number, period: number, dutyCycle=0.5) {
     const result = new Array<number>(length);
 
