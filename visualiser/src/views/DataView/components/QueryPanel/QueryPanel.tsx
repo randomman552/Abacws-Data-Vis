@@ -8,10 +8,13 @@ interface QueryPanelForm {
     type: { value: string }
     floor: { value: string }
     has: { value: string }
+    from: { value: string }
+    to: { value: string }
 }
 
 export function QueryPanel() {
     const [hideHas, setHideHas] = useState(true);
+    const [hideDateRange, setHideDateRange] = useState(true);
 
     return (
         <article>
@@ -19,10 +22,14 @@ export function QueryPanel() {
                 className="query-form"
                 id="query-form"
                 autoComplete="off"
-                onReset={(e) => { setHideHas(true); }}
+                onReset={() => { setHideHas(true); setHideDateRange(true); }}
                 onSubmit={async (e) => {
                     e.preventDefault();
                     const target = e.target as typeof e.target & QueryPanelForm;
+                    
+                    // Convert datetime entries to unix time strings                    
+                    const fromTime = String(new Date(target.from.value).getTime());
+                    const toTime = String(new Date(target.to.value).getTime());
                     
                     // Create base url based on the query type
                     const queryType = target.queryType.value;
@@ -35,6 +42,8 @@ export function QueryPanel() {
                     if (target.type.value) url.searchParams.set("type", target.type.value);
                     if (target.floor.value) url.searchParams.set("floor", target.floor.value);
                     if (target.has.value) url.searchParams.set("has", target.has.value);
+                    if (target.from.value) url.searchParams.set("from", fromTime);
+                    if (target.to.value) url.searchParams.set("to", toTime);
                     
                     // Query API and once request is complete, download file
                     const result = await (await apiFetch(url.toString())).body;
@@ -63,6 +72,7 @@ export function QueryPanel() {
                         onChange={(e) => {
                             const value = e.target.value;
                             setHideHas(value === "info");
+                            setHideDateRange(value !== "history")
                         }}
                     >
                         <option>info</option>
@@ -120,6 +130,30 @@ export function QueryPanel() {
                         name="has"
                         type="text"
                         placeholder="temperature,humidity"
+                    />
+                </div>
+
+                {/** From */}
+                <div className={(hideDateRange) ? "input-group hidden" : "input-group"}>
+                    <span className="label-container">
+                        <label htmlFor="from">From:</label>
+                    </span>
+                    <input
+                        id="from"
+                        name="from"
+                        type="datetime-local"
+                    />
+                </div>
+
+                {/** To */}
+                <div className={(hideDateRange) ? "input-group hidden" : "input-group"}>
+                    <span className="label-container">
+                        <label htmlFor="to">To:</label>
+                    </span>
+                    <input
+                        id="to"
+                        name="to"
+                        type="datetime-local"
                     />
                 </div>
                 
