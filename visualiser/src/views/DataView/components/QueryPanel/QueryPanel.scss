@@ -6,6 +6,10 @@
     
     input, select {
         width: 200px;
+
+        &[type=submit], &[type=reset] {
+            width: 100px;
+        }
     }
 
     #queryType {
