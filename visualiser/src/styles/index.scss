@@ -42,13 +42,18 @@ p {
 }
 
 input, select {
-    background-color: variables.$background_color;
+    background-color: variables.$background-color;
     color: variables.$color;
-    border-color: #000;
+    border: 1px solid variables.$color;
     border-radius: 5px;
     padding: 5px;
     margin: 2px;
     box-sizing: border-box;
+    transition: 0.3s;
+
+    &:hover, &:active, &:focus, &.active {
+        background-color: variables.$background-hover-color
+    }
 }
 
 .hidden {
