@@ -27,7 +27,7 @@ export function QueryPanel() {
                     // Create base url based on the query type
                     const queryType = target.queryType.value;
                     let baseUrl = `${window.location.protocol}${window.location.host}/api/query`;
-                    if (queryType != "info") baseUrl = `${baseUrl}/${queryType}`;
+                    if (queryType !== "info") baseUrl = `${baseUrl}/${queryType}`;
                     
                     // Build URL for query
                     const url = new URL(baseUrl);
