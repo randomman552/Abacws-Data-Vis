@@ -56,8 +56,8 @@ input, select {
     &:hover, &:active, &:focus, &.active {
         background-color: variables.$background-hover-color
     }
-}
 
-.hidden {
-    display: none;
+    &.hidden {
+        display: none;
+    }
 }
