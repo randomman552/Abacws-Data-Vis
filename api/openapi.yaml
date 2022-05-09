@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 1.1.0
+  version: 1.3.0
   title: Abacws Data Visualiser
   description: >
     API for the storage and query of IoT data for the Cardiff University Comptuer Science building (Abacws).
