@@ -29,7 +29,7 @@ servers:
     description: >
       Relative url
 
-  - url: https://api.abacws.ggrainger.uk
+  - url: https://abacws.ggrainger.uk/api
     description: >
       Production deployment
 
