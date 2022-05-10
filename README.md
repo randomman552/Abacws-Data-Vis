@@ -3,11 +3,11 @@ Web application made to visualise IoT data for devices in the Abacws building at
 This repository contains the API and the Visualiser tool, both of which are deployed using [docker](https://www.docker.com/).
 
 Production deployments for these tools can be found at the following locations:
-- [API](https://api.abacws.ggrainger.uk)
+- [API](https://api.abacws.ggrainger.uk/api)
 - [Visualiser](https://abacws.ggrainger.uk)
 
 ## Docs
-You can view the documentation for the two separate components in their respective README files.
+You can view the documentation for the two separate services in their respective README files.
 - [API](./api)
 - [Visualiser](./visualiser)
 
