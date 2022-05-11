@@ -14,7 +14,7 @@ export const router = express.Router()
  * @param to The end of the time range in UNIX time
  * @returns The filter and projection objects in an array
  */
-function buildDataQueryParams(has: string[]|undefined, from: number=0, to: number=Number.MAX_SAFE_INTEGER) {
+function buildDataQueryParams(has: string[] | undefined, from: number = 0, to: number = Number.MAX_SAFE_INTEGER) {
     const filter: any = {};
     const projection: any = { _id: 0 }
     if (has && has.length > 0) {
@@ -25,7 +25,7 @@ function buildDataQueryParams(has: string[]|undefined, from: number=0, to: numbe
 
             projection[value] = 1;
         });
-        
+
         // Always show timestamp
         projection.timestamp = 1;
     }
@@ -55,7 +55,7 @@ async function queryInfo(req: Request, res: Response) {
  */
 async function queryData(req: Request, res: Response) {
     const has = req.query.has?.toString().split(",");
-    
+
     // Build data filter and projection for mongodb request
     const [filter, projection] = buildDataQueryParams(has);
 
@@ -87,7 +87,7 @@ async function queryHistory(req: Request, res: Response) {
 
     // Build data filter and projection for mongodb request
     const [filter, projection] = buildDataQueryParams(has, from, to);
-    
+
     // Get devices from middleware
     const devices = res.locals.devices as Document[];
 

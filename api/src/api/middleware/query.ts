@@ -36,6 +36,8 @@ export async function queryMiddleware(req: Request, res: Response, next: NextFun
         .project({ _id: 0 })
         .toArray();
 
+    // Store result for future use
     res.locals.devices = devices;
+    // Call next endpoint handler
     return next();
 }

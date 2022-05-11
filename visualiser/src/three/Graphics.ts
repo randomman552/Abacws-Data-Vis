@@ -216,6 +216,7 @@ export default class Graphics {
      * @param floor Integer representing the floor number
      */
     setFloor(floor: number) {
+        // Constants controlling floor height
         const perFloor = 12.5
         const base = 12.5;
 
@@ -234,7 +235,11 @@ export default class Graphics {
     setDevices(devices: Device[]) {
         // Stop if devices is empty or undefined
         if (!devices) return;
+
+        // Clear existing devices
         this.deviceScene.clear();
+
+        // Create geometry for each device
         const geom = DEVICE_GEOM;
         for (const device of devices) {
             const mat = new THREE.MeshPhongMaterial({color: DEVICE_COLOR});
@@ -243,7 +248,8 @@ export default class Graphics {
             cube.userData = device;
             this.deviceScene.add(cube);
         }
-        // Lighting
+
+        // Add lighting so the devices look nicer
         const ambientLight = new THREE.AmbientLight(0x404040);
         const light = new THREE.DirectionalLight(0xf4f4f4);
         light.position.set(-100, 100, -100);

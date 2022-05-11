@@ -20,9 +20,9 @@ function getDeviceCollection(deviceName: string) {
 const listDevices = async (req: Request, res: Response) => {
     const devices = await client.db().collection("devices")
         .find<Device>({})
-        .project({_id: 0})
+        .project({ _id: 0 })
         .toArray();
-    
+
     res.status(200).json(devices);
 }
 
@@ -43,7 +43,7 @@ const getDevice = async (req: Request, res: Response) => {
  */
 const getData = async (req: Request, res: Response) => {
     const device = res.locals.device;
-    
+
     // Query database for most recent data entry
     const collection = getDeviceCollection(device.name);
     const data = await collection.findOne(
@@ -85,18 +85,18 @@ const getHistoricalData = async (req: Request, res: Response) => {
     // Query data history
     const collection = getDeviceCollection(device.name);
     const history = await collection.find(
-            filter,
-            {
-                limit: 10000,
-                sort: {
-                    timestamp: -1
-                },
-                projection: {
-                    _id: 0
-                }
+        filter,
+        {
+            limit: 10000,
+            sort: {
+                timestamp: -1
+            },
+            projection: {
+                _id: 0
             }
-        ).toArray();
-    
+        }
+    ).toArray();
+
     res.status(200).json(history);
 }
 
@@ -116,7 +116,7 @@ const addData = async (req: Request, res: Response) => {
 
     // Create index if it doesn't already exist
     if (!(collection.indexExists("timestamp")))
-        await collection.createIndex({timestamp: 1}, {name: "timestamp"});
+        await collection.createIndex({ timestamp: 1 }, { name: "timestamp" });
 
     res.status(202).json();
 }
