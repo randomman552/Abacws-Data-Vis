@@ -6,7 +6,7 @@ Uses React and three.js to display a model of the building which can then be eas
 
 Designed to be hosted alongside our [API](../api/README.md), but queries can be redirected to another API instance using the `API_HOST` environment variable.
 
-Hosted at [abacws.ggrainger.uk](https://abacws.ggrainger.uk).
+Hosted at [abacws.ggrainger.uk](https://abacws.ggrainger.uk/).
 
 ## Deployment
 This application must be deployed using docker.\

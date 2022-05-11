@@ -3,10 +3,10 @@
 
 API to store data provided by various IoT devices throughout the Abacws building.
 
-Deployed at [abacws.ggrainger.uk](https://abacws.ggrainger.uk/api).
+Deployed at [abacws.ggrainger.uk](https://abacws.ggrainger.uk/api/).
 
 This API is defined using the OpenAPI 3.0 specification, it generates it's own documentation page when hosted which can be found at the root directory of the API.\
-Alternatively, you can view the docs [here](https://abacws.ggrainger.uk/api) or view/download the OpenAPI specification [here](https://abacws.ggrainger.uk/api/openapi.json).
+Alternatively, you can view the docs [here](https://abacws.ggrainger.uk/api/) or view/download the OpenAPI specification [here](https://abacws.ggrainger.uk/api/openapi.json).
 
 ## Deployment
 Must be deployed using docker.
