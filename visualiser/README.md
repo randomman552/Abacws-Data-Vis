@@ -4,7 +4,7 @@
 IoT data visualiser tool built for the Abacws building.\
 Uses React and three.js to display a model of the building which can then be easily navigated to view data for various IoT devices in the building.
 
-Designed to be hosted alongside our [API](../api/), but queries can be redirected to another API instance using the `API_HOST` environment variable.
+Designed to be hosted alongside our [API](../api/README.md), but queries can be redirected to another API instance using the `API_HOST` environment variable.
 
 Hosted at [abacws.ggrainger.uk](https://abacws.ggrainger.uk).
 

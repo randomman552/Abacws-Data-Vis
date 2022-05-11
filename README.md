@@ -3,13 +3,13 @@ Web application made to visualise IoT data for devices in the Abacws building at
 This repository contains the API and the Visualiser tool, both of which are deployed using [docker](https://www.docker.com/).
 
 Production deployments for these tools can be found at the following locations:
-- [API](https://api.abacws.ggrainger.uk/api)
+- [API](https://abacws.ggrainger.uk/api)
 - [Visualiser](https://abacws.ggrainger.uk)
 
 ## Docs
 You can view the documentation for the two separate services in their respective README files.
-- [API](./api)
-- [Visualiser](./visualiser)
+- [API](./api/README.md)
+- [Visualiser](./visualiser/README.md)
 
 ## Docker compose
 I recommend using docker compose to deploy this to your own server alongside [traefik](https://traefik.io/traefik/).\
