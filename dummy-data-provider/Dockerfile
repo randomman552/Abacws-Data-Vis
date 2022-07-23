@@ -1,6 +1,6 @@
 FROM debian
 
-ADD data.sh crontab /
+ADD crontab /
 RUN \
     apt-get update && \
     apt-get install -y cron docker.io --no-install-recommends --no-install-suggests && \
