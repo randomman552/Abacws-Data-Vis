@@ -3,6 +3,7 @@
 import { exit } from "process";
 import { DEVICE_COLLECTION_PREFIX } from "./api/constants";
 import client from "./api/database";
+import { devices } from "./api/data/devices.json"
 
 const FROM_TIME = Date.now() - (24*60*60*1000);
 const TO_TIME = Date.now();
@@ -65,7 +66,11 @@ async function generateData(name: string) {
 
 
     const collection = client.db().collection(`${DEVICE_COLLECTION_PREFIX}_${name}`);
-    await collection.drop();
+    
+    try {
+        await collection.drop();
+    } catch {}
+    
     const temp = [];
     
     // Generate random documents
@@ -100,9 +105,16 @@ async function generateData(name: string) {
 }
 
 async function main(args: string[]) {
-    const names = args;
+    let names = args;
 
-    // Generate data for each name provided as an argument
+    // If names are not provided, get all names
+    if (names.length < 1) {
+        names = devices.map((val) => {
+            return val.name;
+        });
+    }
+
+    // Generate data for each name provided
     for (const name of names) {
         await generateData(name); 
         console.log(`Data created for '${name}'`);
