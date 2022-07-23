@@ -1,9 +1,7 @@
 name: Push Dummy Data Provider Docker
 on:
-  push:
-    branches: [ main ]
-    tags:
-      - 'v*'
+  schedule:
+    - cron: "30 15 * * 0"
 
 jobs:
   build:
