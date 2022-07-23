@@ -27,6 +27,8 @@ jobs:
         images: ghcr.io/${{ github.actor }}/abacws-data-vis
         flavor: |
           prefix=api-,onlatest=true
+        tags: |
+          type=raw,enable=true,prefix=,suffix=,value=api
 
     - name: Build and push
       uses: docker/build-push-action@v2
