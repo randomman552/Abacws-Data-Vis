@@ -1,4 +1,4 @@
-name: Push API Docker
+name: Push Dummy Data Provider Docker
 on:
   push:
     branches: [ main ]
